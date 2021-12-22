@@ -48,3 +48,6 @@
 
 ## :clipboard: 로그 분석 도구
 * 미정
+
+## :clipboard: ERD 설계 명세서
+* [shopping mall ERD](https://github.com/CokeLee777/springboot-shoppingmall/issues/2)

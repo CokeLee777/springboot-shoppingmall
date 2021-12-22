@@ -31,4 +31,23 @@ public class ItemInquiryAnswer extends BaseEntity {
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "item_inquiry_id")
     private ItemInquiry itemInquiry;
+
+    /**
+     * 연관관계 메서드
+     */
+    public void setUser(User user){
+        if(this.user != null){
+            this.user.getItemInquiryAnswers().remove(this);
+        }
+        this.user = user;
+        user.getItemInquiryAnswers().add(this);
+    }
+
+    public void setItemInquiry(ItemInquiry itemInquiry){
+        if(this.itemInquiry != null){
+            this.itemInquiry.getItemInquiryAnswers().remove(this);
+        }
+        this.itemInquiry = itemInquiry;
+        itemInquiry.getItemInquiryAnswers().add(this);
+    }
 }

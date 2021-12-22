@@ -27,8 +27,16 @@ public class Category extends BaseEntity {
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "parent_id")
-    private Category category;
+    private Category parent;
 
-    @OneToMany(mappedBy = "category")
-    private List<Category> categories = new ArrayList<>();
+    @OneToMany(mappedBy = "parent")
+    private List<Category> children = new ArrayList<>();
+
+    /**
+     * 연관관계 메서드
+     */
+    public void addChildCategory(Category child){
+        this.children.add(child);
+        child.setParent(this);
+    }
 }

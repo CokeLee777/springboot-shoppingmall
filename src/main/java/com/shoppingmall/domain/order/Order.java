@@ -4,10 +4,7 @@ import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.OrderStatus;
 import com.shoppingmall.domain.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -43,4 +40,25 @@ public class Order extends BaseEntity {
 
     @OneToMany(mappedBy = "order")
     private List<OrderItem> orderItems = new ArrayList<>();
+
+    /**
+     * 연관관계 메서드
+     */
+    private void setUser(User user){
+        if(this.user != null) {
+            this.user.getOrders().remove(this);
+        }
+        this.user = user;
+        user.getOrders().add(this);
+    }
+
+    private void setDelivery(Delivery delivery){
+        this.delivery = delivery;
+        delivery.setOrder(this);
+    }
+
+    private void addOrderItem(OrderItem orderItem){
+        this.orderItems.add(orderItem);
+        orderItem.setOrder(this);
+    }
 }

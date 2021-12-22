@@ -21,7 +21,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter(AccessLevel.PROTECTED)
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Item extends BaseEntity {
 
@@ -50,7 +50,18 @@ public class Item extends BaseEntity {
     @OneToMany(mappedBy = "item")
     private List<ItemReview> itemReviews = new ArrayList<>();
 
+    @OneToMany(mappedBy = "item")
+    public List<ItemCategory> itemCategories = new ArrayList<>();
+
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "cart_id")
     private Cart cart;
+
+    /**
+     * 연관관계 메서드
+     */
+    public void addItemCategories(ItemCategory itemCategory){
+        this.itemCategories.add(itemCategory);
+        itemCategory.setItem(this);
+    }
 }

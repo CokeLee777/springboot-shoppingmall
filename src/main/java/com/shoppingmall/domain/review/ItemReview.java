@@ -35,4 +35,23 @@ public class ItemReview extends BaseEntity {
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "item_id")
     private Item item;
+
+    /**
+     * 연관관계 메서드
+     */
+    public void setItem(Item item){
+        if(this.item != null){
+            this.item.getItemReviews().remove(this);
+        }
+        this.item = item;
+        item.getItemReviews().add(this);
+    }
+
+    public void setUser(User user){
+        if(this.user != null){
+            this.user.getItemReviews().remove(this);
+        }
+        this.user = user;
+        user.getItemReviews().add(this);
+    }
 }

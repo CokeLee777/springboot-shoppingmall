@@ -43,4 +43,23 @@ public class ItemInquiry extends BaseEntity {
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "item_id")
     private Item item;
+
+    /**
+     * 연관관계 메서드
+     */
+    public void setUser(User user){
+        if(this.user != null){
+            this.user.getItemInquiries().remove(this);
+        }
+        this.user = user;
+        user.getItemInquiries().add(this);
+    }
+
+    public void setItem(Item item){
+        if(this.item != null){
+            this.item.getItemInquiries().remove(this);
+        }
+        this.item = item;
+        item.getItemInquiries().add(this);
+    }
 }

@@ -33,4 +33,18 @@ public class Cart extends BaseEntity {
 
     @OneToMany(mappedBy = "cart")
     private List<Item> items = new ArrayList<>();
+
+    /**
+     * 연관관계 메서드
+     */
+    public void setUser(User user){
+        this.user = user;
+        user.setCart(this);
+    }
+
+    public void addItems(Item item){
+        this.items.add(item);
+        item.setCart(this);
+    }
+
 }

@@ -14,7 +14,7 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter(AccessLevel.PROTECTED)
+@Getter @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OrderItem extends BaseEntity {
 

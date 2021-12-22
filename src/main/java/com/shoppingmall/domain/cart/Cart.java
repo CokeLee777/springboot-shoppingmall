@@ -31,7 +31,7 @@ public class Cart extends BaseEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToMany(mappedBy = "cart")
+    @OneToMany(mappedBy = "cart", cascade = ALL)
     private List<Item> items = new ArrayList<>();
 
     /**

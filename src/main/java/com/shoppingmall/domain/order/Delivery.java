@@ -3,10 +3,7 @@ package com.shoppingmall.domain.order;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.DeliveryStatus;
 import com.shoppingmall.domain.user.Address;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,7 +12,8 @@ import static javax.persistence.EnumType.*;
 
 @Entity
 @Getter @Setter(AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Delivery extends BaseEntity {
 
     @Id @GeneratedValue

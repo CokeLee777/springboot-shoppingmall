@@ -2,10 +2,7 @@ package com.shoppingmall.domain.inquiry;
 
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.user.User;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -14,7 +11,8 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter(AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class ItemInquiryAnswer extends BaseEntity {
 
     @Id @GeneratedValue

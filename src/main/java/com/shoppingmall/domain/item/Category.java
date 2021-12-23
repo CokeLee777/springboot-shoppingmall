@@ -1,10 +1,7 @@
 package com.shoppingmall.domain.item;
 
 import com.shoppingmall.domain.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,7 +12,8 @@ import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter(AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Category extends BaseEntity {
 
     @Id @GeneratedValue

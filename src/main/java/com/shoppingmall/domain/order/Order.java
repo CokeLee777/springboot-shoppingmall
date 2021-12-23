@@ -17,7 +17,8 @@ import static javax.persistence.FetchType.*;
 
 @Entity(name = "orders")
 @Getter @Setter(AccessLevel.PROTECTED)
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class Order extends BaseEntity {
 
     @Id @GeneratedValue

@@ -3,10 +3,7 @@ package com.shoppingmall.domain.orderitem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.order.Order;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -15,7 +12,8 @@ import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class OrderItem extends BaseEntity {
 
     @Id @GeneratedValue

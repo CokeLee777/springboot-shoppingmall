@@ -18,7 +18,8 @@ import static javax.persistence.EnumType.*;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
+@AllArgsConstructor
 public class User extends BaseEntity {
 
     @Id @GeneratedValue
@@ -57,4 +58,13 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();
+
+    /**
+     * 비즈니스 로직
+     */
+    public User updatePassword(String password){
+        this.password = password;
+
+        return this;
+    }
 }

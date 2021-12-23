@@ -8,8 +8,9 @@ import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-
+    //아이디로 회원 찾기
     Optional<User> findByIdentifier(String identifier);
-
+    //아이디로 회원 존재 여부 찾기
     boolean existsByIdentifier(String identifier);
+
 }

@@ -6,6 +6,7 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
+import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -35,6 +36,9 @@ public class Item extends BaseEntity {
     @Column
     private int price;
 
+    @Column
+    private int stockQuantity;
+
     @Enumerated(value = STRING)
     private ItemStatus itemStatus;
 
@@ -63,5 +67,22 @@ public class Item extends BaseEntity {
     public void addItemCategories(ItemCategory itemCategory){
         this.itemCategories.add(itemCategory);
         itemCategory.setItem(this);
+    }
+
+    /**
+     * 비즈니스 로직
+     */
+    public void addStock(int quantity){
+        this.stockQuantity += quantity;
+    }
+
+    public void removeStock(int quantity){
+        int restStock = this.stockQuantity - quantity;
+
+        if(restStock < 0){
+            throw new NotEnoughStockException("재고가 부족합니다.");
+        }
+
+        this.stockQuantity = restStock;
     }
 }

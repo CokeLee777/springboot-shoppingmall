@@ -10,6 +10,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
 
 @Entity
@@ -27,6 +28,6 @@ public class Delivery extends BaseEntity {
     @Embedded
     private Address address;
 
-    @OneToOne(mappedBy = "delivery")
+    @OneToOne(mappedBy = "delivery", cascade = ALL)
     private Order order;
 }

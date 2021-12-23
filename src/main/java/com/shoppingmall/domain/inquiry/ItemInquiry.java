@@ -33,7 +33,7 @@ public class ItemInquiry extends BaseEntity {
     @Column
     private int answerCount;
 
-    @OneToMany(mappedBy = "itemInquiry")
+    @OneToMany(mappedBy = "itemInquiry", cascade = ALL)
     private List<ItemInquiryAnswer> itemInquiryAnswers = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY, cascade = ALL)

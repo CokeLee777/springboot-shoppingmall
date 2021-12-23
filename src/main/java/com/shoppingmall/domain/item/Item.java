@@ -41,16 +41,16 @@ public class Item extends BaseEntity {
     @Column
     private String itemImg;
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = ALL)
     private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item")
+    @OneToMany(mappedBy = "item", cascade = ALL)
     public List<ItemCategory> itemCategories = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY, cascade = ALL)

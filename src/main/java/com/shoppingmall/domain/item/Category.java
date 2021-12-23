@@ -29,7 +29,7 @@ public class Category extends BaseEntity {
     @JoinColumn(name = "parent_id")
     private Category parent;
 
-    @OneToMany(mappedBy = "parent")
+    @OneToMany(mappedBy = "parent", cascade = ALL)
     private List<Category> children = new ArrayList<>();
 
     /**

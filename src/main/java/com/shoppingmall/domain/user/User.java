@@ -7,15 +7,13 @@ import com.shoppingmall.domain.inquiry.ItemInquiryAnswer;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.order.Order;
 import com.shoppingmall.domain.common.BaseEntity;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
 
 @Entity
@@ -45,18 +43,18 @@ public class User extends BaseEntity {
     @Embedded
     private Address address;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = ALL)
     private Cart cart;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Order> orders = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<ItemInquiryAnswer> itemInquiryAnswers = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();
 }

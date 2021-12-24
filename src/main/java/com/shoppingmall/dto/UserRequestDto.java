@@ -3,15 +3,13 @@ package com.shoppingmall.dto;
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.Address;
 import com.shoppingmall.domain.user.User;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.*;
 
 @Getter @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class UserRequestDto {
 

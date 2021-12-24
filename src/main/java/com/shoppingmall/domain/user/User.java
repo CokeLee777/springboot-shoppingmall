@@ -75,18 +75,17 @@ public class User extends BaseEntity {
         this.password = userRequestDto.getPassword();
         this.username = userRequestDto.getUsername();
         this.email = userRequestDto.getEmail();
-        this.address.setRoad(userRequestDto.getRoadAddress());
-        this.address.setDetail(userRequestDto.getDetailAddress());
+        this.address = new Address(userRequestDto.getRoadAddress(), userRequestDto.getDetailAddress());
     }
 
     public UserResponseDto toUserResponseDto(User user){
         return UserResponseDto.builder()
+                .id(user.id)
                 .identifier(user.identifier)
                 .role(user.role)
                 .username(user.username)
                 .email(user.email)
-                .roadAddress(user.address.getRoad())
-                .detailAddress(user.address.getDetail())
+                .address(user.address)
                 .build();
     }
 }

@@ -23,18 +23,22 @@ public class UserService {
     //일반 유저 회원가입
     @Transactional
     public void userRegistration(UserRequestDto userRequestDto){
-        duplicateIdentifierCheck(userRequestDto);
-        userRequestDto.setRole(UserRole.USER);          //일반 유저
-        userRepository.save(userRequestDto.toEntity());
-    }
-
-    private void duplicateIdentifierCheck(UserRequestDto userRequestDto) {
-        if(userRepository.existsByIdentifier(userRequestDto.getIdentifier())){
-            throw new DuplicatedUserException("이미 등록된 아이디입니다.");
+        if(duplicateIdentifierCheck(userRequestDto)){
+            userRequestDto.setRole(UserRole.USER);          //일반 유저
+            userRepository.save(userRequestDto.toEntity());
         }
     }
 
-    //유저 프로필 조회
+    private boolean duplicateIdentifierCheck(UserRequestDto userRequestDto) {
+        if (userRepository.existsByIdentifier(userRequestDto.getIdentifier())) {
+            log.error("중복 아이디 오류={}", DuplicatedUserException.class);
+            throw new DuplicatedUserException("이미 등록된 아이디입니다.");
+        }
+
+        return true;
+    }
+
+        //유저 프로필 조회
     public UserResponseDto searchProfiles(Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(() -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
 

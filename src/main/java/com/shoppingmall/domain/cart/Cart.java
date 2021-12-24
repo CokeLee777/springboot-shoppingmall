@@ -23,7 +23,7 @@ public class Cart extends BaseEntity {
     private Long id;
 
     @Column
-    private int totalPrice;
+    private Integer totalPrice;
 
     @OneToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "user_id")

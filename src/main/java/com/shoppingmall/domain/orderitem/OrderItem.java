@@ -21,10 +21,10 @@ public class OrderItem extends BaseEntity {
     private Long id;
 
     @Column
-    private int orderPrice;
+    private Integer orderPrice;
 
     @Column
-    private int count;
+    private Integer count;
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "order_id")

@@ -1,6 +1,7 @@
 package com.shoppingmall.dto;
 
 import com.shoppingmall.domain.enums.UserRole;
+import com.shoppingmall.domain.user.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,17 +15,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class UserResponseDto {
 
+    private Long id;
     private String identifier;
-
     private UserRole role;
-
     private String username;
-
     private String email;
-
-    private String roadAddress;
-
-    private String detailAddress;
-
+    private Address address;
 
 }

@@ -8,33 +8,34 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.*;
 
 @Getter @Setter
 @AllArgsConstructor
 @Builder
 public class UserRequestDto {
 
-    @NotEmpty
+    @NotBlank(message = "아이디를 작성해주세요.")
+//    @Pattern()
     private String identifier;
 
     private UserRole role;
 
-    @NotNull
+    @NotBlank(message = "비밀번호를 작성해주세요.")
+//    @Pattern()
     private String password;
 
-    @NotNull
+    @NotBlank(message = "이름을 작성해주세요.")
     private String username;
 
-    @Email
+    @NotBlank(message = "이메일을 작성해주세요.")
+    @Email(message = "이메일 양식으로 작성해주세요.")
     private String email;
 
-    @NotNull
+    @Size(max = 50, message = "도로명 주소는 최대 50자까지 허용합니다.")
     private String roadAddress;
 
-    @NotNull
+    @Size(max = 50, message = "상세 주소는 최대 50자까지 허용합니다.")
     private String detailAddress;
 
     public User toEntity(){

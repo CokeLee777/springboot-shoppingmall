@@ -6,6 +6,7 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
+import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.*;
 
@@ -19,6 +20,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.*;
 
 @Entity
+@Builder
 @Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -32,10 +34,10 @@ public class Item extends BaseEntity {
     private String name;
 
     @Column
-    private int price;
+    private Integer price;
 
     @Column
-    private int stockQuantity;
+    private Integer stockQuantity;
 
     @Enumerated(value = STRING)
     private ItemStatus itemStatus;
@@ -44,15 +46,19 @@ public class Item extends BaseEntity {
     private String itemImg;
 
     @OneToMany(mappedBy = "item", cascade = ALL)
+    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
+    @Builder.Default
     private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
+    @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
+    @Builder.Default
     public List<ItemCategory> itemCategories = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
@@ -82,5 +88,15 @@ public class Item extends BaseEntity {
         }
 
         this.stockQuantity = restStock;
+    }
+
+    public ItemResponseDto toItemResponseDto(Item item){
+        return ItemResponseDto.builder()
+                .name(item.name)
+                .price(item.price)
+                .stockQuantity(item.stockQuantity)
+                .itemStatus(item.itemStatus)
+                .itemImg(item.itemImg)
+                .build();
     }
 }

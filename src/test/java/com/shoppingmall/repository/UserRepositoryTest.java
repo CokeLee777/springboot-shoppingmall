@@ -46,10 +46,9 @@ class UserRepositoryTest {
         em.flush();
         em.clear();
         //when
-        User updatedUser = savedUser.updatePassword("1234");
-        String subPwd = updatedUser.getPassword();
+        savedUser.setPassword("1234");
         //then
-        assertThat(prevPwd).isNotEqualTo(subPwd);
+        assertThat(prevPwd).isNotEqualTo("1234");
     }
 
     @Test

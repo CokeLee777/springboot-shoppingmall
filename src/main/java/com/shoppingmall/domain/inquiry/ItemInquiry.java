@@ -29,7 +29,7 @@ public class ItemInquiry extends BaseEntity {
     private Boolean answerState;
 
     @Column
-    private int answerCount;
+    private Integer answerCount;
 
     @OneToMany(mappedBy = "itemInquiry", cascade = ALL)
     private List<ItemInquiryAnswer> itemInquiryAnswers = new ArrayList<>();

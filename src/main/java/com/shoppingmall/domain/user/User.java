@@ -1,5 +1,6 @@
 package com.shoppingmall.domain.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.inquiry.ItemInquiry;
@@ -7,6 +8,8 @@ import com.shoppingmall.domain.inquiry.ItemInquiryAnswer;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.order.Order;
 import com.shoppingmall.domain.common.BaseEntity;
+import com.shoppingmall.dto.UserRequestDto;
+import com.shoppingmall.dto.UserResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +21,7 @@ import static javax.persistence.EnumType.*;
 
 @Entity
 @Getter @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends BaseEntity {
@@ -48,23 +52,40 @@ public class User extends BaseEntity {
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = ALL)
+    @Builder.Default
     private List<Order> orders = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
+    @Builder.Default
     private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
+    @Builder.Default
     private List<ItemInquiryAnswer> itemInquiryAnswers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
+    @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
     /**
      * 비즈니스 로직
      */
-    public User updatePassword(String password){
-        this.password = password;
+    public void updateProfiles(UserRequestDto userRequestDto){
+        this.identifier = userRequestDto.getIdentifier();
+        this.password = userRequestDto.getPassword();
+        this.username = userRequestDto.getUsername();
+        this.email = userRequestDto.getEmail();
+        this.address = new Address(userRequestDto.getRoadAddress(), userRequestDto.getDetailAddress());
+    }
 
-        return this;
+    public UserResponseDto toUserResponseDto(User user){
+        return UserResponseDto.builder()
+                .id(user.id)
+                .identifier(user.identifier)
+                .role(user.role)
+                .username(user.username)
+                .email(user.email)
+                .address(user.address)
+                .build();
     }
 }

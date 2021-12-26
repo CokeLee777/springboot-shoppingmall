@@ -14,16 +14,23 @@ import javax.validation.constraints.*;
 public class UserRequestDto {
 
     @NotBlank(message = "아이디를 작성해주세요.")
-//    @Pattern()
+    @Pattern(
+            regexp = "^[A-Za-z0-9]{6,12}$",
+            message = "아이디는 숫자, 문자 포함의 6~12자 이내로 작성해주세요."
+    )
     private String identifier;
 
     private UserRole role;
 
     @NotBlank(message = "비밀번호를 작성해주세요.")
-//    @Pattern()
+    @Pattern(
+            regexp = "^.*(?=^.{8,15}$)(?=.*\\d)(?=.*[a-zA-Z])(?=.*[!@#$%^&+=]).*$",
+            message = "비밀번호는 숫자, 문자, 특수문자 포함의 8~15자 이내로 작성해주세요."
+    )
     private String password;
 
     @NotBlank(message = "이름을 작성해주세요.")
+    @Size(max = 10, message = "이름은 10자 이내로 작성해주세요.")
     private String username;
 
     @NotBlank(message = "이메일을 작성해주세요.")
@@ -44,5 +51,15 @@ public class UserRequestDto {
                 .email(email)
                 .address(new Address(roadAddress, detailAddress))
                 .build();
+    }
+
+    @Builder
+    @Getter
+    @AllArgsConstructor
+    public static class LoginUserRequestDto {
+        @NotBlank(message = "아이디를 작성해주세요.")
+        private String identifier;
+        @NotBlank(message = "비밀번호를 작성해주세요.")
+        private String password;
     }
 }

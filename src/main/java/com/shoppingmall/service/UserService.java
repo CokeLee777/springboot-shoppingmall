@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.shoppingmall.dto.UserRequestDto.*;
+
 @Slf4j
 @Service
 @Transactional(readOnly = true)
@@ -29,6 +31,15 @@ public class UserService {
         }
     }
 
+    //유저 로그인
+    public UserResponseDto login(LoginUserRequestDto userRequestDto){
+        User user = userRepository.findByIdentifier(userRequestDto.getIdentifier())
+                .filter(u -> u.getPassword().equals(userRequestDto.getPassword()))
+                .orElse(null);
+
+        return user == null ? null : user.toUserResponseDto(user);
+    }
+
     private boolean duplicateIdentifierCheck(UserRequestDto userRequestDto) {
         if (userRepository.existsByIdentifier(userRequestDto.getIdentifier())) {
             log.error("중복 아이디 오류={}", DuplicatedUserException.class);
@@ -38,7 +49,7 @@ public class UserService {
         return true;
     }
 
-        //유저 프로필 조회
+    //유저 프로필 조회
     public UserResponseDto searchProfiles(Long userId){
         User findUser = userRepository.findById(userId).orElseThrow(() -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
 

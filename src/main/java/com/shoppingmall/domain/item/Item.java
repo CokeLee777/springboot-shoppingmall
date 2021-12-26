@@ -6,7 +6,6 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
-import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.*;
 
@@ -90,13 +89,13 @@ public class Item extends BaseEntity {
         this.stockQuantity = restStock;
     }
 
-    public ItemResponseDto toItemResponseDto(Item item){
-        return ItemResponseDto.builder()
-                .name(item.name)
-                .price(item.price)
-                .stockQuantity(item.stockQuantity)
-                .itemStatus(item.itemStatus)
-                .itemImg(item.itemImg)
-                .build();
-    }
+//    public ItemResponseDto toItemResponseDto(Item item){
+//        return ItemResponseDto.builder()
+//                .name(item.name)
+//                .price(item.price)
+//                .stockQuantity(item.stockQuantity)
+//                .itemStatus(item.itemStatus)
+//                .itemImg(item.itemImg)
+//                .build();
+//    }
 }

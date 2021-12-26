@@ -6,7 +6,6 @@ import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+import static com.shoppingmall.dto.UserRequestDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,11 +30,11 @@ class UserServiceTest {
     public void join () throws Exception
     {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto("test", UserRole.USER, "1111", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
         //when
         userService.userRegistration(userRequestDto);
         //then
-        Optional<User> findUser = userRepository.findByIdentifier("test");
+        Optional<User> findUser = userRepository.findByIdentifier("test123");
         assertThat(userRequestDto.getEmail()).isEqualTo(findUser.get().getEmail());
     }
 
@@ -43,13 +43,27 @@ class UserServiceTest {
     public void duplicatedJoin () throws Exception
     {
         //given
-        UserRequestDto userRequestDto1 = new UserRequestDto("test", UserRole.USER, "1111", "test1", "test@naver.com", "test", "test");
-        UserRequestDto userRequestDto2 = new UserRequestDto("test", UserRole.USER, "2222", "test2", "test2@naver.com", "test2", "test2");
+        UserRequestDto userRequestDto1 = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto2 = new UserRequestDto("test123", UserRole.USER, "test123*", "test2", "test2@naver.com", "test2", "test2");
         //when
         userService.userRegistration(userRequestDto1);
         //then
         assertThrows(DuplicatedUserException.class,
                 () -> userService.userRegistration(userRequestDto2));
+    }
+
+    @Test
+    @DisplayName("로그인 테스트")
+    public void login () throws Exception
+    {
+        //given
+        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
+        userService.userRegistration(userRequestDto);
+        //when
+        LoginUserRequestDto loginUserRequestDto = new LoginUserRequestDto("test123", "test123*");
+        UserResponseDto userResponseDto = userService.login(loginUserRequestDto);
+        //then
+        assertThat(userResponseDto.getIdentifier()).isEqualTo("test123");
     }
 
     @Test
@@ -73,7 +87,7 @@ class UserServiceTest {
         //given
         User user = new User();
         userRepository.save(user);
-        UserRequestDto userRequestDto = new UserRequestDto("test", UserRole.USER, "1111", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
         //when
         UserResponseDto userResponseDto = userService.updateProfiles(user.getId(), userRequestDto);
         //then

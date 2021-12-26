@@ -40,7 +40,7 @@ public class UserService {
         return user == null ? null : user.toUserResponseDto(user);
     }
 
-    private boolean duplicateIdentifierCheck(UserRequestDto userRequestDto) {
+    public boolean duplicateIdentifierCheck(UserRequestDto userRequestDto) {
         if (userRepository.existsByIdentifier(userRequestDto.getIdentifier())) {
             log.error("중복 아이디 오류={}", DuplicatedUserException.class);
             throw new DuplicatedUserException("이미 등록된 아이디입니다.");

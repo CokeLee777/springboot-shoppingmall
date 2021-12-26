@@ -28,13 +28,14 @@ public class UserController {
     }
 
     @PostMapping("/sign-up")
-    public String signUp(@Validated @ModelAttribute UserRequestDto userRequestDto, BindingResult bindingResult){
+    public String signUp(@Validated @ModelAttribute("user") UserRequestDto userRequestDto, BindingResult bindingResult){
         try{
             userService.duplicateIdentifierCheck(userRequestDto);
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
-                bindingResult.reject("duplicateUser", "이미 존재하는 아이디입니다.");
+                bindingResult.reject("duplicatedUserException", new Object[]{DuplicatedUserException.class}, null);
             }
+            return "user/signUpForm";
         }
         //검증 실패시 입력 폼으로 돌아간다.
         if(bindingResult.hasErrors()){

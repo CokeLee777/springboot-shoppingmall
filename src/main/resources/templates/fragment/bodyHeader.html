@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<header class="header-area clearfix" th:fragment="bodyHeader">
+    <!-- Close Icon -->
+    <div class="nav-close">
+        <i class="fa fa-close" aria-hidden="true"></i>
+    </div>
+    <!-- Logo -->
+    <div class="logo">
+        <a href="/"><img src="/img/core-img/logo.png" alt=""></a>
+    </div>
+    <!-- Amado Nav -->
+    <nav class="amado-nav">
+        <ul>
+            <li class="active"><a href="/">Home</a></li>
+            <li><a href="/">Shop</a></li>
+            <li><a href="/">Cart</a></li>
+        </ul>
+    </nav>
+    <!-- Button Group -->
+    <div class="amado-btn-group mt-30 mb-100">
+        <a href="/sign-in" class="btn amado-btn mb-15">SIGN IN</a>
+        <a href="/sign-up" class="btn amado-btn active">SIGN UP</a>
+    </div>
+    <!-- Cart Menu -->
+    <div class="cart-fav-search mb-100">
+        <a href="#" class="search-nav"><img src="/img/core-img/search.png" alt=""> Search</a>
+    </div>
+</header>

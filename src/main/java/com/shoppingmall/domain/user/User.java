@@ -31,7 +31,8 @@ public class User extends BaseEntity {
     private Long id;
 
     @Enumerated(STRING)
-    private UserRole role;
+    @Builder.Default
+    private UserRole role = UserRole.USER;
 
     @Column
     private String identifier;
@@ -49,6 +50,7 @@ public class User extends BaseEntity {
     private Address address;
 
     @OneToOne(mappedBy = "user", cascade = ALL)
+    @JsonIgnore
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = ALL)
@@ -82,7 +84,7 @@ public class User extends BaseEntity {
         return UserResponseDto.builder()
                 .id(user.id)
                 .identifier(user.identifier)
-                .role(user.role)
+                .password(user.password)
                 .username(user.username)
                 .email(user.email)
                 .address(user.address)

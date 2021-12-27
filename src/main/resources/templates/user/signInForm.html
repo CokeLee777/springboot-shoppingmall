@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Sign In')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <div th:replace="fragment/bodyHeader :: bodyHeader"/>
+    <!-- Header Area End -->
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2 th:text="#{page.signIn}">로그인</h2>
+                        </div>
+
+                        <form action="/sign-up" th:action th:object="${signInForm}" method="post">
+
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-12 mb-3">
+                                    <label for="identifier" th:text="#{label.user.identifier}">아이디</label>
+                                    <input type="text" id="identifier" th:field="*{identifier}"
+                                           th:errorclass="field-error" class="form-control" placeholder="아이디를 입력하세요">
+                                    <div class="field-error" th:errors="*{identifier}">
+                                        아이디 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="password" th:text="#{label.user.password}">비밀번호</label>
+                                    <input type="password" id="password" th:field="*{password}"
+                                           th:errorclass="field-error" class="form-control" placeholder="비밀번호를 입력하세요">
+                                    <div class="field-error" th:errors="*{password}">
+                                        비밀번호 입력 오류
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.signIn}">로그인</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

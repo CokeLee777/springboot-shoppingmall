@@ -7,9 +7,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-
 @Getter @Setter
 @Builder
 @AllArgsConstructor
@@ -17,9 +14,19 @@ public class UserResponseDto {
 
     private Long id;
     private String identifier;
-    private UserRole role;
+    private String password;
     private String username;
     private String email;
     private Address address;
 
+    public UserRequestDto toUserRequestDto(){
+        return UserRequestDto.builder()
+                .identifier(identifier)
+                .password(password)
+                .username(username)
+                .email(email)
+                .roadAddress(address.getRoad())
+                .detailAddress(address.getDetail())
+                .build();
+    }
 }

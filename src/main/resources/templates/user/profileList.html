@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Profile')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"/>
+    <!-- Header Area End -->
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2 th:text="#{page.profile}">내 프로필 정보</h2>
+                        </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="identifier" th:text="#{label.user.identifier}">아이디</label>
+                                    <input type="text" id="identifier" th:value="${user.identifier}"
+                                            class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" th:text="#{label.user.password}">비밀번호</label>
+                                    <input type="password" id="password" th:value="${user.password}"
+                                            class="form-control" readonly>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="username" th:text="#{label.user.username}">이름</label>
+                                    <input type="text" id="username" th:value="${user.username}"
+                                            class="form-control" readonly>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="email" th:text="#{label.user.email}">이메일</label>
+                                    <input type="email" id="email" th:value="${user.email}"
+                                            class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="road_address" th:text="#{label.user.roadAddress}">도로명 주소</label>
+                                    <input type="text" id="road_address" th:value="${user.address.getRoad()}"
+                                            class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="detail_address" th:text="#{label.user.detailAddress}">세부 주소</label>
+                                    <input type="text" id="detail_address" th:value="${user.address.getDetail()}"
+                                            class="form-control" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="w-100 btn btn-primary btn-lg"
+                                            onclick="location.href='editProfileForm.html'"
+                                            th:onclick="|location.href='@{/profile/{userId}/edit(userId=${user.id})}'|"
+                                            type="button" th:text="#{button.profile.edit}">프로필 수정</button>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

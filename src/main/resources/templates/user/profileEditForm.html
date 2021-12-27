@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Profile Update')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"/>
+    <!-- Header Area End -->
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2 th:text="#{page.profile.edit}">프로필 수정</h2>
+                        </div>
+
+                        <form action="profileList.html" th:action th:object="${user}" method="post">
+
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="identifier">아이디(수정 불가)</label>
+                                    <input type="text" id="identifier" th:field="${user.identifier}"
+                                           class="form-control" readonly>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="password" th:text="#{label.user.password}">비밀번호</label>
+                                    <input type="password" id="password" th:field="*{password}"
+                                           th:errorclass="field-error" class="form-control" placeholder="비밀번호를 입력하세요">
+                                    <div class="field-error" th:errors="*{password}">
+                                        비밀번호 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="username" th:text="#{label.user.username}">이름</label>
+                                    <input type="text" id="username" th:field="*{username}"
+                                           th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+                                    <div class="field-error" th:errors="*{username}">
+                                        이름 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label for="email" th:text="#{label.user.email}">이메일</label>
+                                    <input type="email" id="email" th:field="*{email}"
+                                           th:errorclass="field-error" class="form-control" placeholder="이메일을 입력하세요">
+                                    <div class="field-error" th:errors="*{email}">
+                                        이메일 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="road_address" th:text="#{label.user.roadAddress}">도로명 주소</label>
+                                    <input type="text" id="road_address" th:field="*{roadAddress}"
+                                           th:errorclass="field-error" class="form-control" placeholder="도로명 주소를 입력하세요">
+                                    <div class="field-error" th:errors="*{roadAddress}">
+                                        도로명주소 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="detail_address" th:text="#{label.user.detailAddress}">세부 주소</label>
+                                    <input type="text" id="detail_address" th:field="*{detailAddress}"
+                                           th:errorclass="field-error" class="form-control" placeholder="세부 주소를 입력하세요">
+                                    <div class="field-error" th:errors="*{detailAddress}">
+                                        세부주소 입력 오류
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.edit.complete}">수정 완료</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

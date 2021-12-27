@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<header class="header-area clearfix" th:fragment="bodyHeader">
+<header class="header-area clearfix" th:fragment="loginBodyHeader">
     <!-- Close Icon -->
     <div class="nav-close">
         <i class="fa fa-close" aria-hidden="true"></i>
@@ -19,8 +19,10 @@
     </nav>
     <!-- Button Group -->
     <div class="amado-btn-group mt-30 mb-100">
-        <a href="/sign-in" class="btn amado-btn mb-15">SIGN IN</a>
-        <a href="/sign-up" class="btn amado-btn active">SIGN UP</a>
+        <form th:action="@{/logout}" method="post">
+            <button class="btn amado-btn mb-15" type="submit">LOG OUT</button>
+        </form>
+        <a href="/profile" class="btn amado-btn active">MY PROFILE</a>
     </div>
     <!-- Cart Menu -->
     <div class="cart-fav-search mb-100">

@@ -30,7 +30,7 @@ class UserServiceTest {
     public void join () throws Exception
     {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
         //when
         userService.userRegistration(userRequestDto);
         //then
@@ -43,8 +43,8 @@ class UserServiceTest {
     public void duplicatedJoin () throws Exception
     {
         //given
-        UserRequestDto userRequestDto1 = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
-        UserRequestDto userRequestDto2 = new UserRequestDto("test123", UserRole.USER, "test123*", "test2", "test2@naver.com", "test2", "test2");
+        UserRequestDto userRequestDto1 = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto2 = new UserRequestDto("test123", "test123*", "test2", "test2@naver.com", "test2", "test2");
         //when
         userService.userRegistration(userRequestDto1);
         //then
@@ -57,13 +57,12 @@ class UserServiceTest {
     public void login () throws Exception
     {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
         userService.userRegistration(userRequestDto);
         //when
-        LoginUserRequestDto loginUserRequestDto = new LoginUserRequestDto("test123", "test123*");
-        UserResponseDto userResponseDto = userService.login(loginUserRequestDto);
+        LoginRequestDto loginRequestDto = new LoginRequestDto("test123", "test123*");
+        userService.login(loginRequestDto);
         //then
-        assertThat(userResponseDto.getIdentifier()).isEqualTo("test123");
     }
 
     @Test
@@ -87,7 +86,7 @@ class UserServiceTest {
         //given
         User user = new User();
         userRepository.save(user);
-        UserRequestDto userRequestDto = new UserRequestDto("test123", UserRole.USER, "test123*", "test1", "test@naver.com", "test", "test");
+        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
         //when
         UserResponseDto userResponseDto = userService.updateProfiles(user.getId(), userRequestDto);
         //then

@@ -56,9 +56,9 @@ public class Item extends BaseEntity {
     @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item", cascade = ALL)
-    @Builder.Default
-    public List<ItemCategory> itemCategories = new ArrayList<>();
+    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @JoinColumn(name = "item_category_id")
+    public ItemCategory itemCategory;
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "cart_id")
@@ -67,9 +67,12 @@ public class Item extends BaseEntity {
     /**
      * 연관관계 메서드
      */
-    public void addItemCategories(ItemCategory itemCategory){
-        this.itemCategories.add(itemCategory);
-        itemCategory.setItem(this);
+    public void setItemCategory(ItemCategory itemCategory){
+        if(this.itemCategory != null){
+            this.itemCategory.getItems().remove(this);
+        }
+        this.itemCategory = itemCategory;
+        itemCategory.getItems().add(this);
     }
 
     /**

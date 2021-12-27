@@ -5,6 +5,8 @@ import lombok.*;
 
 import javax.persistence.*;
 
+import java.util.List;
+
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
@@ -18,11 +20,9 @@ public class ItemCategory extends BaseEntity {
     @Column(name = "item_category_id")
     private Long id;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "item_id")
-    private Item item;
+    @Column
+    private String name;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "category_id")
-    private Category category;
+    @OneToMany(mappedBy = "itemCategory",fetch = LAZY, cascade = ALL)
+    private List<Item> items;
 }

@@ -52,16 +52,11 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
+    @AllArgsConstructor
     public static class LoginRequestDto {
-        private Long id;
         @NotBlank(message = "아이디를 작성해주세요.")
         private String identifier;
         @NotBlank(message = "비밀번호를 작성해주세요.")
         private String password;
-
-        public LoginRequestDto(String identifier, String password){
-            this.identifier = identifier;
-            this.password = password;
-        }
     }
 }

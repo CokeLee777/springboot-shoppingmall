@@ -32,7 +32,7 @@ class UserServiceTest {
         //given
         UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
         //when
-        userService.userRegistration(userRequestDto);
+        userService.userRegistration(userRequestDto.toEntity());
         //then
         Optional<User> findUser = userRepository.findByIdentifier("test123");
         assertThat(userRequestDto.getEmail()).isEqualTo(findUser.get().getEmail());
@@ -46,10 +46,10 @@ class UserServiceTest {
         UserRequestDto userRequestDto1 = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
         UserRequestDto userRequestDto2 = new UserRequestDto("test123", "test123*", "test2", "test2@naver.com", "test2", "test2");
         //when
-        userService.userRegistration(userRequestDto1);
+        userService.userRegistration(userRequestDto1.toEntity());
         //then
         assertThrows(DuplicatedUserException.class,
-                () -> userService.userRegistration(userRequestDto2));
+                () -> userService.userRegistration(userRequestDto2.toEntity()));
     }
 
     @Test
@@ -58,10 +58,10 @@ class UserServiceTest {
     {
         //given
         UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
-        userService.userRegistration(userRequestDto);
+        userService.userRegistration(userRequestDto.toEntity());
         //when
         LoginRequestDto loginRequestDto = new LoginRequestDto("test123", "test123*");
-        userService.login(loginRequestDto);
+        userService.login(loginRequestDto.toEntity());
         //then
     }
 

@@ -52,11 +52,19 @@ public class UserRequestDto {
     }
 
     @Getter @Setter
+    @Builder
     @AllArgsConstructor
     public static class LoginRequestDto {
         @NotBlank(message = "아이디를 작성해주세요.")
         private String identifier;
         @NotBlank(message = "비밀번호를 작성해주세요.")
         private String password;
+
+        public User toEntity(){
+            return User.builder()
+                    .identifier(identifier)
+                    .password(password)
+                    .build();
+        }
     }
 }

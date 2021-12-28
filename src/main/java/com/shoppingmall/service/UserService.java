@@ -1,6 +1,5 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.User;
 import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
@@ -25,26 +24,22 @@ public class UserService {
 
     //일반 유저 회원가입
     @Transactional
-    public void userRegistration(UserRequestDto userRequestDto){
-        if(duplicateIdentifierCheck(userRequestDto)){
-            userRepository.save(userRequestDto.toEntity());
-        }
+    public Long userRegistration(User user){
+        validateDuplicateUser(user);  //중복 회원 검증
+        userRepository.save(user);
+        return user.getId();
     }
 
     //유저 로그인
-    public void login(LoginRequestDto loginRequestDto){
-        User user = userRepository.findByIdentifier(loginRequestDto.getIdentifier())
-                .filter(u -> u.getPassword().equals(loginRequestDto.getPassword()))
-                .orElseThrow(() -> new IncorrectLoginInfoException("아이디 또는 삐밀번호가 맞지 않습니다."));
+    public void login(User user){
+        User findUser = userRepository.findByIdentifier(user.getIdentifier())
+                .filter(u -> u.getPassword().equals(user.getPassword()))
+                .orElseThrow(() -> new IncorrectLoginInfoException("아이디 또는 비밀번호가 맞지 않습니다."));
     }
 
-    public boolean duplicateIdentifierCheck(UserRequestDto userRequestDto) {
-        if (userRepository.existsByIdentifier(userRequestDto.getIdentifier())) {
-            log.error("error={}", "중복 아이디 오류");
-            throw new DuplicatedUserException("이미 등록된 아이디입니다.");
-        }
-
-        return true;
+    public void validateDuplicateUser(User user) {
+        boolean duplicated = userRepository.existsByIdentifier(user.getIdentifier());
+        if (duplicated) throw new DuplicatedUserException("이미 등록된 아이디입니다.");
     }
 
     public UserResponseDto searchProfiles(String identifier){

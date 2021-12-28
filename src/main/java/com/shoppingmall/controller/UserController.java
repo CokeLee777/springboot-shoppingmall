@@ -43,7 +43,7 @@ public class UserController {
 
         //중복 아이디 체크
         try{
-            userService.userRegistration(userRequestDto);
+            userService.userRegistration(userRequestDto.toEntity());
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
                 log.error("errors={}", e.getMessage());
@@ -73,7 +73,8 @@ public class UserController {
         }
 
         try{
-            userService.login(loginRequestDto);
+            userService.login(loginRequestDto.toEntity());
+
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
             bindingResult.reject("incorrectLoginInfoException", new Object[]{IncorrectLoginInfoException.class}, null);

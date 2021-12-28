@@ -25,8 +25,7 @@ public class Cart extends BaseEntity {
     @Column
     private Integer totalPrice;
 
-    @OneToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "cart", fetch = LAZY, cascade = ALL)
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = ALL)

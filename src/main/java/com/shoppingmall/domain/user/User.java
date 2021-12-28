@@ -18,6 +18,7 @@ import java.util.List;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
+import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter
@@ -49,8 +50,8 @@ public class User extends BaseEntity {
     @Embedded
     private Address address;
 
-    @OneToOne(mappedBy = "user", cascade = ALL)
-    @JsonIgnore
+    @OneToOne(fetch = LAZY, cascade = ALL)
+    @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @OneToMany(mappedBy = "user", cascade = ALL)

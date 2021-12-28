@@ -1,11 +1,11 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.User;
 import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
+import com.shoppingmall.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     @Autowired UserRepository userRepository;
-    @Autowired UserService userService;
+    @Autowired
+    UserService userService;
 
     @Test
     @DisplayName("회원가입 테스트")

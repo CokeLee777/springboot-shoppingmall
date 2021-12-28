@@ -6,6 +6,8 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
+import com.shoppingmall.dto.ItemRequestDto;
+import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.*;
 
@@ -78,6 +80,14 @@ public class Item extends BaseEntity {
     /**
      * 비즈니스 로직
      */
+    public void updateItem(ItemRequestDto itemRequestDto){
+        this.name = itemRequestDto.getName();
+        this.price = itemRequestDto.getPrice();
+        this.stockQuantity = itemRequestDto.getStockQuantity();
+        this.itemStatus = itemRequestDto.getItemStatus();
+        this.itemImg = itemRequestDto.getItemImg();
+    }
+
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
@@ -92,13 +102,13 @@ public class Item extends BaseEntity {
         this.stockQuantity = restStock;
     }
 
-//    public ItemResponseDto toItemResponseDto(Item item){
-//        return ItemResponseDto.builder()
-//                .name(item.name)
-//                .price(item.price)
-//                .stockQuantity(item.stockQuantity)
-//                .itemStatus(item.itemStatus)
-//                .itemImg(item.itemImg)
-//                .build();
-//    }
+    public ItemResponseDto toItemResponseDto(){
+        return ItemResponseDto.builder()
+                .name(name)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .itemStatus(itemStatus)
+                .itemImg(itemImg)
+                .build();
+    }
 }

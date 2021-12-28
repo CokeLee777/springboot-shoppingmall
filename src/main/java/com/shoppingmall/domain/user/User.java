@@ -81,14 +81,14 @@ public class User extends BaseEntity {
         this.address = new Address(userRequestDto.getRoadAddress(), userRequestDto.getDetailAddress());
     }
 
-    public UserResponseDto toUserResponseDto(User user){
+    public UserResponseDto toUserResponseDto(){
         return UserResponseDto.builder()
-                .id(user.id)
-                .identifier(user.identifier)
-                .password(user.password)
-                .username(user.username)
-                .email(user.email)
-                .address(user.address)
+                .id(id)
+                .identifier(identifier)
+                .password(password)
+                .username(username)
+                .email(email)
+                .address(address)
                 .build();
     }
 }

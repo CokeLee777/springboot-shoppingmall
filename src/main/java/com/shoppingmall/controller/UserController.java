@@ -4,7 +4,7 @@ import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
-import com.shoppingmall.service.UserService;
+import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -73,18 +73,17 @@ public class UserController {
         }
 
         try{
+            //로그인 시도
             userService.login(loginRequestDto.toEntity());
-
+            //세션이 있으면 세션 반환, 없으면 신규 세션 생성
+            HttpSession session = request.getSession();
+            //세션에 로그인 회원 정보를 보관한다.
+            session.setAttribute(SessionConst.LOGIN_USER, loginRequestDto);
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
             bindingResult.reject("incorrectLoginInfoException", new Object[]{IncorrectLoginInfoException.class}, null);
             return "user/signInForm";
         }
-
-        //세션이 있으면 세션 반환, 없으면 신규 세션 생성
-        HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보를 보관한다.
-        session.setAttribute(SessionConst.LOGIN_USER, loginRequestDto);
 
         return "redirect:" + redirectURL;
     }

@@ -146,4 +146,16 @@ public class UserController {
 
         return "redirect:/profile";
     }
+
+    @GetMapping("/profile/{userId}/delete")
+    public String deleteUser(@PathVariable Long userId, HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        //세션이 존재하지 않는다면 홈으로 리다이렉트
+        if(session == null) return "redirect:/";
+
+        userService.deleteUser(userId);
+        session.invalidate();
+
+        return "redirect:/";
+    }
 }

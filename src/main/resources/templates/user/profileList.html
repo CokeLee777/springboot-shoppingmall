@@ -28,6 +28,7 @@
 
                         <div class="cart-title">
                             <h2 th:text="#{page.profile}">내 프로필 정보</h2>
+                            <h3><a href="#" th:href="@{/profile/{userId}/delete (userId=${user.id})}" class="btn btn-danger" role="button">회원 탈퇴</a></h3>
                         </div>
 
                             <div class="row">

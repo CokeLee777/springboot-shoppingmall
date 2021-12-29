@@ -50,23 +50,23 @@
                                 <p>총 상품 <span th:text="${items.size()}"></span></p>
                             </div>
 
-                            <form th:action th:object="${searchCondition}" method="get">
+                            <form th:action>
                                 <div class="product-sorting d-flex">
-                                    <div class="sort-by-date d-flex align-items-center mr-15">
+                                    <div class="sort-by-date d-flex align-items-center mr-15" th:object="${sortCondition}">
                                         <p>정렬 기준</p>
-                                        <select th:field="*{sortCondition}">
-                                            <option th:each="sort : ${T(com.shoppingmall.dto.enums.SortCondition).values()}"
-                                                    th:value="${sort}"
-                                                    th:text="${sort.getCondition()}">option
+                                        <select th:field="*{sort}">
+                                            <option th:each="sortCond : ${sortCondition}"
+                                                    th:value="${sortCond.getSortName()} + ',' + ${sortCond.getDirection()}"
+                                                    th:text="${sortCond.getSortName()} + ',' + ${sortCond.getDirection()}">option
                                             </option>
                                         </select>
                                     </div>
-                                    <div class="view-product d-flex align-items-center">
+                                    <div class="view-product d-flex align-items-center" th:object="${sizeCondition}">
                                         <p>보기</p>
-                                        <select th:field="*{sizeCondition}">
-                                            <option th:each="size : ${T(com.shoppingmall.dto.enums.ViewCondition).values()}"
-                                                    th:value="${size}"
-                                                    th:text="${size.getCondition()}">option
+                                        <select th:field="*{size}">
+                                            <option th:each="sizeCond : ${sizeCondition}"
+                                                    th:value="${sizeCond.size}"
+                                                    th:text="${sizeCond.size}">option
                                             </option>
                                         </select>
                                     </div>
@@ -96,7 +96,7 @@
                                 <div class="product-meta-data">
                                     <div class="line"></div>
                                     <p class="product-price" th:text="${item.price}">상품가격</p>
-                                    <a href="../product-details.html">
+                                    <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
                                         <h6 th:text="${item.name}">상품명</h6>
                                     </a>
                                 </div>
@@ -114,14 +114,19 @@
                 <div class="row">
                     <div class="col-12">
                         <!-- Pagination -->
-                        <nav aria-label="navigation">
-                            <ul th:each="page, pageCount : ${pages}" class="pagination justify-content-end mt-50">
-<!--                                <li class="page-item active">-->
-<!--                                    <a class="page-link" th:href="@{{page}(page=${page})}" th:text="${pageCount.count}">01</a>-->
-<!--                                </li>-->
-<!--                                <li class="page-item"><a class="page-link" href="#">02</a></li>-->
-<!--                                <li class="page-item"><a class="page-link" href="#">03</a></li>-->
-<!--                                <li class="page-item"><a class="page-link" href="#">04</a></li>-->
+                        <nav aria-label="navigation"
+                            th:with="
+                                pageNumber = ${page.pageable.pageNumber},
+                                pageSize = ${page.pageable.pageSize},
+                                totalPages = ${page.totalPages},
+                                startPage = ${T(Math).floor(pageNumber / pageSize) * pageSize + 1},
+                                tempEndPage = ${startPage + pageSize - 1},
+                                endPage = (${tempEndPage > totalPages ? totalPages : tempEndPage})">
+
+                            <ul class="pagination justify-content-end mt-50">
+                                <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                                    <a th:if="${categoryId == null}" th:text="${page}" class="page-link" th:href="@{/shop/(page=${page}-1)}"></a>
+                                </li>
                             </ul>
                         </nav>
                     </div>

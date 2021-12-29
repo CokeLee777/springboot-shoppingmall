@@ -29,6 +29,7 @@ public class HomeController {
         }
 
         model.addAttribute("user", loginRequestDto);
+
         return "loginHome";
     }
 }

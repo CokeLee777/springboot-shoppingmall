@@ -104,6 +104,8 @@ public class Item extends BaseEntity {
 
     public ItemResponseDto toItemResponseDto(){
         return ItemResponseDto.builder()
+                .id(id)
+                .itemCategoryId(itemCategory.getId())
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)

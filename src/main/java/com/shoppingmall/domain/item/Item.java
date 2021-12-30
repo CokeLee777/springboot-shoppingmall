@@ -6,6 +6,8 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
+import com.shoppingmall.dto.ItemRequestDto;
+import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.*;
 
@@ -56,9 +58,9 @@ public class Item extends BaseEntity {
     @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    @OneToMany(mappedBy = "item", cascade = ALL)
-    @Builder.Default
-    public List<ItemCategory> itemCategories = new ArrayList<>();
+    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @JoinColumn(name = "item_category_id")
+    public ItemCategory itemCategory;
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "cart_id")
@@ -67,14 +69,25 @@ public class Item extends BaseEntity {
     /**
      * 연관관계 메서드
      */
-    public void addItemCategories(ItemCategory itemCategory){
-        this.itemCategories.add(itemCategory);
-        itemCategory.setItem(this);
+    public void setItemCategory(ItemCategory itemCategory){
+        if(this.itemCategory != null){
+            this.itemCategory.getItems().remove(this);
+        }
+        this.itemCategory = itemCategory;
+        itemCategory.getItems().add(this);
     }
 
     /**
      * 비즈니스 로직
      */
+    public void updateItem(ItemRequestDto itemRequestDto){
+        this.name = itemRequestDto.getName();
+        this.price = itemRequestDto.getPrice();
+        this.stockQuantity = itemRequestDto.getStockQuantity();
+        this.itemStatus = itemRequestDto.getItemStatus();
+        this.itemImg = itemRequestDto.getItemImg();
+    }
+
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
@@ -89,13 +102,15 @@ public class Item extends BaseEntity {
         this.stockQuantity = restStock;
     }
 
-//    public ItemResponseDto toItemResponseDto(Item item){
-//        return ItemResponseDto.builder()
-//                .name(item.name)
-//                .price(item.price)
-//                .stockQuantity(item.stockQuantity)
-//                .itemStatus(item.itemStatus)
-//                .itemImg(item.itemImg)
-//                .build();
-//    }
+    public ItemResponseDto toItemResponseDto(){
+        return ItemResponseDto.builder()
+                .id(id)
+                .itemCategoryId(itemCategory.getId())
+                .name(name)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .itemStatus(itemStatus)
+                .itemImg(itemImg)
+                .build();
+    }
 }

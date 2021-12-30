@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Shop')}"></div>
+</head>
+
+<body>
+    <!-- Search Wrapper Area Start -->
+    <div th:replace="fragment/search :: search"/>
+    <!-- Search Wrapper Area End -->
+
+    <!-- ##### Main Content Wrapper Start ##### -->
+    <div class="main-content-wrapper d-flex clearfix">
+
+        <!-- Mobile Nav (max width 767px)-->
+        <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+        <!-- Header Area Start -->
+        <div th:replace="fragment/bodyHeader :: bodyHeader"/>
+        <!-- Header Area End -->
+
+        <div class="shop_sidebar_area">
+
+            <!-- ##### Single Widget ##### -->
+            <div class="widget catagory mb-50">
+                <!-- Widget Title -->
+                <a href="/shop">
+                    <h6 class="widget-title mb-30">전체 상품</h6>
+                </a>
+
+                <!--  Catagories  -->
+                <div class="catagories-menu">
+                    <ul th:each="itemcategory : ${itemCategories}">
+                        <li><a href="#" th:href="@{/shop/{categoryId}(categoryId=${itemcategory.id})}" th:text="${itemcategory.name}">카테고리명</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="amado_product_area section-padding-100">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="product-topbar d-xl-flex align-items-end justify-content-between">
+                            <!-- Total Products -->
+                            <div class="total-products">
+                                <p>총 상품 <span th:text="${items.size()}"></span></p>
+                            </div>
+
+                            <form th:action  th:object="${searchCondition}">
+                                <div class="product-sorting d-flex">
+                                    <div class="sort-by-date d-flex align-items-center mr-15">
+                                        <p>정렬 기준</p>
+                                        <select th:field="*{sort}">
+                                            <option th:each="sortCond : ${T(com.shoppingmall.dto.pageCondition.SortCondition).values()}"
+                                                    th:value="${sortCond}"
+                                                    th:text="${sortCond.sort}">option
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="view-product d-flex align-items-center">
+                                        <button type="submit" class="btn btn-primary mb-2">검색</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <!-- Single Product Area -->
+                    <div th:each="item : ${items}" class="col-12 col-sm-6 col-md-12 col-xl-6">
+                        <div class="single-product-wrapper">
+                            <!-- Product Image -->
+                            <div class="product-img">
+                                <img src="/img/product-img/product1.jpg" alt="">
+                                <!-- Hover Thumb -->
+                                <img class="hover-img" src="/img/product-img/product2.jpg" alt="">
+                            </div>
+
+                            <!-- Product Description -->
+                            <div class="product-description d-flex align-items-center justify-content-between">
+                                <!-- Product Meta Data -->
+                                <div class="product-meta-data">
+                                    <div class="line"></div>
+                                    <p class="product-price" th:text="${item.price}">상품가격</p>
+                                    <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
+                                        <h6 th:text="${item.name}">상품명</h6>
+                                    </a>
+                                </div>
+                                <!-- Ratings & Cart -->
+                                <div class="ratings-cart text-right">
+                                    <div class="cart">
+                                        <a href="../cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img src="/img/core-img/cart.png" alt=""></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12">
+                        <!-- Pagination -->
+                        <nav aria-label="navigation"
+                            th:with="
+                                pageNumber = ${page.pageable.pageNumber},
+                                pageSize = ${page.pageable.pageSize},
+                                totalPages = ${page.totalPages},
+                                startPage = ${T(Math).floor(pageNumber / pageSize) * pageSize + 1},
+                                tempEndPage = ${startPage + pageSize - 1},
+                                endPage = (${tempEndPage > totalPages ? totalPages : tempEndPage})">
+
+                            <ul class="pagination justify-content-end mt-50">
+                                <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                                    <a th:text="${page}" class="page-link" th:href="@{/shop(page=${page}-1)}"></a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Main Content Wrapper End ##### -->
+
+    <!-- ##### Footer Area Start ##### -->
+    <div th:replace="fragment/footer :: footer"/>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+    <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="/js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/js/active.js"></script>
+
+</body>
+
+</html>

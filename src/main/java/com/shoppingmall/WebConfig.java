@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import java.util.List;
 
 @Configuration
-public class Webconfig implements WebMvcConfigurer {
+public class WebConfig implements WebMvcConfigurer {
     //로그인 쿠키, 세션 처리
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -22,7 +22,7 @@ public class Webconfig implements WebMvcConfigurer {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/sign-in", "/sign-up", "/search",
+                .excludePathPatterns("/", "/sign-in", "/sign-up", "/search", "/shop/**",
                         "/css/**", "/fonts/**", "/img/**", "/js/**", "/scss/**",
                         "/*.ico", "/error");
     }

@@ -4,7 +4,7 @@ import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
-import com.shoppingmall.service.UserService;
+import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +43,7 @@ public class UserController {
 
         //중복 아이디 체크
         try{
-            userService.userRegistration(userRequestDto);
+            userService.userRegistration(userRequestDto.toEntity());
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
                 log.error("errors={}", e.getMessage());
@@ -73,17 +73,17 @@ public class UserController {
         }
 
         try{
-            userService.login(loginRequestDto);
+            //로그인 시도
+            userService.login(loginRequestDto.toEntity());
+            //세션이 있으면 세션 반환, 없으면 신규 세션 생성
+            HttpSession session = request.getSession();
+            //세션에 로그인 회원 정보를 보관한다.
+            session.setAttribute(SessionConst.LOGIN_USER, loginRequestDto);
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
             bindingResult.reject("incorrectLoginInfoException", new Object[]{IncorrectLoginInfoException.class}, null);
             return "user/signInForm";
         }
-
-        //세션이 있으면 세션 반환, 없으면 신규 세션 생성
-        HttpSession session = request.getSession();
-        //세션에 로그인 회원 정보를 보관한다.
-        session.setAttribute(SessionConst.LOGIN_USER, loginRequestDto);
 
         return "redirect:" + redirectURL;
     }
@@ -144,5 +144,17 @@ public class UserController {
         userService.updateProfiles(userId, userRequestDto);
 
         return "redirect:/profile";
+    }
+
+    @GetMapping("/profile/{userId}/delete")
+    public String deleteUser(@PathVariable Long userId, HttpServletRequest request){
+        HttpSession session = request.getSession(false);
+        //세션이 존재하지 않는다면 홈으로 리다이렉트
+        if(session == null) return "redirect:/";
+
+        userService.deleteUser(userId);
+        session.invalidate();
+
+        return "redirect:/";
     }
 }

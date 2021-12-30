@@ -116,7 +116,7 @@
 
                             <ul class="pagination justify-content-end mt-50">
                                 <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                                    <a th:text="${page}" class="page-link" th:href="@{/shop(page=${page}-1)}"></a>
+                                    <a th:text="${page}" class="page-link" th:href="@{/shop/{categoryId}(categoryId=${itemCategory.getId()}, page=${page}-1)}"></a>
                                 </li>
                             </ul>
                         </nav>

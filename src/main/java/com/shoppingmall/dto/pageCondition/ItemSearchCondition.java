@@ -5,7 +5,6 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ViewCondition {
-
-    private String size;
+public class ItemSearchCondition {
+    private SortCondition sort;
 }

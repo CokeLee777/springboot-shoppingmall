@@ -26,6 +26,17 @@
             <div class="container-fluid">
 
                 <div class="row">
+                    <div class="col-12">
+                        <nav aria-label="breadcrumb">
+                            <ol class="breadcrumb mt-50">
+                                <li class="breadcrumb-item"><a href="#" th:href="@{/shop/{categoryId}(categoryId=${categoryId})}" th:text="${category.name}">카테고리명</a></li>
+                                <li class="breadcrumb-item active" aria-current="page" th:text="${item.name}">상품명</li>
+                            </ol>
+                        </nav>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-12 col-lg-7">
                         <div class="single_product_thumb">
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
@@ -80,7 +91,9 @@
                                     </div>
                                 </div>
                                 <!-- Avaiable -->
-                                <p class="avaibility"><i class="fa fa-circle"></i>In Stock</p>
+                                <p class="avaibility" th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).SALE}" th:text="${item.itemStatus.getStatus()}"><i class="fa fa-circle"></i>판매중</p>
+                                <p class="avaibility" th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).TEMPSOLDOUT}" th:text="${item.itemStatus.getStatus()}"><i class="fa fa-circle"></i>일시품절</p>
+                                <p class="avaibility" th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).SOLDOUT}" th:text="${item.itemStatus.getStatus()}"><i class="fa fa-circle"></i>품절</p>
                             </div>
 
                             <div class="short_overview my-5">
@@ -97,7 +110,9 @@
                                         <span class="qty-plus" onclick="var effect = document.getElementById('qty'); var qty = effect.value; if( !isNaN( qty )) effect.value++;return false;"><i class="fa fa-caret-up" aria-hidden="true"></i></span>
                                     </div>
                                 </div>
-                                <button type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
+                                <button th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).SALE}" type="submit" name="addtocart" value="5" class="btn amado-btn">Add to cart</button>
+                                <button th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).TEMPSOLDOUT}" type="submit" name="addtocart" value="5" class="btn amado-btn" disabled>Add to cart</button>
+                                <button th:if="${item.itemStatus} == ${T(com.shoppingmall.domain.enums.ItemStatus).SOLDOUT}" type="submit" name="addtocart" value="5" class="btn amado-btn" disabled>Add to cart</button>
                             </form>
 
                         </div>

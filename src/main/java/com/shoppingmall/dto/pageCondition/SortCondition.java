@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class SortCondition {
+public enum SortCondition {
+    createdDate("등록일"), price("가격");
 
-    private String sortName;
-    private String Direction;
+    private String sort;
 }

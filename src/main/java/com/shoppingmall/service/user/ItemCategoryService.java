@@ -39,6 +39,11 @@ public class ItemCategoryService {
                 () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
     }
 
+    public ItemCategory getItemCategory(String categoryName){
+        return itemCategoryRepository.findByName(categoryName).orElseThrow(
+                () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
+    }
+
     public List<ItemCategory> getItemCategories(){
         return itemCategoryRepository.findAll();
     }

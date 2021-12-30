@@ -12,4 +12,12 @@ public class ItemCategoryResponseDto {
 
     private Long id;
     private String name;
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ItemCategoryInfo {
+        private Long id;
+        private String name;
+    }
 }

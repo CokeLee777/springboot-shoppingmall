@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
@@ -38,8 +39,8 @@ public class ItemCategory extends BaseEntity {
         this.name = itemCategoryRequestDto.getName();
     }
 
-    public ItemCategoryResponseDto toItemCategoryResponseDto(){
-        return ItemCategoryResponseDto.builder()
+    public ItemCategoryInfo toItemCategoryInfo(){
+        return ItemCategoryInfo.builder()
                 .id(id)
                 .name(name)
                 .build();

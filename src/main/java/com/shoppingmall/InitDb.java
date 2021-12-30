@@ -7,6 +7,7 @@ import com.shoppingmall.domain.user.Address;
 import com.shoppingmall.domain.user.User;
 import com.shoppingmall.dto.ItemCategoryRequestDto;
 import com.shoppingmall.dto.ItemRequestDto;
+import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
 import com.shoppingmall.service.user.UserService;
@@ -15,6 +16,8 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
+
+import static com.shoppingmall.dto.UserRequestDto.*;
 
 /**
  * 테스트 DB
@@ -28,13 +31,9 @@ public class InitDb {
 
     @PostConstruct
     public void init(){
-        User user = new User();
-        user.setIdentifier("test123");
-        user.setPassword("test123!");
-        user.setUsername("test");
-        user.setEmail("test@naver.com");
-        user.setAddress(new Address("test", "test"));
-        userService.userRegistration(user);
+        CreateUserForm form = new CreateUserForm("test123", "test123!", "test",
+                "test@naver.com", "test", "test");
+        userService.userRegistration(form);
 
         for(int i = 0; i < 20; i++){
             ItemCategory itemCategory = new ItemCategory();

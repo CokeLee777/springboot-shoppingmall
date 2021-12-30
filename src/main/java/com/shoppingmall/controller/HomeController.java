@@ -1,10 +1,6 @@
 package com.shoppingmall.controller;
 
 import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemCategoryResponseDto;
-import com.shoppingmall.dto.ItemResponseDto;
-import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
 import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.shoppingmall.dto.ItemResponseDto.*;
 import static com.shoppingmall.dto.UserRequestDto.*;
 
 @Slf4j
@@ -26,15 +23,15 @@ public class HomeController {
     private final ItemService itemService;
 
     @GetMapping("/")
-    public String home(@Login LoginRequestDto loginRequestDto, Model model){
+    public String home(@Login LoginUserForm loginUserForm, Model model){
         log.info("home access");
-        List<Item> items = itemService.findAll();
-        List<ItemResponseDto> itemResponseDtos = items.stream()
-                .map(Item::toItemResponseDto)
+        List<Item> items = itemService.searchItems();
+        List<ItemInfo> itemInfos = items.stream()
+                .map(Item::toItemInfo)
                 .collect(Collectors.toList());
 
-        model.addAttribute("user", loginRequestDto);
-        model.addAttribute("items", itemResponseDtos);
+        model.addAttribute("user", loginUserForm);
+        model.addAttribute("items", itemInfos);
 
         return "home";
     }

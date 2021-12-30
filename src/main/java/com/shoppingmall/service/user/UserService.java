@@ -2,8 +2,6 @@ package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.UserRequestDto;
-import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.exception.LoginRequiredException;
@@ -11,6 +9,9 @@ import com.shoppingmall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.UserResponseDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -21,46 +22,44 @@ public class UserService {
 
     //일반 유저 회원가입
     @Transactional
-    public Long userRegistration(User user){
-        validateDuplicateUser(user);  //중복 회원 검증
-        userRepository.save(user);
-        return user.getId();
+    public void userRegistration(CreateUserForm form){
+        validateDuplicateUser(form);  //중복 회원 검증
+        userRepository.save(form.toEntity());
     }
 
     //유저 로그인
-    public UserRole login(User user){
-        User findUser = userRepository.findByIdentifier(user.getIdentifier())
-                .filter(u -> u.getPassword().equals(user.getPassword()))
+    public UserRole login(LoginUserForm form){
+        User findUser = userRepository.findByIdentifier(form.getIdentifier())
+                .filter(u -> u.getPassword().equals(form.getPassword()))
                 .orElseThrow(() -> new IncorrectLoginInfoException("아이디 또는 비밀번호가 맞지 않습니다."));
         return findUser.getRole();
     }
 
-    public void validateDuplicateUser(User user) {
-        boolean duplicated = userRepository.existsByIdentifier(user.getIdentifier());
+    public void validateDuplicateUser(CreateUserForm form) {
+        boolean duplicated = userRepository.existsByIdentifier(form.getIdentifier());
         if (duplicated) throw new DuplicatedUserException("이미 등록된 아이디입니다.");
     }
 
-    public UserResponseDto searchProfiles(String identifier){
+    //유저 프로필 조회
+    public UserProfileInfo searchProfiles(String identifier){
         User findUser = userRepository.findByIdentifier(identifier).orElseThrow(
                 () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
 
-        return findUser.toUserResponseDto();
+        return findUser.toUserProfileInfo();
     }
 
-    public UserResponseDto searchProfiles(Long userId){
+    public UpdateUserForm searchProfiles(Long userId){
         User findUser = getUserById(userId);
 
-        return findUser.toUserResponseDto();
+        return findUser.toUpdateUserForm();
     }
 
     //유저 프로필 수정
     @Transactional
-    public UserResponseDto updateProfiles(Long userId, UserRequestDto userRequestDto){
+    public void updateProfiles(Long userId, UpdateUserForm updateUserForm){
         User findUser = getUserById(userId);
 
-        findUser.updateProfiles(userRequestDto);
-
-        return findUser.toUserResponseDto();
+        findUser.updateProfiles(updateUserForm);
     }
 
     //유저 탈퇴

@@ -11,11 +11,16 @@ import lombok.Setter;
 @AllArgsConstructor
 public class ItemResponseDto {
 
-    private Long id;
-    private Long itemCategoryId;
-    private String name;
-    private Integer price;
-    private Integer stockQuantity;
-    private ItemStatus itemStatus;
-    private String itemImg;
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class ItemInfo {
+        private Long id;
+        private Long itemCategoryId;
+        private String name;
+        private Integer price;
+        private Integer stockQuantity;
+        private ItemStatus itemStatus;
+        private String itemImg;
+    }
 }

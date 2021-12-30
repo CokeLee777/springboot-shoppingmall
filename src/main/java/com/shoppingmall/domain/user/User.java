@@ -1,6 +1,5 @@
 package com.shoppingmall.domain.user;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.inquiry.ItemInquiry;
@@ -8,14 +7,14 @@ import com.shoppingmall.domain.inquiry.ItemInquiryAnswer;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.order.Order;
 import com.shoppingmall.domain.common.BaseEntity;
-import com.shoppingmall.dto.UserRequestDto;
-import com.shoppingmall.dto.UserResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.UserResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
@@ -70,25 +69,32 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    /**
-     * 비즈니스 로직
-     */
-    public void updateProfiles(UserRequestDto userRequestDto){
-        this.identifier = userRequestDto.getIdentifier();
-        this.password = userRequestDto.getPassword();
-        this.username = userRequestDto.getUsername();
-        this.email = userRequestDto.getEmail();
-        this.address = new Address(userRequestDto.getRoadAddress(), userRequestDto.getDetailAddress());
+    public void updateProfiles(UpdateUserForm updateUserForm){
+        this.password = updateUserForm.getPassword();
+        this.username = updateUserForm.getUsername();
+        this.email = updateUserForm.getEmail();
+        this.address = new Address(updateUserForm.getRoadAddress(), updateUserForm.getDetailAddress());
     }
 
-    public UserResponseDto toUserResponseDto(){
-        return UserResponseDto.builder()
+    public UserProfileInfo toUserProfileInfo(){
+        return UserProfileInfo.builder()
                 .id(id)
                 .identifier(identifier)
                 .password(password)
                 .username(username)
                 .email(email)
                 .address(address)
+                .build();
+    }
+
+    public UpdateUserForm toUpdateUserForm(){
+        return UpdateUserForm.builder()
+                .identifier(identifier)
+                .password(password)
+                .username(username)
+                .email(email)
+                .roadAddress(address.getRoad())
+                .detailAddress(address.getDetail())
                 .build();
     }
 }

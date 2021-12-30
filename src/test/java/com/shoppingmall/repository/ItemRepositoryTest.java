@@ -59,10 +59,10 @@ class ItemRepositoryTest {
         List<Item> content = page.getContent();
 
         assertThat(content.size()).isEqualTo(10);
-        assertThat(page.getTotalElements()).isEqualTo(20);
+        assertThat(page.getTotalElements()).isEqualTo(40);
         assertThat(page.getNumberOfElements()).isEqualTo(10);
         assertThat(page.getNumber()).isEqualTo(0);
-        assertThat(page.getTotalPages()).isEqualTo(2);
+        assertThat(page.getTotalPages()).isEqualTo(4);
         assertThat(page.isFirst()).isTrue();
         assertThat(page.hasNext()).isTrue();
     }

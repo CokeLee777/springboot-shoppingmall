@@ -1,7 +1,6 @@
 package com.shoppingmall.service;
 
 import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
@@ -15,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.UserResponseDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,12 +31,12 @@ class UserServiceTest {
     public void join () throws Exception
     {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
+        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
         //when
-        userService.userRegistration(userRequestDto.toEntity());
+        userService.userRegistration(createUserForm);
         //then
-        Optional<User> findUser = userRepository.findByIdentifier("test123");
-        assertThat(userRequestDto.getEmail()).isEqualTo(findUser.get().getEmail());
+        Optional<User> findUser = userRepository.findByIdentifier("test1234");
+        assertThat(createUserForm.getEmail()).isEqualTo(findUser.get().getEmail());
     }
 
     @Test
@@ -44,13 +44,13 @@ class UserServiceTest {
     public void duplicatedJoin () throws Exception
     {
         //given
-        UserRequestDto userRequestDto1 = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
-        UserRequestDto userRequestDto2 = new UserRequestDto("test123", "test123*", "test2", "test2@naver.com", "test2", "test2");
+        CreateUserForm createUserForm1 = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
+        CreateUserForm createUserForm2 = new CreateUserForm("test1234", "test123*", "test2", "test2@naver.com", "test2", "test2");
         //when
-        userService.userRegistration(userRequestDto1.toEntity());
+        userService.userRegistration(createUserForm1);
         //then
         assertThrows(DuplicatedUserException.class,
-                () -> userService.userRegistration(userRequestDto2.toEntity()));
+                () -> userService.userRegistration(createUserForm2));
     }
 
     @Test
@@ -58,11 +58,11 @@ class UserServiceTest {
     public void login () throws Exception
     {
         //given
-        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
-        userService.userRegistration(userRequestDto.toEntity());
+        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
+        userService.userRegistration(createUserForm);
         //when
-        LoginRequestDto loginRequestDto = new LoginRequestDto("test123", "test123*");
-        userService.login(loginRequestDto.toEntity());
+        LoginUserForm loginUserForm = new LoginUserForm("test1234", "test123*");
+        userService.login(loginUserForm);
         //then
     }
 
@@ -72,12 +72,13 @@ class UserServiceTest {
     {
         //given
         User user = new User();
+        user.setIdentifier("test111");
         userRepository.save(user);
 
         //when
-        UserResponseDto findUserResponseDto = userService.searchProfiles(user.getId());
+        UserProfileInfo userProfileInfo = userService.searchProfiles(user.getIdentifier());
         //then
-        assertThat(findUserResponseDto.getId()).isEqualTo(user.getId());
+        assertThat(userProfileInfo.getId()).isEqualTo(user.getId());
     }
 
     @Test
@@ -85,14 +86,15 @@ class UserServiceTest {
     public void updateProfiles () throws Exception
     {
         //given
-        User user = new User();
-        userRepository.save(user);
-        UserRequestDto userRequestDto = new UserRequestDto("test123", "test123*", "test1", "test@naver.com", "test", "test");
+        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "beforeName", "test@naver.com", "test", "test");
+        userService.userRegistration(createUserForm);
         //when
-        UserResponseDto userResponseDto = userService.updateProfiles(user.getId(), userRequestDto);
+        UserProfileInfo userProfileInfo = userService.searchProfiles("test1234");
+        UpdateUserForm updateUserForm = new UpdateUserForm("test1234", "test123*", "afterName", "test@naver.com", "test", "test");
+        userService.updateProfiles(userProfileInfo.getId(), updateUserForm);
         //then
-        Optional<User> findUser = userRepository.findById(user.getId());
-        assertThat(findUser.get().getIdentifier()).isEqualTo(userResponseDto.getIdentifier());
+        Optional<User> findUser = userRepository.findById(userProfileInfo.getId());
+        assertThat(findUser.get().getUsername()).isEqualTo("afterName");
     }
 
     @Test

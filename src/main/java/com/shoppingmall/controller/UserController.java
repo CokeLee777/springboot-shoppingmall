@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.UserResponseDto.*;
 
 @Slf4j
 @Controller
@@ -28,12 +29,13 @@ public class UserController {
 
     //회원가입 form
     @GetMapping("/sign-up")
-    public String signUpForm(@ModelAttribute("user") UserRequestDto userRequestDto){
+    public String signUpForm(@ModelAttribute("user") CreateUserForm createUserForm){
+        log.info("회원가입 form access");
         return "user/signUpForm";
     }
     //회원가입
     @PostMapping("/sign-up")
-    public String signUp(@Validated @ModelAttribute("user") UserRequestDto userRequestDto, BindingResult bindingResult){
+    public String signUp(@Validated @ModelAttribute("user") CreateUserForm createUserForm, BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
         if(bindingResult.hasErrors()){
@@ -43,7 +45,7 @@ public class UserController {
 
         //중복 아이디 체크
         try{
-            userService.userRegistration(userRequestDto.toEntity());
+            userService.userRegistration(createUserForm);
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
                 log.error("errors={}", e.getMessage());
@@ -52,18 +54,20 @@ public class UserController {
             return "user/signUpForm";
         }
 
+        log.info("회원가입 완료 identifier={}", createUserForm.getIdentifier());
         return "home";
     }
 
     //로그인 form
     @GetMapping("/sign-in")
-    public String signInForm(@ModelAttribute("signInForm") LoginRequestDto loginRequestDto){
+    public String signInForm(@ModelAttribute("signInForm") LoginUserForm loginUserForm){
+        log.info("로그인 form access");
         return "user/signInForm";
     }
 
     //로그인
     @PostMapping("/sign-in")
-    public String signIn(@Validated @ModelAttribute("signInForm") LoginRequestDto loginRequestDto,
+    public String signIn(@Validated @ModelAttribute("signInForm") LoginUserForm loginUserForm,
                          BindingResult bindingResult, @RequestParam(defaultValue = "/") String redirectURL,
                          HttpServletRequest request){
         //검증 오류에 문제가 있다면
@@ -74,17 +78,18 @@ public class UserController {
 
         try{
             //로그인 시도
-            userService.login(loginRequestDto.toEntity());
+            userService.login(loginUserForm);
             //세션이 있으면 세션 반환, 없으면 신규 세션 생성
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보를 보관한다.
-            session.setAttribute(SessionConst.LOGIN_USER, loginRequestDto);
+            session.setAttribute(SessionConst.LOGIN_USER, loginUserForm);
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
             bindingResult.reject("incorrectLoginInfoException", new Object[]{IncorrectLoginInfoException.class}, null);
             return "user/signInForm";
         }
 
+        log.info("로그인 identifier={}", loginUserForm.getIdentifier());
         return "redirect:" + redirectURL;
     }
 
@@ -93,6 +98,9 @@ public class UserController {
     public String logout(HttpServletRequest request){
         //세션을 불러온다. -> 없으면 생성하지 않는다.
         HttpSession session = request.getSession(false);
+
+        log.info("로그아웃 session={}", session);
+
         //세션이 존재한다면 세션을 없앤다.
         if(session != null){
             session.invalidate();
@@ -108,23 +116,24 @@ public class UserController {
         //세션이 존재하지 않는다면 홈으로 돌아간다.
         if(session == null) return "redirect:/";
         //세션이 존재한다면 현재 로그인 한 회원의 프로필을 모델에 담는다.
-        LoginRequestDto loginRequestDto = (LoginRequestDto) session.getAttribute(SessionConst.LOGIN_USER);
+        LoginUserForm loginUserForm = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
 
-        UserResponseDto userResponseDto = userService.searchProfiles(loginRequestDto.getIdentifier());
+        UserProfileInfo userProfileInfo = userService.searchProfiles(loginUserForm.getIdentifier());
 
-        model.addAttribute("user", userResponseDto);
+        model.addAttribute("user", userProfileInfo);
 
+        log.info("프로필 정보 열람 identifier={}", loginUserForm.getIdentifier());
         return "user/profileList";
     }
 
     //프로필 수정 폼
     @GetMapping("/profile/{userId}/edit")
     public String myProfileEditForm(@PathVariable Long userId, Model model){
-        UserResponseDto userResponseDto = userService.searchProfiles(userId);
-        UserRequestDto userRequestDto = userResponseDto.toUserRequestDto();
+        UpdateUserForm updateUserForm = userService.searchProfiles(userId);
 
-        model.addAttribute("user", userRequestDto);
+        model.addAttribute("user", updateUserForm);
 
+        log.info("프로필 수정 form access");
         return "user/profileEditForm";
     }
 
@@ -132,7 +141,7 @@ public class UserController {
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
-            @Validated @ModelAttribute("user") UserRequestDto userRequestDto,
+            @Validated @ModelAttribute("user") UpdateUserForm updateUserForm,
             BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
@@ -141,8 +150,9 @@ public class UserController {
             return "user/profileEditForm";
         }
 
-        userService.updateProfiles(userId, userRequestDto);
+        userService.updateProfiles(userId, updateUserForm);
 
+        log.info("프로필 수정 완료");
         return "redirect:/profile";
     }
 
@@ -155,6 +165,7 @@ public class UserController {
         userService.deleteUser(userId);
         session.invalidate();
 
+        log.info("회원 탈퇴 id={}", userId);
         return "redirect:/";
     }
 }

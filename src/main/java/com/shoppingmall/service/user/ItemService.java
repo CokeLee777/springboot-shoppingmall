@@ -20,19 +20,23 @@ import java.util.List;
 public class ItemService {
 
     private final ItemRepository itemRepository;
-    private final ItemCategoryRepository itemCategoryRepository;
+
+    public Item searchItem(Long itemId) {
+        return itemRepository.findById(itemId).orElseThrow(
+                () -> new NotExistItemException("존재하지 않는 상품입니다."));
+    }
 
     //모든 상품 조회
-    public Page<Item> findAll(Pageable pageable){
+    public Page<Item> searchItems(Pageable pageable){
         return itemRepository.findAll(pageable);
     }
 
-    public List<Item> findAll(){
+    public List<Item> searchItems(){
         return itemRepository.findAll();
     }
 
     //특정 카테고리의 모든 상품 조회
-    public Page<Item> findAllByItemCategory(ItemCategory itemCategory, Pageable pageable){
+    public Page<Item> searchSameCategoryItems(ItemCategory itemCategory, Pageable pageable){
         return itemRepository.findAllByItemCategory(itemCategory, pageable);
     }
 
@@ -43,18 +47,13 @@ public class ItemService {
 
     @Transactional
     public void updateItem(Long itemId, ItemRequestDto itemRequestDto){
-        Item findItem = findOne(itemId);
+        Item findItem = searchItem(itemId);
         findItem.updateItem(itemRequestDto);
     }
 
     @Transactional
     public void deleteItem(Long itemId){
-        Item findItem = findOne(itemId);
+        Item findItem = searchItem(itemId);
         itemRepository.delete(findItem);
-    }
-
-    public Item findOne(Long itemId) {
-        return itemRepository.findById(itemId).orElseThrow(
-                () -> new NotExistItemException("존재하지 않는 상품입니다."));
     }
 }

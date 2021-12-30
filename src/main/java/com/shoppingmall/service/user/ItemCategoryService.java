@@ -17,34 +17,34 @@ public class ItemCategoryService {
 
     private final ItemCategoryRepository itemCategoryRepository;
 
+    public List<ItemCategory> searchItemCategories(){
+        return itemCategoryRepository.findAll();
+    }
+
     @Transactional
-    public void saveItemCategory(ItemCategory itemCategory){
+    public void addItemCategory(ItemCategory itemCategory){
         itemCategoryRepository.save(itemCategory);
     }
 
     @Transactional
     public void updateItemCategory(Long itemCategoryId, ItemCategoryRequestDto itemCategoryRequestDto){
-        ItemCategory findItemCategory = getItemCategory(itemCategoryId);
+        ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
         findItemCategory.updateItemCategory(itemCategoryRequestDto);
     }
 
     @Transactional
     public void deleteItemCategory(Long itemCategoryId){
-        ItemCategory findItemCategory = getItemCategory(itemCategoryId);
+        ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
         itemCategoryRepository.delete(findItemCategory);
     }
 
-    public ItemCategory getItemCategory(Long itemCategoryId) {
+    public ItemCategory searchItemCategory(Long itemCategoryId) {
         return itemCategoryRepository.findById(itemCategoryId).orElseThrow(
                 () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
     }
 
-    public ItemCategory getItemCategory(String categoryName){
+    public ItemCategory searchItemCategory(String categoryName){
         return itemCategoryRepository.findByName(categoryName).orElseThrow(
                 () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
-    }
-
-    public List<ItemCategory> getItemCategories(){
-        return itemCategoryRepository.findAll();
     }
 }

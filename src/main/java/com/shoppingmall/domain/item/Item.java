@@ -16,6 +16,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shoppingmall.dto.ItemResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.*;
@@ -77,9 +78,6 @@ public class Item extends BaseEntity {
         itemCategory.getItems().add(this);
     }
 
-    /**
-     * 비즈니스 로직
-     */
     public void updateItem(ItemRequestDto itemRequestDto){
         this.name = itemRequestDto.getName();
         this.price = itemRequestDto.getPrice();
@@ -88,6 +86,9 @@ public class Item extends BaseEntity {
         this.itemImg = itemRequestDto.getItemImg();
     }
 
+    /**
+     * 비즈니스 로직
+     */
     public void addStock(int quantity){
         this.stockQuantity += quantity;
     }
@@ -102,8 +103,8 @@ public class Item extends BaseEntity {
         this.stockQuantity = restStock;
     }
 
-    public ItemResponseDto toItemResponseDto(){
-        return ItemResponseDto.builder()
+    public ItemInfo toItemInfo(){
+        return ItemInfo.builder()
                 .id(id)
                 .itemCategoryId(itemCategory.getId())
                 .name(name)

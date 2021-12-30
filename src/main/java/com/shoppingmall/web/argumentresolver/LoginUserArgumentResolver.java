@@ -21,7 +21,7 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
         //@Login 어노테이션이 붙어있는가?
         boolean hasLoginAnnotation = parameter.hasParameterAnnotation(Login.class);
         //LoginUserRequestDto 타입인가?
-        boolean hasUserType = LoginRequestDto.class.isAssignableFrom(parameter.getParameterType());
+        boolean hasUserType = LoginUserForm.class.isAssignableFrom(parameter.getParameterType());
 
         return hasLoginAnnotation && hasUserType;
     }

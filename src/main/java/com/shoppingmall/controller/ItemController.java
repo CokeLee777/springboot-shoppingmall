@@ -2,9 +2,6 @@ package com.shoppingmall.controller;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemCategoryResponseDto;
-import com.shoppingmall.dto.ItemResponseDto;
-import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
@@ -20,10 +17,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
+import static com.shoppingmall.dto.ItemResponseDto.*;
+import static com.shoppingmall.dto.UserRequestDto.*;
 
 @Slf4j
 @Controller
@@ -36,78 +35,80 @@ public class ItemController {
     //전체 상품 조회
     @GetMapping("/shop")
     public String itemList(
-            @Login UserRequestDto.LoginRequestDto loginRequestDto,
+            @Login LoginUserForm loginUserForm,
             @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //상품 전체 조회 - 페이징
-        Page<Item> page = itemService.findAll(pageable);
+        Page<Item> page = itemService.searchItems(pageable);
         //전체 상품 및 전체 카테고리 DTO로 변환
-        List<ItemResponseDto> itemResponseDtos = getItemResponseDtos(page);
-        List<ItemCategoryResponseDto> itemCategoryResponseDtos = getItemCategoryResponseDtos();
+        List<ItemInfo> itemInfos = getItemResponseDtos(page);
+        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
 
-        addSessionAttribute(loginRequestDto, model);
-        model.addAttribute("items", itemResponseDtos);
-        model.addAttribute("itemCategories", itemCategoryResponseDtos);
+        addSessionAttribute(loginUserForm, model);
+        model.addAttribute("items", itemInfos);
+        model.addAttribute("itemCategories", itemCategoryInfos);
         model.addAttribute("page", page);
         return "item/itemList";
     }
 
-    private void addSessionAttribute(UserRequestDto.LoginRequestDto loginRequestDto, Model model) {
-        model.addAttribute("user", loginRequestDto);
+    private void addSessionAttribute(LoginUserForm loginUserForm, Model model) {
+        model.addAttribute("user", loginUserForm);
     }
 
     //카테고리별로 상품 조회
     @GetMapping("/shop/{categoryId}")
     public String itemCategoryList(
-            @Login UserRequestDto.LoginRequestDto loginRequestDto,
+            @Login LoginUserForm loginUserForm,
             @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
             @PathVariable("categoryId") Long categoryId,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //현재 선택된 카테고리에 따른 상품 조회 - 페이징
-        ItemCategory itemCategory = itemCategoryService.getItemCategory(categoryId);
-        Page<Item> page = itemService.findAllByItemCategory(itemCategory, pageable);
+        ItemCategory itemCategory = itemCategoryService.searchItemCategory(categoryId);
+        Page<Item> page = itemService.searchSameCategoryItems(itemCategory, pageable);
         //카테고리에 따른 전체 상품, 전체 카테고리, 특정 카테고리 DTO로 변환
-        List<ItemResponseDto> itemResponseDtos = getItemResponseDtos(page);
-        List<ItemCategoryResponseDto> itemCategoryResponseDtos = getItemCategoryResponseDtos();
-        ItemCategoryResponseDto itemCategoryResponseDto = itemCategory.toItemCategoryResponseDto();
+        List<ItemInfo> itemInfos = getItemResponseDtos(page);
+        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+        ItemCategoryInfo itemCategoryInfo = itemCategory.toItemCategoryInfo();
 
-        addSessionAttribute(loginRequestDto, model);
-        model.addAttribute("itemCategory", itemCategoryResponseDto);
-        model.addAttribute("items", itemResponseDtos);
-        model.addAttribute("itemCategories", itemCategoryResponseDtos);
+        addSessionAttribute(loginUserForm, model);
+        model.addAttribute("itemCategory", itemCategoryInfo);
+        model.addAttribute("items", itemInfos);
+        model.addAttribute("itemCategories", itemCategoryInfos);
         model.addAttribute("page", page);
         return "item/itemCategoryList";
     }
 
-    private List<ItemResponseDto> getItemResponseDtos(Page<Item> page) {
+    private List<ItemInfo> getItemResponseDtos(Page<Item> page) {
         List<Item> items = page.getContent();
-        return items.stream().map(Item::toItemResponseDto)
+        return items.stream().map(Item::toItemInfo)
                 .collect(Collectors.toList());
     }
 
-    private List<ItemCategoryResponseDto> getItemCategoryResponseDtos() {
+    private List<ItemCategoryInfo> getItemCategoryInfos() {
         //전체 카테고리 조회
-        List<ItemCategory> itemCategories = itemCategoryService.getItemCategories();
+        List<ItemCategory> itemCategories = itemCategoryService.searchItemCategories();
         return itemCategories.stream()
-                .map(ItemCategory::toItemCategoryResponseDto)
+                .map(ItemCategory::toItemCategoryInfo)
                 .collect(Collectors.toList());
     }
 
     //상품 상세 조회
     @GetMapping("/shop/{categoryId}/{itemId}")
     public String itemDetails(
-            @Login UserRequestDto.LoginRequestDto loginRequestDto,
+            @Login LoginUserForm loginUserForm,
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("itemId") Long itemId,
             Model model){
-        Item item = itemService.findOne(itemId);
-        ItemCategory itemCategory = itemCategoryService.getItemCategory(categoryId);
-        ItemResponseDto itemResponseDto = item.toItemResponseDto();
-        ItemCategoryResponseDto itemCategoryResponseDto = itemCategory.toItemCategoryResponseDto();
 
-        addSessionAttribute(loginRequestDto, model);
-        model.addAttribute("item", itemResponseDto);
-        model.addAttribute("category", itemCategoryResponseDto);
+        Item item = itemService.searchItem(itemId);
+        ItemCategory itemCategory = itemCategoryService.searchItemCategory(categoryId);
+
+        ItemInfo itemInfo = item.toItemInfo();
+        ItemCategoryInfo itemCategoryInfo = itemCategory.toItemCategoryInfo();
+
+        addSessionAttribute(loginUserForm, model);
+        model.addAttribute("item", itemInfo);
+        model.addAttribute("category", itemCategoryInfo);
         return "item/itemDetails";
     }
 

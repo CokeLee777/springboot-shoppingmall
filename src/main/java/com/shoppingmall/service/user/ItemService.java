@@ -12,6 +12,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -23,6 +25,10 @@ public class ItemService {
     //모든 상품 조회
     public Page<Item> findAll(Pageable pageable){
         return itemRepository.findAll(pageable);
+    }
+
+    public List<Item> findAll(){
+        return itemRepository.findAll();
     }
 
     //특정 카테고리의 모든 상품 조회

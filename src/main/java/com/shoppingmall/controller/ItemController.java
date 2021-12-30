@@ -4,9 +4,11 @@ import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.ItemCategoryResponseDto;
 import com.shoppingmall.dto.ItemResponseDto;
+import com.shoppingmall.dto.UserRequestDto;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
+import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,6 +36,7 @@ public class ItemController {
     //전체 상품 조회
     @GetMapping("/shop")
     public String itemList(
+            @Login UserRequestDto.LoginRequestDto loginRequestDto,
             @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //상품 전체 조회 - 페이징
@@ -42,15 +45,21 @@ public class ItemController {
         List<ItemResponseDto> itemResponseDtos = getItemResponseDtos(page);
         List<ItemCategoryResponseDto> itemCategoryResponseDtos = getItemCategoryResponseDtos();
 
+        addSessionAttribute(loginRequestDto, model);
         model.addAttribute("items", itemResponseDtos);
         model.addAttribute("itemCategories", itemCategoryResponseDtos);
         model.addAttribute("page", page);
         return "item/itemList";
     }
 
+    private void addSessionAttribute(UserRequestDto.LoginRequestDto loginRequestDto, Model model) {
+        model.addAttribute("user", loginRequestDto);
+    }
+
     //카테고리별로 상품 조회
     @GetMapping("/shop/{categoryId}")
     public String itemCategoryList(
+            @Login UserRequestDto.LoginRequestDto loginRequestDto,
             @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
             @PathVariable("categoryId") Long categoryId,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
@@ -62,6 +71,7 @@ public class ItemController {
         List<ItemCategoryResponseDto> itemCategoryResponseDtos = getItemCategoryResponseDtos();
         ItemCategoryResponseDto itemCategoryResponseDto = itemCategory.toItemCategoryResponseDto();
 
+        addSessionAttribute(loginRequestDto, model);
         model.addAttribute("itemCategory", itemCategoryResponseDto);
         model.addAttribute("items", itemResponseDtos);
         model.addAttribute("itemCategories", itemCategoryResponseDtos);
@@ -86,6 +96,7 @@ public class ItemController {
     //상품 상세 조회
     @GetMapping("/shop/{categoryId}/{itemId}")
     public String itemDetails(
+            @Login UserRequestDto.LoginRequestDto loginRequestDto,
             @PathVariable("categoryId") Long categoryId,
             @PathVariable("itemId") Long itemId,
             Model model){
@@ -94,6 +105,7 @@ public class ItemController {
         ItemResponseDto itemResponseDto = item.toItemResponseDto();
         ItemCategoryResponseDto itemCategoryResponseDto = itemCategory.toItemCategoryResponseDto();
 
+        addSessionAttribute(loginRequestDto, model);
         model.addAttribute("item", itemResponseDto);
         model.addAttribute("category", itemCategoryResponseDto);
         return "item/itemDetails";

@@ -1,8 +1,11 @@
 package com.shoppingmall.controller;
 
+import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.ItemCategoryResponseDto;
+import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.service.user.ItemCategoryService;
+import com.shoppingmall.service.user.ItemService;
 import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,19 +20,22 @@ import static com.shoppingmall.dto.UserRequestDto.*;
 
 @Slf4j
 @Controller
+@RequiredArgsConstructor
 public class HomeController {
+
+    private final ItemService itemService;
 
     @GetMapping("/")
     public String home(@Login LoginRequestDto loginRequestDto, Model model){
         log.info("home access");
-
-        //세션에 회원 데이터가 없으면 일반 home으로 이동
-        if(loginRequestDto == null){
-            return "home";
-        }
+        List<Item> items = itemService.findAll();
+        List<ItemResponseDto> itemResponseDtos = items.stream()
+                .map(Item::toItemResponseDto)
+                .collect(Collectors.toList());
 
         model.addAttribute("user", loginRequestDto);
+        model.addAttribute("items", itemResponseDtos);
 
-        return "loginHome";
+        return "home";
     }
 }

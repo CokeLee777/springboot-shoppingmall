@@ -18,7 +18,12 @@
         <div th:replace="fragment/mobileNav :: mobileNav"/>
 
         <!-- Header Area Start -->
-        <div th:replace="fragment/bodyHeader :: bodyHeader"/>
+        <th:block th:if="${user} == null">
+            <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+        </th:block>
+        <th:block th:if="${user} != null">
+            <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+        </th:block>
         <!-- Header Area End -->
 
         <div class="shop_sidebar_area">

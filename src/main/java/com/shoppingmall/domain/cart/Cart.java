@@ -13,7 +13,8 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter @Setter(AccessLevel.PROTECTED)
+@Builder
+@Getter @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class Cart extends BaseEntity {
@@ -34,10 +35,6 @@ public class Cart extends BaseEntity {
     /**
      * 연관관계 메서드
      */
-    public void setUser(User user){
-        this.user = user;
-        user.setCart(this);
-    }
 
     public void addItems(Item item){
         this.items.add(item);

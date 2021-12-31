@@ -1,5 +1,6 @@
 package com.shoppingmall.dto;
 
+import com.shoppingmall.domain.item.ItemCategory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

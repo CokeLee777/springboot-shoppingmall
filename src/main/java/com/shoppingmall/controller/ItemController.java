@@ -3,6 +3,7 @@ package com.shoppingmall.controller;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
+import com.shoppingmall.service.user.CartService;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
 import com.shoppingmall.web.argumentresolver.Login;
@@ -16,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +33,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final ItemCategoryService itemCategoryService;
+    private final CartService cartService;
 
     //전체 상품 조회
     @GetMapping("/shop")
@@ -100,6 +103,7 @@ public class ItemController {
             @PathVariable("itemId") Long itemId,
             Model model){
 
+        //현재 선택한 아이템 정보 불러오기
         Item item = itemService.searchItem(itemId);
         ItemCategory itemCategory = itemCategoryService.searchItemCategory(categoryId);
 
@@ -112,6 +116,19 @@ public class ItemController {
         return "item/itemDetails";
     }
 
+    //상품 장바구니에 담기
+    @PostMapping("/shop/{itemId}/cart/add")
+    public String addItemToCart(
+            @Login LoginUserForm loginUserForm,
+            @PathVariable("itemId") Long itemId,
+            Model model){
 
+        //현재 선택한 아이템 정보 불러오기
+        Item item = itemService.searchItem(itemId);
+        cartService.addItem(loginUserForm.getIdentifier(), item);
+
+        addSessionAttribute(loginUserForm, model);
+        return "item/itemDetails";
+    }
 
 }

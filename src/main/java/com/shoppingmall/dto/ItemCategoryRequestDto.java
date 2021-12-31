@@ -32,11 +32,6 @@ public class ItemCategoryRequestDto {
         @NotBlank(message = "카테고리명을 작성해주세요.")
         private String name;
 
-        public ItemCategory toEntity(){
-            return ItemCategory.builder()
-                    .name(name)
-                    .build();
-        }
     }
 }
 

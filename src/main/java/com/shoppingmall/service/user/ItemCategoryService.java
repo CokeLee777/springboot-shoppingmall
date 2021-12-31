@@ -1,6 +1,8 @@
 package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.dto.ItemCategoryRequestDto;
+import com.shoppingmall.exception.DuplicatedCategoryException;
 import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.repository.ItemCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +21,14 @@ public class ItemCategoryService {
     private final ItemCategoryRepository itemCategoryRepository;
 
     @Transactional
-    public void addItemCategory(ItemCategory itemCategory){
-        itemCategoryRepository.save(itemCategory);
+    public void addItemCategory(ItemCategoryCreateForm form){
+        validateDuplicateCategory(form);
+        itemCategoryRepository.save(form.toEntity());
+    }
+
+    public void validateDuplicateCategory(ItemCategoryCreateForm form){
+        boolean duplicated = itemCategoryRepository.existsByName(form.getName());
+        if(duplicated) throw new DuplicatedCategoryException("이미 존재하는 카테고리입니다.");
     }
 
     @Transactional

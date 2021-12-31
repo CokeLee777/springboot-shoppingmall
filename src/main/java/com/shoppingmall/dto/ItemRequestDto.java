@@ -2,10 +2,16 @@ package com.shoppingmall.dto;
 
 import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.domain.item.Item;
+import com.shoppingmall.domain.item.ItemCategory;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
 
 public class ItemRequestDto {
 
@@ -29,13 +35,14 @@ public class ItemRequestDto {
         private String itemImg;
 
         public Item toEntity(){
-            return Item.builder()
+            Item item = Item.builder()
                     .name(name)
                     .price(price)
                     .stockQuantity(stockQuantity)
                     .itemStatus(itemStatus)
                     .itemImg(itemImg)
                     .build();
+            return item;
         }
     }
 
@@ -58,14 +65,5 @@ public class ItemRequestDto {
         @NotBlank(message = "상품 사진을 등록해주세요.")
         private String itemImg;
 
-        public Item toEntity(){
-            return Item.builder()
-                    .name(name)
-                    .price(price)
-                    .stockQuantity(stockQuantity)
-                    .itemStatus(itemStatus)
-                    .itemImg(itemImg)
-                    .build();
-        }
     }
 }

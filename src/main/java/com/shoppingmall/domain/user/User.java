@@ -69,6 +69,11 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
+    public void setCart(Cart cart){
+        this.cart = cart;
+        cart.setUser(this);
+    }
+
     public void updateProfiles(UserUpdateForm userUpdateForm){
         this.password = userUpdateForm.getPassword();
         this.username = userUpdateForm.getUsername();

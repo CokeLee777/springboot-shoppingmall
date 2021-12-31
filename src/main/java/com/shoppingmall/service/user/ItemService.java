@@ -2,9 +2,7 @@ package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemRequestDto;
 import com.shoppingmall.exception.NotExistItemException;
-import com.shoppingmall.repository.ItemCategoryRepository;
 import com.shoppingmall.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -13,6 +11,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+
+import static com.shoppingmall.dto.ItemRequestDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -46,9 +46,9 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(Long itemId, ItemRequestDto itemRequestDto){
+    public void updateItem(Long itemId, ItemUpdateForm itemUpdateForm){
         Item findItem = searchItem(itemId);
-        findItem.updateItem(itemRequestDto);
+        findItem.updateItem(itemUpdateForm);
     }
 
     @Transactional

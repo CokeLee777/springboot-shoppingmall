@@ -69,11 +69,11 @@ public class User extends BaseEntity {
     @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
 
-    public void updateProfiles(UpdateUserForm updateUserForm){
-        this.password = updateUserForm.getPassword();
-        this.username = updateUserForm.getUsername();
-        this.email = updateUserForm.getEmail();
-        this.address = new Address(updateUserForm.getRoadAddress(), updateUserForm.getDetailAddress());
+    public void updateProfiles(UserUpdateForm userUpdateForm){
+        this.password = userUpdateForm.getPassword();
+        this.username = userUpdateForm.getUsername();
+        this.email = userUpdateForm.getEmail();
+        this.address = new Address(userUpdateForm.getRoadAddress(), userUpdateForm.getDetailAddress());
     }
 
     public UserProfileInfo toUserProfileInfo(){
@@ -87,8 +87,8 @@ public class User extends BaseEntity {
                 .build();
     }
 
-    public UpdateUserForm toUpdateUserForm(){
-        return UpdateUserForm.builder()
+    public UserUpdateForm toUpdateUserForm(){
+        return UserUpdateForm.builder()
                 .identifier(identifier)
                 .password(password)
                 .username(username)

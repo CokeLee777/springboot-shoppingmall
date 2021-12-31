@@ -1,7 +1,5 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.dto.UserRequestDto;
-import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.service.user.UserService;
@@ -29,13 +27,13 @@ public class UserController {
 
     //회원가입 form
     @GetMapping("/sign-up")
-    public String signUpForm(@ModelAttribute("user") CreateUserForm createUserForm){
+    public String signUpForm(@ModelAttribute("user") UserCreateForm userCreateForm){
         log.info("회원가입 form access");
         return "user/signUpForm";
     }
     //회원가입
     @PostMapping("/sign-up")
-    public String signUp(@Validated @ModelAttribute("user") CreateUserForm createUserForm, BindingResult bindingResult){
+    public String signUp(@Validated @ModelAttribute("user") UserCreateForm userCreateForm, BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
         if(bindingResult.hasErrors()){
@@ -45,7 +43,7 @@ public class UserController {
 
         //중복 아이디 체크
         try{
-            userService.userRegistration(createUserForm);
+            userService.userRegistration(userCreateForm);
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
                 log.error("errors={}", e.getMessage());
@@ -54,7 +52,7 @@ public class UserController {
             return "user/signUpForm";
         }
 
-        log.info("회원가입 완료 identifier={}", createUserForm.getIdentifier());
+        log.info("회원가입 완료 identifier={}", userCreateForm.getIdentifier());
         return "home";
     }
 
@@ -129,9 +127,9 @@ public class UserController {
     //프로필 수정 폼
     @GetMapping("/profile/{userId}/edit")
     public String myProfileEditForm(@PathVariable Long userId, Model model){
-        UpdateUserForm updateUserForm = userService.searchProfiles(userId);
+        UserUpdateForm userUpdateForm = userService.searchProfiles(userId);
 
-        model.addAttribute("user", updateUserForm);
+        model.addAttribute("user", userUpdateForm);
 
         log.info("프로필 수정 form access");
         return "user/profileEditForm";
@@ -141,7 +139,7 @@ public class UserController {
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
-            @Validated @ModelAttribute("user") UpdateUserForm updateUserForm,
+            @Validated @ModelAttribute("user") UserUpdateForm userUpdateForm,
             BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
@@ -150,7 +148,7 @@ public class UserController {
             return "user/profileEditForm";
         }
 
-        userService.updateProfiles(userId, updateUserForm);
+        userService.updateProfiles(userId, userUpdateForm);
 
         log.info("프로필 수정 완료");
         return "redirect:/profile";

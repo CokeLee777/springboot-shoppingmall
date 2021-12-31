@@ -22,7 +22,7 @@ public class UserService {
 
     //일반 유저 회원가입
     @Transactional
-    public void userRegistration(CreateUserForm form){
+    public void userRegistration(UserCreateForm form){
         validateDuplicateUser(form);  //중복 회원 검증
         userRepository.save(form.toEntity());
     }
@@ -35,7 +35,7 @@ public class UserService {
         return findUser.getRole();
     }
 
-    public void validateDuplicateUser(CreateUserForm form) {
+    public void validateDuplicateUser(UserCreateForm form) {
         boolean duplicated = userRepository.existsByIdentifier(form.getIdentifier());
         if (duplicated) throw new DuplicatedUserException("이미 등록된 아이디입니다.");
     }
@@ -48,7 +48,7 @@ public class UserService {
         return findUser.toUserProfileInfo();
     }
 
-    public UpdateUserForm searchProfiles(Long userId){
+    public UserUpdateForm searchProfiles(Long userId){
         User findUser = getUserById(userId);
 
         return findUser.toUpdateUserForm();
@@ -56,10 +56,10 @@ public class UserService {
 
     //유저 프로필 수정
     @Transactional
-    public void updateProfiles(Long userId, UpdateUserForm updateUserForm){
+    public void updateProfiles(Long userId, UserUpdateForm userUpdateForm){
         User findUser = getUserById(userId);
 
-        findUser.updateProfiles(updateUserForm);
+        findUser.updateProfiles(userUpdateForm);
     }
 
     //유저 탈퇴

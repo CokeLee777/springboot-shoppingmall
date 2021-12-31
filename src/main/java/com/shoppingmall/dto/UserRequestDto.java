@@ -1,5 +1,6 @@
 package com.shoppingmall.dto;
 
+import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.user.Address;
 import com.shoppingmall.domain.user.User;
 import lombok.*;
@@ -11,7 +12,7 @@ public class UserRequestDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class CreateUserForm {
+    public static class UserCreateForm {
 
         @NotBlank(message = "아이디를 작성해주세요.")
         @Pattern(
@@ -57,7 +58,7 @@ public class UserRequestDto {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class UpdateUserForm {
+    public static class UserUpdateForm {
 
         private String identifier;
 

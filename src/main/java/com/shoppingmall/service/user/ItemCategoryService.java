@@ -1,7 +1,6 @@
 package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemCategoryRequestDto;
 import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.repository.ItemCategoryRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -17,25 +18,25 @@ public class ItemCategoryService {
 
     private final ItemCategoryRepository itemCategoryRepository;
 
-    public List<ItemCategory> searchItemCategories(){
-        return itemCategoryRepository.findAll();
-    }
-
     @Transactional
     public void addItemCategory(ItemCategory itemCategory){
         itemCategoryRepository.save(itemCategory);
     }
 
     @Transactional
-    public void updateItemCategory(Long itemCategoryId, ItemCategoryRequestDto itemCategoryRequestDto){
+    public void updateItemCategory(Long itemCategoryId, ItemCategoryUpdateForm itemCategoryUpdateForm){
         ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
-        findItemCategory.updateItemCategory(itemCategoryRequestDto);
+        findItemCategory.updateItemCategory(itemCategoryUpdateForm);
     }
 
     @Transactional
     public void deleteItemCategory(Long itemCategoryId){
         ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
         itemCategoryRepository.delete(findItemCategory);
+    }
+
+    public List<ItemCategory> searchItemCategories(){
+        return itemCategoryRepository.findAll();
     }
 
     public ItemCategory searchItemCategory(Long itemCategoryId) {

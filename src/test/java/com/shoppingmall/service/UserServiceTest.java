@@ -1,7 +1,6 @@
 package com.shoppingmall.service;
 
 import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
 import com.shoppingmall.service.user.UserService;
@@ -31,12 +30,12 @@ class UserServiceTest {
     public void join () throws Exception
     {
         //given
-        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
+        UserCreateForm userCreateForm = new UserCreateForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
         //when
-        userService.userRegistration(createUserForm);
+        userService.userRegistration(userCreateForm);
         //then
         Optional<User> findUser = userRepository.findByIdentifier("test1234");
-        assertThat(createUserForm.getEmail()).isEqualTo(findUser.get().getEmail());
+        assertThat(userCreateForm.getEmail()).isEqualTo(findUser.get().getEmail());
     }
 
     @Test
@@ -44,13 +43,13 @@ class UserServiceTest {
     public void duplicatedJoin () throws Exception
     {
         //given
-        CreateUserForm createUserForm1 = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
-        CreateUserForm createUserForm2 = new CreateUserForm("test1234", "test123*", "test2", "test2@naver.com", "test2", "test2");
+        UserCreateForm userCreateForm1 = new UserCreateForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
+        UserCreateForm userCreateForm2 = new UserCreateForm("test1234", "test123*", "test2", "test2@naver.com", "test2", "test2");
         //when
-        userService.userRegistration(createUserForm1);
+        userService.userRegistration(userCreateForm1);
         //then
         assertThrows(DuplicatedUserException.class,
-                () -> userService.userRegistration(createUserForm2));
+                () -> userService.userRegistration(userCreateForm2));
     }
 
     @Test
@@ -58,8 +57,8 @@ class UserServiceTest {
     public void login () throws Exception
     {
         //given
-        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
-        userService.userRegistration(createUserForm);
+        UserCreateForm userCreateForm = new UserCreateForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
+        userService.userRegistration(userCreateForm);
         //when
         LoginUserForm loginUserForm = new LoginUserForm("test1234", "test123*");
         userService.login(loginUserForm);
@@ -86,12 +85,12 @@ class UserServiceTest {
     public void updateProfiles () throws Exception
     {
         //given
-        CreateUserForm createUserForm = new CreateUserForm("test1234", "test123*", "beforeName", "test@naver.com", "test", "test");
-        userService.userRegistration(createUserForm);
+        UserCreateForm userCreateForm = new UserCreateForm("test1234", "test123*", "beforeName", "test@naver.com", "test", "test");
+        userService.userRegistration(userCreateForm);
         //when
         UserProfileInfo userProfileInfo = userService.searchProfiles("test1234");
-        UpdateUserForm updateUserForm = new UpdateUserForm("test1234", "test123*", "afterName", "test@naver.com", "test", "test");
-        userService.updateProfiles(userProfileInfo.getId(), updateUserForm);
+        UserUpdateForm userUpdateForm = new UserUpdateForm("test1234", "test123*", "afterName", "test@naver.com", "test", "test");
+        userService.updateProfiles(userProfileInfo.getId(), userUpdateForm);
         //then
         Optional<User> findUser = userRepository.findById(userProfileInfo.getId());
         assertThat(findUser.get().getUsername()).isEqualTo("afterName");

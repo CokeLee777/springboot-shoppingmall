@@ -3,19 +3,12 @@ package com.shoppingmall;
 import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.domain.user.Address;
-import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.ItemCategoryRequestDto;
-import com.shoppingmall.dto.ItemRequestDto;
-import com.shoppingmall.dto.UserRequestDto;
-import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
 import com.shoppingmall.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
 
@@ -31,7 +24,7 @@ public class InitDb {
 
     @PostConstruct
     public void init(){
-        CreateUserForm form = new CreateUserForm("test123", "test123!", "test",
+        UserCreateForm form = new UserCreateForm("test123", "test123!", "test",
                 "test@naver.com", "test", "test");
         userService.userRegistration(form);
 

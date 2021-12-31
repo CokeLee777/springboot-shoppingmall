@@ -6,8 +6,6 @@ import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
-import com.shoppingmall.dto.ItemRequestDto;
-import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.exception.NotEnoughStockException;
 import lombok.*;
 
@@ -16,6 +14,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shoppingmall.dto.ItemRequestDto.*;
 import static com.shoppingmall.dto.ItemResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.STRING;
@@ -78,12 +77,12 @@ public class Item extends BaseEntity {
         itemCategory.getItems().add(this);
     }
 
-    public void updateItem(ItemRequestDto itemRequestDto){
-        this.name = itemRequestDto.getName();
-        this.price = itemRequestDto.getPrice();
-        this.stockQuantity = itemRequestDto.getStockQuantity();
-        this.itemStatus = itemRequestDto.getItemStatus();
-        this.itemImg = itemRequestDto.getItemImg();
+    public void updateItem(ItemUpdateForm itemUpdateForm){
+        this.name = itemUpdateForm.getName();
+        this.price = itemUpdateForm.getPrice();
+        this.stockQuantity = itemUpdateForm.getStockQuantity();
+        this.itemStatus = itemUpdateForm.getItemStatus();
+        this.itemImg = itemUpdateForm.getItemImg();
     }
 
     /**

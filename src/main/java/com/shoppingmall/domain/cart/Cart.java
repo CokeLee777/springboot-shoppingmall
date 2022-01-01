@@ -1,5 +1,6 @@
 package com.shoppingmall.domain.cart;
 
+import com.shoppingmall.domain.cartitem.CartItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.user.User;
@@ -23,22 +24,28 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long id;
 
-    @Column
-    private Integer totalPrice;
-
     @OneToOne(mappedBy = "cart", fetch = LAZY, cascade = ALL)
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = ALL)
-    private List<Item> items = new ArrayList<>();
+    private List<CartItem> cartItems = new ArrayList<>();
 
     /**
-     * 연관관계 메서드
+     * 비즈니스 로직
      */
+    //상품 추가
+    public void addItem(CartItem cartItem){
+        this.cartItems.add(cartItem);
+        cartItem.setCart(this);
+    }
 
-    public void addItems(Item item){
-        this.items.add(item);
-        item.setCart(this);
+    //장바구니 전체 가격 조회
+    public Integer getTotalPrice(){
+        Integer totalPrice = 0;
+        for(CartItem cartItem: cartItems){
+            totalPrice += cartItem.getTotalPrice();
+        }
+        return totalPrice;
     }
 
 }

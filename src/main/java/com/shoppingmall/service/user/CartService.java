@@ -18,9 +18,9 @@ public class CartService {
     private final CartRepository cartRepository;
     private final UserRepository userRepository;
 
-    public void addItem(String identifier, Item item){
-        User user = userRepository.findByIdentifier(identifier).orElseThrow(
-                () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
-        user.getCart().addItems(item);
-    }
+//    public void addItem(String identifier, Item item){
+//        User user = userRepository.findByIdentifier(identifier).orElseThrow(
+//                () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
+//        user.getCart().addItem(item);
+//    }
 }

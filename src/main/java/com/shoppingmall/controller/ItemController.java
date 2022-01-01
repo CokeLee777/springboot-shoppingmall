@@ -117,18 +117,18 @@ public class ItemController {
     }
 
     //상품 장바구니에 담기
-    @PostMapping("/shop/{itemId}/cart/add")
-    public String addItemToCart(
-            @Login LoginUserForm loginUserForm,
-            @PathVariable("itemId") Long itemId,
-            Model model){
-
-        //현재 선택한 아이템 정보 불러오기
-        Item item = itemService.searchItem(itemId);
-        cartService.addItem(loginUserForm.getIdentifier(), item);
-
-        addSessionAttribute(loginUserForm, model);
-        return "item/itemDetails";
-    }
+//    @PostMapping("/shop/{itemId}/cart/add")
+//    public String addItemToCart(
+//            @Login LoginUserForm loginUserForm,
+//            @PathVariable("itemId") Long itemId,
+//            Model model){
+//
+//        //현재 선택한 아이템 정보 불러오기
+//        Item item = itemService.searchItem(itemId);
+//        cartService.addItem(loginUserForm.getIdentifier(), item);
+//
+//        addSessionAttribute(loginUserForm, model);
+//        return "item/itemDetails";
+//    }
 
 }

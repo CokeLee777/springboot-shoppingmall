@@ -46,7 +46,7 @@ class UserRepositoryTest {
         em.flush();
         em.clear();
         //when
-        savedUser.setPassword("1234");
+//        savedUser.updateProfiles();
         //then
         assertThat(prevPwd).isNotEqualTo("1234");
     }

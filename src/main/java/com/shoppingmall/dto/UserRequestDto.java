@@ -45,15 +45,15 @@ public class UserRequestDto {
         private String detailAddress;
 
         public User toEntity(){
-            User user = User.builder()
+
+            return User.builder()
                     .identifier(identifier)
                     .password(password)
                     .username(username)
                     .email(email)
                     .address(new Address(roadAddress, detailAddress))
+                    .cart(new Cart())
                     .build();
-            user.setCart(new Cart());
-            return user;
         }
     }
 

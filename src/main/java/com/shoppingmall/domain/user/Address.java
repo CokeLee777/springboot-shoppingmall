@@ -6,8 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 
 @Embeddable
-@Getter @Setter(AccessLevel.PROTECTED)
-@NoArgsConstructor
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class Address {
 

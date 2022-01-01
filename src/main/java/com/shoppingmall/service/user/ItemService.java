@@ -2,6 +2,7 @@ package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.dto.ItemRequestDto;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
@@ -41,8 +42,8 @@ public class ItemService {
     }
 
     @Transactional
-    public void saveItem(Item item){
-        itemRepository.save(item);
+    public void addItem(ItemCreateForm form){
+        itemRepository.save(form.toEntity());
     }
 
     @Transactional

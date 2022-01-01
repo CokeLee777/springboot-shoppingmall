@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
+import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
 
 public class ItemRequestDto {
 
@@ -28,21 +29,16 @@ public class ItemRequestDto {
         @NotNull(message = "상품 수량을 작성해주세요.")
         private Integer stockQuantity;
 
-        @NotNull(message = "상품 상태를 선택해주세요.")
-        private ItemStatus itemStatus;
-
         @NotBlank(message = "상품 사진을 등록해주세요.")
         private String itemImg;
 
         public Item toEntity(){
-            Item item = Item.builder()
+            return Item.builder()
                     .name(name)
                     .price(price)
                     .stockQuantity(stockQuantity)
-                    .itemStatus(itemStatus)
                     .itemImg(itemImg)
                     .build();
-            return item;
         }
     }
 

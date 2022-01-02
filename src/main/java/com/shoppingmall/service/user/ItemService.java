@@ -3,7 +3,9 @@ package com.shoppingmall.service.user;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.ItemRequestDto;
+import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.exception.NotExistItemException;
+import com.shoppingmall.repository.ItemCategoryRepository;
 import com.shoppingmall.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -21,6 +23,7 @@ import static com.shoppingmall.dto.ItemRequestDto.*;
 public class ItemService {
 
     private final ItemRepository itemRepository;
+    private final ItemCategoryRepository itemCategoryRepository;
 
     public Item searchItem(Long itemId) {
         return itemRepository.findById(itemId).orElseThrow(
@@ -43,7 +46,11 @@ public class ItemService {
 
     @Transactional
     public void addItem(ItemCreateForm form){
-        itemRepository.save(form.toEntity());
+        //아이템 카테고리 정보를 받아온다.
+        Long categoryId = form.getCategoryId();
+        ItemCategory itemCategory = itemCategoryRepository.findById(categoryId).orElseThrow(
+                () -> new NotExistCategoryException("존재하지 않는 카테고리입니다."));
+        itemRepository.save(form.toEntity(itemCategory));
     }
 
     @Transactional

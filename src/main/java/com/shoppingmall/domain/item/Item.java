@@ -63,15 +63,16 @@ public class Item extends BaseEntity {
     public ItemCategory itemCategory;
 
     @Builder
-    private Item(String name, Integer price, Integer stockQuantity, String itemImg){
+    private Item(String name, Integer price, Integer stockQuantity, String itemImg, ItemCategory itemCategory){
         this.itemStatus = ItemStatus.SALE;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
         this.itemImg = itemImg;
+        setItemCategory(itemCategory);
     }
 
-    public void setItemCategory(ItemCategory itemCategory){
+    private void setItemCategory(ItemCategory itemCategory){
         if(this.itemCategory !=  null){
             this.itemCategory.getItems().remove(this);
         }

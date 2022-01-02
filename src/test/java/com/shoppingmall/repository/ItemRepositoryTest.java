@@ -81,7 +81,7 @@ class ItemRepositoryTest {
         em.persist(itemCategory);
         for(int i = 0; i < 10; i++){
             Item item = new Item();
-            item.setItemCategory(itemCategory);
+//            item.setItemCategory(itemCategory);
             itemRepository.save(item);
         }
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -108,7 +108,7 @@ class ItemRepositoryTest {
         em.persist(itemCategory);
         for(int i = 0; i < 30; i++){
             Item item = new Item();
-            item.setItemCategory(itemCategory);
+//            item.setItemCategory(itemCategory);
             itemRepository.save(item);
         }
         PageRequest pageRequest = PageRequest.of(1, 20);

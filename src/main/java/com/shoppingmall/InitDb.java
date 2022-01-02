@@ -37,10 +37,8 @@ public class InitDb {
             ItemCategoryCreateForm itemCategoryCreateForm = new ItemCategoryCreateForm("카테고리" + i);
             ItemCategory itemCategory = itemCategoryCreateForm.toEntity();
 
-            ItemCreateForm itemCreateForm = new ItemCreateForm("상품" + i, 1000 - i, i, null);
-            Item item = itemCreateForm.toEntity();
-            item.setItemCategory(itemCategory);
-            itemRepository.save(item);
+            ItemCreateForm itemCreateForm = new ItemCreateForm("상품" + i, 1000 - i, i, itemCategory.getId(), null);
+            itemRepository.save(itemCreateForm.toEntity(itemCategory));
         }
     }
 }

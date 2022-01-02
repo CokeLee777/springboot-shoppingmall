@@ -95,6 +95,7 @@ public class User extends BaseEntity {
     public UserProfileInfo toUserProfileInfo(){
         return UserProfileInfo.builder()
                 .id(id)
+                .role(role)
                 .identifier(identifier)
                 .password(password)
                 .username(username)

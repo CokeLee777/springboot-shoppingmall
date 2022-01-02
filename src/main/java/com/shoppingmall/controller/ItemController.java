@@ -1,11 +1,12 @@
 package com.shoppingmall.controller;
 
+import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
-import com.shoppingmall.service.user.CartService;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
+import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,17 +15,20 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
+import static com.shoppingmall.dto.ItemRequestDto.*;
 import static com.shoppingmall.dto.ItemResponseDto.*;
 import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.UserResponseDto.*;
 
 @Slf4j
 @Controller
@@ -33,7 +37,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final ItemCategoryService itemCategoryService;
-    private final CartService cartService;
+    private final UserService userService;
 
     //전체 상품 조회
     @GetMapping("/shop")
@@ -116,19 +120,48 @@ public class ItemController {
         return "item/itemDetails";
     }
 
-    //상품 장바구니에 담기
-//    @PostMapping("/shop/{itemId}/cart/add")
-//    public String addItemToCart(
-//            @Login LoginUserForm loginUserForm,
-//            @PathVariable("itemId") Long itemId,
-//            Model model){
-//
-//        //현재 선택한 아이템 정보 불러오기
-//        Item item = itemService.searchItem(itemId);
-//        cartService.addItem(loginUserForm.getIdentifier(), item);
-//
-//        addSessionAttribute(loginUserForm, model);
-//        return "item/itemDetails";
-//    }
+    //상품 추가
+    @GetMapping("/item/add")
+    public String addItemForm(
+            @Login LoginUserForm loginUserForm,
+            @ModelAttribute("item") ItemCreateForm itemCreateForm,
+            HttpServletRequest request, HttpServletResponse response, Model model) throws  Exception{
+        //관리자인지 아닌지 판별
+        String requestURI = request.getRequestURI();
+        UserProfileInfo userProfileInfo = userService.searchProfiles(loginUserForm.getIdentifier());
+
+        if(userProfileInfo.getRole() == UserRole.USER){
+            response.sendRedirect("/sign-in?redirectURL=" + requestURI);
+        }
+        //카테고리 모두 불러오기
+        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+
+        log.info("상품 추가 form access");
+        addSessionAttribute(loginUserForm, model);
+        model.addAttribute("itemCategories", itemCategoryInfos);
+        return "item/itemAddForm";
+    }
+
+    //상품 추가
+    @PostMapping("/item/add")
+    public String addItem(
+            @Login LoginUserForm loginUserForm,
+            @Validated @ModelAttribute("item") ItemCreateForm itemCreateForm,
+            BindingResult bindingResult, Model model){
+
+        if(bindingResult.hasErrors()){
+            log.error("error={}", bindingResult);
+            //카테고리 모두 불러오기
+            List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+            model.addAttribute("itemCategories", itemCategoryInfos);
+            return "item/itemAddForm";
+        }
+
+        addSessionAttribute(loginUserForm, model);
+
+        log.info("상품 추가 완료 name={}", itemCreateForm.getName());
+        itemService.addItem(itemCreateForm);
+        return "redirect:/";
+    }
 
 }

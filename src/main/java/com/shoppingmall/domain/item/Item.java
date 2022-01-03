@@ -104,6 +104,8 @@ public class Item extends BaseEntity {
         if(restStock < 0){
             throw new NotEnoughStockException("재고가 부족합니다.");
         }
+        //품절이라면
+        if(restStock == 0) this.itemStatus = ItemStatus.SOLDOUT;
 
         this.stockQuantity = restStock;
     }

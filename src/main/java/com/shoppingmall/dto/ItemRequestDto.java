@@ -61,7 +61,9 @@ public class ItemRequestDto {
         @NotNull(message = "상품 상태를 선택해주세요.")
         private ItemStatus itemStatus;
 
-        @NotBlank(message = "상품 사진을 등록해주세요.")
+        @NotNull(message = "상품 카테고리를 선택해주세요.")
+        private Long categoryId;
+
         private String itemImg;
 
     }

@@ -30,13 +30,12 @@
 
             <!-- ##### Single Widget ##### -->
             <div class="widget catagory mb-50">
-                <!-- Widget Title -->
-                <a href="/shop">
-                    <h6 class="widget-title mb-30">전체 상품</h6>
-                </a>
-
+                <a href="/category/add" class="btn btn-primary mb-4">카테고리 추가</a>
                 <!--  Catagories  -->
                 <div class="catagories-menu">
+                    <ul>
+                        <li><a href="/shop">전체 상품</a></li>
+                    </ul>
                     <ul th:each="itemcategory : ${itemCategories}">
                         <li><a href="#" th:href="@{/shop/{categoryId}(categoryId=${itemcategory.id})}" th:text="${itemcategory.name}">카테고리명</a></li>
                     </ul>

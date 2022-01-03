@@ -3,10 +3,12 @@ package com.shoppingmall.domain.cartitem;
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.item.Item;
+import com.shoppingmall.dto.CartItemRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
 
+import static com.shoppingmall.dto.CartItemRequestDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
@@ -21,23 +23,23 @@ public class CartItem extends BaseEntity {
     private Long id;
 
     @Column
-    private Integer cartPrice;
+    private Integer itemPrice;
 
     @Column
     private Integer itemCount;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_id")
     private Item item;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "cart_id")
     private Cart cart;
 
     @Builder
-    private CartItem(Item item, Integer cartPrice, Integer itemCount){
+    private CartItem(Item item, Integer itemPrice, Integer itemCount){
         this.item = item;
-        this.cartPrice = cartPrice;
+        this.itemPrice = itemPrice;
         this.itemCount = itemCount;
 
         item.removeStock(itemCount);
@@ -51,8 +53,19 @@ public class CartItem extends BaseEntity {
         getItem().addStock(itemCount);
     }
 
-    //장바구니 상품 전체 가격조회
+    //장바구니 상품 하나 총 가격 조회
     public Integer getTotalPrice(){
-        return getCartPrice() * getItemCount();
+        return getItemPrice() * getItemCount();
+    }
+
+    public CartItemInfo toCartItemInfo(){
+        return CartItemInfo
+                .builder()
+                .id(id)
+                .itemImg(item.getItemImg())
+                .itemName(item.getName())
+                .itemPrice(itemPrice)
+                .itemCount(itemCount)
+                .build();
     }
 }

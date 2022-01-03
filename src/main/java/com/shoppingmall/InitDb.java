@@ -32,13 +32,5 @@ public class InitDb {
                 .address(new Address("test", "test")).cart(new Cart()).build();
         admin.toAdminUser();
         userRepository.save(admin);
-
-        for(int i = 1; i < 20; i++){
-            ItemCategoryCreateForm itemCategoryCreateForm = new ItemCategoryCreateForm("카테고리" + i);
-            ItemCategory itemCategory = itemCategoryCreateForm.toEntity();
-
-            ItemCreateForm itemCreateForm = new ItemCreateForm("상품" + i, 1000 - i, i, itemCategory.getId(), null);
-            itemRepository.save(itemCreateForm.toEntity(itemCategory));
-        }
     }
 }

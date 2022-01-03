@@ -53,7 +53,7 @@ public class UserController {
         }
 
         log.info("회원가입 완료 identifier={}", userCreateForm.getIdentifier());
-        return "home";
+        return "redirect:/";
     }
 
     //로그인 form

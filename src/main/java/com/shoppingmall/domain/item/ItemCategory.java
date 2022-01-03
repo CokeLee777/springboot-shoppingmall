@@ -13,8 +13,7 @@ import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
 import static javax.persistence.CascadeType.*;
 
 @Entity
-@Builder
-@Getter @Setter
+@Getter
 @NoArgsConstructor
 @AllArgsConstructor
 public class ItemCategory extends BaseEntity {
@@ -27,8 +26,12 @@ public class ItemCategory extends BaseEntity {
     private String name;
 
     @OneToMany(mappedBy = "itemCategory", cascade = ALL)
-    @Builder.Default
     private List<Item> items = new ArrayList<>();
+
+    @Builder
+    private ItemCategory(String name){
+        this.name = name;
+    }
 
     /**
      * 비즈니스 로직

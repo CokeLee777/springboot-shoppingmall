@@ -1,6 +1,7 @@
 package com.shoppingmall.domain.item;
 
 import com.shoppingmall.domain.cart.Cart;
+import com.shoppingmall.domain.cartitem.CartItem;
 import com.shoppingmall.domain.inquiry.ItemInquiry;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
@@ -21,8 +22,7 @@ import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Builder
-@Getter @Setter
+@Getter @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor
 @AllArgsConstructor
 public class Item extends BaseEntity {
@@ -47,36 +47,42 @@ public class Item extends BaseEntity {
     private String itemImg;
 
     @OneToMany(mappedBy = "item", cascade = ALL)
-    @Builder.Default
     private List<OrderItem> orderItems = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
-    @Builder.Default
     private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
-    @Builder.Default
     private List<ItemReview> itemReviews = new ArrayList<>();
+
+    @OneToMany(mappedBy = "item", cascade = ALL)
+    public List<CartItem> cartItems = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY, cascade = ALL)
     @JoinColumn(name = "item_category_id")
     public ItemCategory itemCategory;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
-    @JoinColumn(name = "cart_id")
-    private Cart cart;
+    @Builder
+    private Item(String name, Integer price, Integer stockQuantity, String itemImg, ItemCategory itemCategory){
+        this.itemStatus = ItemStatus.SALE;
+        this.name = name;
+        this.price = price;
+        this.stockQuantity = stockQuantity;
+        this.itemImg = itemImg;
+        setItemCategory(itemCategory);
+    }
 
-    /**
-     * 연관관계 메서드
-     */
-    public void setItemCategory(ItemCategory itemCategory){
-        if(this.itemCategory != null){
+    private void setItemCategory(ItemCategory itemCategory){
+        if(this.itemCategory !=  null){
             this.itemCategory.getItems().remove(this);
         }
         this.itemCategory = itemCategory;
         itemCategory.getItems().add(this);
     }
 
+    /**
+     * 연관관계 메서드
+     */
     public void updateItem(ItemUpdateForm itemUpdateForm){
         this.name = itemUpdateForm.getName();
         this.price = itemUpdateForm.getPrice();
@@ -98,6 +104,8 @@ public class Item extends BaseEntity {
         if(restStock < 0){
             throw new NotEnoughStockException("재고가 부족합니다.");
         }
+        //품절이라면
+        if(restStock == 0) this.itemStatus = ItemStatus.SOLDOUT;
 
         this.stockQuantity = restStock;
     }

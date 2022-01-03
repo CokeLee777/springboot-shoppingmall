@@ -1,16 +1,20 @@
 package com.shoppingmall;
 
-import com.shoppingmall.domain.enums.ItemStatus;
+import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.service.user.ItemService;
-import com.shoppingmall.service.user.UserService;
+import com.shoppingmall.domain.user.Address;
+import com.shoppingmall.domain.user.User;
+import com.shoppingmall.repository.ItemCategoryRepository;
+import com.shoppingmall.repository.ItemRepository;
+import com.shoppingmall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 
-import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
+import static com.shoppingmall.dto.ItemRequestDto.*;
 
 /**
  * 테스트 DB
@@ -19,26 +23,14 @@ import static com.shoppingmall.dto.UserRequestDto.*;
 @RequiredArgsConstructor
 public class InitDb {
 
-    private final ItemService itemService;
-    private final UserService userService;
+    private final ItemRepository itemRepository;
+    private final UserRepository userRepository;
 
     @PostConstruct
     public void init(){
-        UserCreateForm form = new UserCreateForm("test123", "test123!", "test",
-                "test@naver.com", "test", "test");
-        userService.userRegistration(form);
-
-        for(int i = 0; i < 20; i++){
-            ItemCategory itemCategory = new ItemCategory();
-            itemCategory.setName("카테고리" + i);
-            Item item = new Item();
-            item.setName("상품" + i);
-            item.setPrice(1000 - i);
-            if(i < 10) item.setItemStatus(ItemStatus.SALE);
-            else if(i < 15) item.setItemStatus(ItemStatus.TEMPSOLDOUT);
-            else item.setItemStatus(ItemStatus.SOLDOUT);
-            item.setItemCategory(itemCategory);
-            itemService.saveItem(item);
-        }
+        User admin = User.builder().identifier("admin123").password("admin123!").username("admin").email("admin@naver.com")
+                .address(new Address("test", "test")).cart(new Cart()).build();
+        admin.toAdminUser();
+        userRepository.save(admin);
     }
 }

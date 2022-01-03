@@ -35,16 +35,6 @@ class ItemRepositoryTest {
     @Autowired EntityManager em;
     @Autowired ItemRepository itemRepository;
 
-    @BeforeEach
-    public void beforeEach(){
-        for(int i = 0; i < 20; i++){
-            Item item = new Item();
-            item.setPrice(1000 + i);
-            itemRepository.save(item);
-        }
-
-    }
-
     @Test
     @DisplayName("모든 상품 조회 - 페이징")
     public void findAll () throws Exception
@@ -91,7 +81,7 @@ class ItemRepositoryTest {
         em.persist(itemCategory);
         for(int i = 0; i < 10; i++){
             Item item = new Item();
-            item.setItemCategory(itemCategory);
+//            item.setItemCategory(itemCategory);
             itemRepository.save(item);
         }
         PageRequest pageRequest = PageRequest.of(0, 10);
@@ -118,7 +108,7 @@ class ItemRepositoryTest {
         em.persist(itemCategory);
         for(int i = 0; i < 30; i++){
             Item item = new Item();
-            item.setItemCategory(itemCategory);
+//            item.setItemCategory(itemCategory);
             itemRepository.save(item);
         }
         PageRequest pageRequest = PageRequest.of(1, 20);

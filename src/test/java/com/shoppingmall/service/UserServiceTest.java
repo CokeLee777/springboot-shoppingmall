@@ -65,20 +65,20 @@ class UserServiceTest {
         //then
     }
 
-    @Test
-    @DisplayName("회원 프로필 조회 테스트")
-    public void searchProfiles () throws Exception
-    {
-        //given
-        User user = new User();
-        user.setIdentifier("test111");
-        userRepository.save(user);
-
-        //when
-        UserProfileInfo userProfileInfo = userService.searchProfiles(user.getIdentifier());
-        //then
-        assertThat(userProfileInfo.getId()).isEqualTo(user.getId());
-    }
+//    @Test
+//    @DisplayName("회원 프로필 조회 테스트")
+//    public void searchProfiles () throws Exception
+//    {
+//        //given
+//        User user = new User();
+//        user.setIdentifier("test111");
+//        userRepository.save(user);
+//
+//        //when
+//        UserProfileInfo userProfileInfo = userService.searchProfiles(user.getIdentifier());
+//        //then
+//        assertThat(userProfileInfo.getId()).isEqualTo(user.getId());
+//    }
 
     @Test
     @DisplayName("회원 프로필 수정 테스트")

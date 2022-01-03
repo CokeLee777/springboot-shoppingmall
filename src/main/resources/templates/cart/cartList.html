@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Home')}"></div>
+</head>
+
+<body>
+    <!-- Search Wrapper Area Start -->
+    <div th:replace="fragment/search :: search"/>
+    <!-- Search Wrapper Area End -->
+
+    <!-- ##### Main Content Wrapper Start ##### -->
+    <div class="main-content-wrapper d-flex clearfix">
+
+        <!-- Mobile Nav (max width 767px)-->
+        <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+        <!-- Header Area Start -->
+        <th:block th:if="${user} == null">
+            <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+        </th:block>
+        <th:block th:if="${user} != null">
+            <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+        </th:block>
+        <!-- Header Area End -->
+
+        <div class="cart-table-area section-padding-100">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-12 col-lg-8">
+                        <div class="cart-title mt-50">
+                            <h2>장바구니</h2>
+                        </div>
+
+                        <div class="cart-table clearfix">
+                            <table class="table table-responsive">
+                                <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>상품명</th>
+                                        <th>가격</th>
+                                        <th>수량</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="cartItem: ${cartItems}">
+                                        <td class="cart_product_img">
+                                            <a href="#"><img src="/img/bg-img/cart1.jpg" alt="Product"></a>
+                                        </td>
+                                        <td class="cart_product_desc">
+                                            <h5 th:text="${cartItem.itemName}">상품명</h5>
+                                        </td>
+                                        <td class="price">
+                                            <span th:text="${cartItem.getItemPrice()}">상품 가격</span>
+                                        </td>
+                                        <td class="qty">
+                                            <span th:text="${cartItem.getItemCount()}">상품 수량</span>
+                                        </td>
+                                        <td>
+                                            <a href="#" th:href="@{/cart/{cartItemId}/delete (cartItemId=${cartItem.id})}" class="btn btn-danger" role="button">삭제</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-4">
+                        <div class="cart-summary" th:object="${carts}">
+                            <h5>장바구니 정보</h5>
+                            <ul class="summary-table">
+                                <li><span>배송비:</span> <span th:text="${carts.getDeliveryPrice()}">배송비</span></li>
+                                <li><span>총 액:</span> <span th:text="${carts.getTotalPrice()}">총 액</span></li>
+                            </ul>
+                            <div class="cart-btn mt-100">
+                                <a href="#" class="btn amado-btn w-100">상품 주문</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ##### Main Content Wrapper End ##### -->
+
+    <!-- ##### Footer Area Start ##### -->
+    <div th:replace="fragment/footer :: footer"/>
+    <!-- ##### Footer Area End ##### -->
+
+    <!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+    <script src="/js/jquery/jquery-2.2.4.min.js"></script>
+    <!-- Popper js -->
+    <script src="/js/popper.min.js"></script>
+    <!-- Bootstrap js -->
+    <script src="/js/bootstrap.min.js"></script>
+    <!-- Plugins js -->
+    <script src="/js/plugins.js"></script>
+    <!-- Active js -->
+    <script src="/js/active.js"></script>
+
+</body>
+
+</html>

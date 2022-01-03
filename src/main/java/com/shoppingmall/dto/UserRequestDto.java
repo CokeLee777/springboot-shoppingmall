@@ -45,12 +45,14 @@ public class UserRequestDto {
         private String detailAddress;
 
         public User toEntity(){
+
             return User.builder()
                     .identifier(identifier)
                     .password(password)
                     .username(username)
                     .email(email)
                     .address(new Address(roadAddress, detailAddress))
+                    .cart(new Cart())
                     .build();
         }
     }
@@ -84,15 +86,6 @@ public class UserRequestDto {
         @NotBlank(message = "상세 주소를 작성해주세요.")
         @Size(max = 50, message = "상세 주소는 최대 50자까지 허용합니다.")
         private String detailAddress;
-
-        public User toEntity(){
-            return User.builder()
-                    .password(password)
-                    .username(username)
-                    .email(email)
-                    .address(new Address(roadAddress, detailAddress))
-                    .build();
-        }
     }
 
     @Getter
@@ -103,12 +96,5 @@ public class UserRequestDto {
         private String identifier;
         @NotBlank(message = "비밀번호를 작성해주세요.")
         private String password;
-
-        public User toEntity(){
-            return User.builder()
-                    .identifier(identifier)
-                    .password(password)
-                    .build();
-        }
     }
 }

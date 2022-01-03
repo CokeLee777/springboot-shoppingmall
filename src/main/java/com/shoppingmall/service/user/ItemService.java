@@ -2,7 +2,6 @@ package com.shoppingmall.service.user;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemRequestDto;
 import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.ItemCategoryRepository;
@@ -30,6 +29,11 @@ public class ItemService {
                 () -> new NotExistItemException("존재하지 않는 상품입니다."));
     }
 
+    public Item searchItemWithCategory(Long itemId){
+        return itemRepository.findItemJoinCategory(itemId).orElseThrow(
+                () -> new NotExistItemException("존재하지 않는 상품입니다."));
+    }
+
     //모든 상품 조회
     public Page<Item> searchItems(Pageable pageable){
         return itemRepository.findAll(pageable);
@@ -40,8 +44,8 @@ public class ItemService {
     }
 
     //특정 카테고리의 모든 상품 조회
-    public Page<Item> searchSameCategoryItems(ItemCategory itemCategory, Pageable pageable){
-        return itemRepository.findAllByItemCategory(itemCategory, pageable);
+    public Page<Item> searchSameCategoryItems(Long categoryId, Pageable pageable){
+        return itemRepository.findItemsJoinCategoryByCategory(categoryId, pageable);
     }
 
     @Transactional

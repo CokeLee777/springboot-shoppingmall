@@ -4,6 +4,7 @@ import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
+import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
@@ -97,28 +100,23 @@ public class UserController {
         //세션을 불러온다. -> 없으면 생성하지 않는다.
         HttpSession session = request.getSession(false);
 
-        log.info("로그아웃 session={}", session);
-
         //세션이 존재한다면 세션을 없앤다.
         if(session != null){
             session.invalidate();
         }
 
+        log.info("로그아웃 session={}", session);
         return "redirect:/";
     }
 
     //프로필 정보
     @GetMapping("/profile")
-    public String myProfile(HttpServletRequest request, Model model){
-        HttpSession session = request.getSession(false);
-        //세션이 존재하지 않는다면 홈으로 돌아간다.
-        if(session == null) return "redirect:/";
-        //세션이 존재한다면 현재 로그인 한 회원의 프로필을 모델에 담는다.
-        LoginUserForm loginUserForm = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
+    public String myProfile(@Login LoginUserForm loginUserForm, Model model){
 
         UserProfileInfo userProfileInfo = userService.searchProfiles(loginUserForm.getIdentifier());
 
-        model.addAttribute("user", userProfileInfo);
+        model.addAttribute("loginUser", loginUserForm);
+        model.addAttribute("userProfileInfo", userProfileInfo);
 
         log.info("프로필 정보 열람 identifier={}", loginUserForm.getIdentifier());
         return "user/profileList";
@@ -126,10 +124,14 @@ public class UserController {
 
     //프로필 수정 폼
     @GetMapping("/profile/{userId}/edit")
-    public String myProfileEditForm(@PathVariable Long userId, Model model){
+    public String myProfileEditForm(
+            @Login LoginUserForm loginUserForm,
+            @PathVariable Long userId, Model model){
+
         UserUpdateForm userUpdateForm = userService.searchProfiles(userId);
 
-        model.addAttribute("user", userUpdateForm);
+        model.addAttribute("loginUser", loginUserForm);
+        model.addAttribute("userUpdateForm", userUpdateForm);
 
         log.info("프로필 수정 form access");
         return "user/profileEditForm";
@@ -139,7 +141,7 @@ public class UserController {
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
-            @Validated @ModelAttribute("user") UserUpdateForm userUpdateForm,
+            @Validated @ModelAttribute("userUpdateForm") UserUpdateForm userUpdateForm,
             BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.

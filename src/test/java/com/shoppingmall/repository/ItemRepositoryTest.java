@@ -2,17 +2,13 @@ package com.shoppingmall.repository;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
-import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -20,7 +16,6 @@ import javax.persistence.EntityManager;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * 1. 모든 상품 조회
@@ -86,7 +81,7 @@ class ItemRepositoryTest {
         }
         PageRequest pageRequest = PageRequest.of(0, 10);
         //when
-        Page<Item> page = itemRepository.findAllByItemCategory(itemCategory, pageRequest);
+        Page<Item> page = itemRepository.findItemsJoinCategoryByCategory(itemCategory.getId(), pageRequest);
         //then
         List<Item> content = page.getContent();
 
@@ -113,7 +108,7 @@ class ItemRepositoryTest {
         }
         PageRequest pageRequest = PageRequest.of(1, 20);
         //when
-        Page<Item> page = itemRepository.findAllByItemCategory(itemCategory, pageRequest);
+        Page<Item> page = itemRepository.findItemsJoinCategoryByCategory(itemCategory.getId(), pageRequest);
         //then
         List<Item> content = page.getContent();
 

@@ -20,8 +20,8 @@ import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
-@Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter @Setter
+@NoArgsConstructor
 public class User extends BaseEntity {
 
     @Id @GeneratedValue

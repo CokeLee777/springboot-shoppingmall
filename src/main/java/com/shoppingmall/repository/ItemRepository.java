@@ -10,6 +10,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Long> {
@@ -23,6 +24,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     //모든 상품 조회
     Page<Item> findAll(Pageable pageable);
 
+    @Query("select i from Item i inner join i.itemCategory")
+    Page<Item> findItemsJoinCategory(Pageable pageable);
+
     //카테고리별로 조회
-    Page<Item> findAllByItemCategory(ItemCategory itemCategory, Pageable pageable);
+    @Query("select i from Item i inner join i.itemCategory where i.itemCategory.id = :categoryId")
+    Page<Item> findItemsJoinCategoryByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+
+    //상품 카테고리와 함께 조회
+    @Query("select i from Item i join fetch i.itemCategory where i.id = :itemId")
+    Optional<Item> findItemJoinCategory(@Param("itemId") Long id);
 }

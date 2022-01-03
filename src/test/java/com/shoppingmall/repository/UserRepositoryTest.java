@@ -1,6 +1,7 @@
 package com.shoppingmall.repository;
 
 import com.shoppingmall.domain.user.User;
+import com.shoppingmall.dto.UserRequestDto;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserRepositoryTest {
 
     @Autowired UserRepository userRepository;
-    @Autowired
-    EntityManager em;
+    @Autowired EntityManager em;
 
     @Test
     @DisplayName("회원 저장 테스트")
@@ -46,7 +46,7 @@ class UserRepositoryTest {
         em.flush();
         em.clear();
         //when
-//        savedUser.updateProfiles();
+        savedUser.setPassword("123");
         //then
         assertThat(prevPwd).isNotEqualTo("1234");
     }

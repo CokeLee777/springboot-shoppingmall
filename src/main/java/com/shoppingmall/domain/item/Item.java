@@ -58,7 +58,7 @@ public class Item extends BaseEntity {
     @OneToMany(mappedBy = "item", cascade = ALL)
     public List<CartItem> cartItems = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "item_category_id")
     public ItemCategory itemCategory;
 

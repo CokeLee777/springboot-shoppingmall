@@ -17,7 +17,12 @@
     <div th:replace="fragment/mobileNav :: mobileNav"/>
 
     <!-- Header Area Start -->
-    <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"/>
+    <th:block th:if="${loginUser} == null">
+        <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+    </th:block>
+    <th:block th:if="${loginUser} != null">
+        <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+    </th:block>
     <!-- Header Area End -->
 
     <div class="cart-table-area section-padding-100">
@@ -30,7 +35,7 @@
                             <h2 th:text="#{page.profile.edit}">프로필 수정</h2>
                         </div>
 
-                        <form action="profileList.html" th:action th:object="${user}" method="post">
+                        <form action="profileList.html" th:action th:object="${userUpdateForm}" method="post">
 
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
@@ -39,7 +44,7 @@
                             <div class="row">
                                 <div class="col-md-6 mb-3">
                                     <label for="identifier">아이디(수정 불가)</label>
-                                    <input type="text" id="identifier" th:field="${user.identifier}"
+                                    <input type="text" id="identifier" th:field="*{identifier}"
                                            class="form-control" readonly>
                                 </div>
                                 <div class="col-md-6 mb-3">

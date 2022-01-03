@@ -3,6 +3,8 @@ package com.shoppingmall.controller;
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.dto.ItemCategoryResponseDto;
+import com.shoppingmall.dto.ItemResponseDto;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.service.user.ItemCategoryService;
 import com.shoppingmall.service.user.ItemService;
@@ -39,6 +41,10 @@ public class ItemController {
     private final ItemCategoryService itemCategoryService;
     private final UserService userService;
 
+    private void addSessionAttribute(LoginUserForm loginUserForm, Model model) {
+        model.addAttribute("loginUser", loginUserForm);
+    }
+
     //전체 상품 조회
     @GetMapping("/shop")
     public String itemList(
@@ -48,18 +54,10 @@ public class ItemController {
         //상품 전체 조회 - 페이징
         Page<Item> page = itemService.searchItems(pageable);
         //전체 상품 및 전체 카테고리 DTO로 변환
-        List<ItemInfo> itemInfos = getItemResponseDtos(page);
-        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
-
+        addItemsAndCategoriesAttribute(model, page);
+        //로그인 세션 추가
         addSessionAttribute(loginUserForm, model);
-        model.addAttribute("items", itemInfos);
-        model.addAttribute("itemCategories", itemCategoryInfos);
-        model.addAttribute("page", page);
         return "item/itemList";
-    }
-
-    private void addSessionAttribute(LoginUserForm loginUserForm, Model model) {
-        model.addAttribute("user", loginUserForm);
     }
 
     //카테고리별로 상품 조회
@@ -70,22 +68,24 @@ public class ItemController {
             @PathVariable("categoryId") Long categoryId,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //현재 선택된 카테고리에 따른 상품 조회 - 페이징
-        ItemCategory itemCategory = itemCategoryService.searchItemCategory(categoryId);
-        Page<Item> page = itemService.searchSameCategoryItems(itemCategory, pageable);
+        Page<Item> page = itemService.searchSameCategoryItems(categoryId, pageable);
         //카테고리에 따른 전체 상품, 전체 카테고리, 특정 카테고리 DTO로 변환
-        List<ItemInfo> itemInfos = getItemResponseDtos(page);
-        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
-        ItemCategoryInfo itemCategoryInfo = itemCategory.toItemCategoryInfo();
-
+        addItemsAndCategoriesAttribute(model, page);
+        //로그인 세션 추가
         addSessionAttribute(loginUserForm, model);
-        model.addAttribute("itemCategory", itemCategoryInfo);
-        model.addAttribute("items", itemInfos);
-        model.addAttribute("itemCategories", itemCategoryInfos);
-        model.addAttribute("page", page);
         return "item/itemCategoryList";
     }
 
-    private List<ItemInfo> getItemResponseDtos(Page<Item> page) {
+    private void addItemsAndCategoriesAttribute(Model model, Page<Item> page) {
+        List<ItemInfo> itemInfos = getItemInfos(page);
+        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+
+        model.addAttribute("items", itemInfos);
+        model.addAttribute("itemCategories", itemCategoryInfos);
+        model.addAttribute("page", page);
+    }
+
+    private List<ItemInfo> getItemInfos(Page<Item> page) {
         List<Item> items = page.getContent();
         return items.stream().map(Item::toItemInfo)
                 .collect(Collectors.toList());
@@ -103,20 +103,15 @@ public class ItemController {
     @GetMapping("/shop/{categoryId}/{itemId}")
     public String itemDetails(
             @Login LoginUserForm loginUserForm,
-            @PathVariable("categoryId") Long categoryId,
-            @PathVariable("itemId") Long itemId,
-            Model model){
+            @PathVariable("itemId") Long itemId, Model model){
 
         //현재 선택한 아이템 정보 불러오기
-        Item item = itemService.searchItem(itemId);
-        ItemCategory itemCategory = itemCategoryService.searchItemCategory(categoryId);
-
-        ItemInfo itemInfo = item.toItemInfo();
-        ItemCategoryInfo itemCategoryInfo = itemCategory.toItemCategoryInfo();
+        Item item = itemService.searchItemWithCategory(itemId);
+        ItemCategory itemCategory = item.getItemCategory();
 
         addSessionAttribute(loginUserForm, model);
-        model.addAttribute("item", itemInfo);
-        model.addAttribute("category", itemCategoryInfo);
+        model.addAttribute("item", item.toItemInfo());
+        model.addAttribute("category", itemCategory.toItemCategoryInfo());
         return "item/itemDetails";
     }
 
@@ -135,10 +130,12 @@ public class ItemController {
         }
         //카테고리 모두 불러오기
         List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+        //로그인 세션 추가
+        addSessionAttribute(loginUserForm, model);
+        //카테고리 추가
+        model.addAttribute("itemCategories", itemCategoryInfos);
 
         log.info("상품 추가 form access");
-        addSessionAttribute(loginUserForm, model);
-        model.addAttribute("itemCategories", itemCategoryInfos);
         return "item/itemAddForm";
     }
 
@@ -152,7 +149,10 @@ public class ItemController {
         if(bindingResult.hasErrors()){
             log.error("error={}", bindingResult);
             //카테고리 모두 불러오기
-            List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+            List<ItemCategory> itemCategories = itemCategoryService.searchItemCategories();
+            List<ItemCategoryInfo> itemCategoryInfos = itemCategories.stream()
+                    .map(ItemCategory::toItemCategoryInfo)
+                    .collect(Collectors.toList());
             model.addAttribute("itemCategories", itemCategoryInfos);
             return "item/itemAddForm";
         }

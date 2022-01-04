@@ -11,23 +11,20 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-
 @Slf4j
-public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
+public class LoginAdminArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasMethodAnnotation(UserLogin.class) || parameter.hasMethodAnnotation(AdminLogin.class);
+        return parameter.hasMethodAnnotation(AdminLogin.class);
     }
 
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         HttpServletRequest request = (HttpServletRequest) webRequest.getNativeRequest();
         HttpSession session = request.getSession(false);
-
+        log.info("session={}", session);
         if(session == null) return null;
 
-        Object userAttribute = session.getAttribute(SessionConst.LOGIN_USER);
-        Object adminAttribute = session.getAttribute(SessionConst.LOGIN_ADMIN);
-        return userAttribute != null ? userAttribute : adminAttribute;
+        return session.getAttribute(SessionConst.LOGIN_ADMIN);
     }
 }

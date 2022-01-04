@@ -18,10 +18,10 @@
         <div th:replace="fragment/mobileNav :: mobileNav"/>
 
         <!-- Header Area Start -->
-        <th:block th:if="${user} == null">
+        <th:block th:if="${#session} == null">
             <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
         </th:block>
-        <th:block th:if="${user} != null">
+        <th:block th:if="${#session} != null">
             <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
         </th:block>
         <!-- Header Area End -->

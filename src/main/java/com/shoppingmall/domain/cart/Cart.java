@@ -23,11 +23,27 @@ public class Cart extends BaseEntity {
     @Column(name = "cart_id")
     private Long id;
 
-    @OneToOne(mappedBy = "cart", fetch = LAZY, cascade = ALL)
+    @OneToOne(mappedBy = "cart", fetch = LAZY)
     private User user;
 
     @OneToMany(mappedBy = "cart", cascade = ALL)
     private List<CartItem> cartItems = new ArrayList<>();
+
+//    @Builder
+//    private Cart(User user, CartItem ... cartItems){
+//        this.setUser(user);
+//        for (CartItem cartItem : cartItems) {
+//            this.addCartItem(cartItem);
+//        }
+//    }
+
+    /**
+     * 연관관계 메서드
+     */
+//    public void setUser(User user){
+//        this.user = user;
+//        user.setCart(this);
+//    }
 
     /**
      * 비즈니스 로직

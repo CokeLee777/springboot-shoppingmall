@@ -4,7 +4,7 @@ import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
-import com.shoppingmall.web.argumentresolver.Login;
+import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -14,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -83,7 +82,11 @@ public class UserController {
             //세션이 있으면 세션 반환, 없으면 신규 세션 생성
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보를 보관한다.
-            session.setAttribute(SessionConst.LOGIN_USER, loginUserForm);
+            if(loginUserForm.getIdentifier().equals("admin123")){
+                session.setAttribute(SessionConst.LOGIN_ADMIN, loginUserForm);
+            } else{
+                session.setAttribute(SessionConst.LOGIN_USER, loginUserForm);
+            }
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
             bindingResult.reject("incorrectLoginInfoException", new Object[]{IncorrectLoginInfoException.class}, null);
@@ -95,6 +98,7 @@ public class UserController {
     }
 
     //로그아웃
+    @UserLogin
     @PostMapping("/logout")
     public String logout(HttpServletRequest request){
         //세션을 불러온다. -> 없으면 생성하지 않는다.
@@ -110,27 +114,38 @@ public class UserController {
     }
 
     //프로필 정보
+    @UserLogin
     @GetMapping("/profile")
-    public String myProfile(@Login LoginUserForm loginUserForm, Model model){
+    public String myProfile(HttpServletRequest request, Model model){
+        HttpSession session = request.getSession(false);
+        if(session.getAttribute(SessionConst.LOGIN_USER) != null){
+            LoginUserForm loginUser = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
+            UserProfileInfo userProfileInfo = userService.searchProfiles(loginUser.getIdentifier());
 
-        UserProfileInfo userProfileInfo = userService.searchProfiles(loginUserForm.getIdentifier());
+            model.addAttribute("loginUser", loginUser);
+            model.addAttribute("userProfileInfo", userProfileInfo);
 
-        model.addAttribute("loginUser", loginUserForm);
-        model.addAttribute("userProfileInfo", userProfileInfo);
+            log.info("프로필 정보 열람 identifier={}", loginUser.getIdentifier());
+        } else {
+            LoginUserForm loginAdmin = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_ADMIN);
+            UserProfileInfo userProfileInfo = userService.searchProfiles(loginAdmin.getIdentifier());
 
-        log.info("프로필 정보 열람 identifier={}", loginUserForm.getIdentifier());
+            model.addAttribute("loginUser", loginAdmin);
+            model.addAttribute("userProfileInfo", userProfileInfo);
+
+            log.info("프로필 정보 열람 identifier={}", loginAdmin.getIdentifier());
+        }
+
         return "user/profileList";
     }
 
     //프로필 수정 폼
+    @UserLogin
     @GetMapping("/profile/{userId}/edit")
-    public String myProfileEditForm(
-            @Login LoginUserForm loginUserForm,
-            @PathVariable Long userId, Model model){
+    public String myProfileEditForm(@PathVariable Long userId, Model model){
 
         UserUpdateForm userUpdateForm = userService.searchProfiles(userId);
 
-        model.addAttribute("loginUser", loginUserForm);
         model.addAttribute("userUpdateForm", userUpdateForm);
 
         log.info("프로필 수정 form access");
@@ -138,6 +153,7 @@ public class UserController {
     }
 
     //프로필 수정
+    @UserLogin
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
@@ -156,6 +172,8 @@ public class UserController {
         return "redirect:/profile";
     }
 
+    //회원 탈퇴
+    @UserLogin
     @GetMapping("/profile/{userId}/delete")
     public String deleteUser(@PathVariable Long userId, HttpServletRequest request){
         HttpSession session = request.getSession(false);

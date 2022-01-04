@@ -2,6 +2,7 @@ package com.shoppingmall.controller;
 
 import com.shoppingmall.service.user.CartService;
 import com.shoppingmall.web.SessionConst;
+import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,6 +35,7 @@ public class CartController {
         return loginUserForm;
     }
 
+    @UserLogin
     @PostMapping("/cart/{itemId}/add")
     public String addItemToCart(
             HttpServletRequest request,
@@ -47,6 +49,7 @@ public class CartController {
         return "redirect:/";
     }
 
+    @UserLogin
     @GetMapping("/cart")
     public String cartList(
             HttpServletRequest request, Model model){
@@ -63,6 +66,7 @@ public class CartController {
         return "cart/cartList";
     }
 
+    @UserLogin
     @GetMapping("/cart/{cartItemId}/delete")
     public String removeCartItem(
             HttpServletRequest request,

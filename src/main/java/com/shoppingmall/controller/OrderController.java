@@ -1,9 +1,9 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.dto.CartItemResponseDto;
 import com.shoppingmall.service.user.CartService;
 import com.shoppingmall.service.user.OrderService;
 import com.shoppingmall.web.SessionConst;
+import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -34,6 +34,7 @@ public class OrderController {
         return loginUserForm;
     }
 
+    @UserLogin
     @GetMapping("/order")
     public String order(HttpServletRequest request, Model model){
         LoginUserForm loginUserForm = addSessionAttribute(request, model);

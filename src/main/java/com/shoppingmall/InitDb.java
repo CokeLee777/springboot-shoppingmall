@@ -30,6 +30,10 @@ public class InitDb {
         User admin = User.builder().identifier("admin123").password("admin123!").username("admin").email("admin@naver.com")
                 .address(new Address("test", "test")).cart(new Cart()).build();
         admin.toAdminUser();
+        User user = User.builder().identifier("test123").password("test123!").username("test").email("test@naver.com")
+                .address(new Address("test", "test")).cart(new Cart()).build();
+
         userRepository.save(admin);
+        userRepository.save(user);
     }
 }

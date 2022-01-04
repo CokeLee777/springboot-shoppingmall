@@ -65,6 +65,5 @@ public class ItemRequestDto {
         private Long categoryId;
 
         private String itemImg;
-
     }
 }

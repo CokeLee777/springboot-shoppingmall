@@ -3,23 +3,20 @@ package com.shoppingmall.domain.cart;
 import com.shoppingmall.domain.cartitem.CartItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.CartItemRequestDto;
-import com.shoppingmall.dto.CartRequestDto;
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemRequestDto.*;
-import static com.shoppingmall.dto.CartRequestDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.*;
+import static com.shoppingmall.dto.CartResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
 @Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Cart extends BaseEntity {
 
     @Id @GeneratedValue
@@ -35,17 +32,24 @@ public class Cart extends BaseEntity {
     /**
      * 비즈니스 로직
      */
-    //상품 추가
+    //상품 장바구니에 추가
     public void addCartItem(CartItem cartItem){
         this.cartItems.add(cartItem);
         cartItem.setCart(this);
     }
 
-    //상품 삭제
+    //상품 장바구니에서 삭제
     public void removeCartItem(CartItem cartItem){
         this.cartItems.remove(cartItem);
         cartItem.dropItem();
         if(cartItem.getCart() == this) cartItem.setCart(null);
+    }
+
+    //상품 모두삭제 -> 주문 완료시
+    public void removeCartItems(List<CartItem> cartItems){
+        for (CartItem cartItem : cartItems) {
+            this.removeCartItem(cartItem);
+        }
     }
 
     //배송비 조회
@@ -65,6 +69,7 @@ public class Cart extends BaseEntity {
 
     public CartInfo toCartInfo(List<CartItemInfo> cartItemInfos){
         return CartInfo.builder()
+                .id(id)
                 .cartItemInfos(cartItemInfos)
                 .deliveryPrice(getDeliveryPrice())
                 .totalPrice(getTotalPrice())

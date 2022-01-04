@@ -8,7 +8,7 @@ import lombok.Getter;
 
 import javax.validation.constraints.NotNull;
 
-public class CartItemRequestDto {
+public class CartItemResponseDto {
 
     @Getter
     @Builder

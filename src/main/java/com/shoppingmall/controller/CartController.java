@@ -1,13 +1,7 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.dto.CartItemRequestDto;
-import com.shoppingmall.dto.CartRequestDto;
-import com.shoppingmall.dto.UserRequestDto;
-import com.shoppingmall.dto.UserResponseDto;
 import com.shoppingmall.service.user.CartService;
-import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
-import com.shoppingmall.web.argumentresolver.Login;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,8 +15,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemRequestDto.*;
-import static com.shoppingmall.dto.CartRequestDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.*;
+import static com.shoppingmall.dto.CartResponseDto.*;
 import static com.shoppingmall.dto.UserRequestDto.*;
 
 @Slf4j
@@ -74,8 +68,8 @@ public class CartController {
             HttpServletRequest request,
             @PathVariable("cartItemId") Long cartItemId, Model model){
 
-        addSessionAttribute(request, model);
-        cartService.removeItemFromCart(cartItemId);
+        LoginUserForm loginUserForm = addSessionAttribute(request, model);
+        cartService.removeItemFromCart(loginUserForm.getIdentifier(), cartItemId);
 
         log.info("장바구니 상품 삭제 cartItemId={}", cartItemId);
         return "redirect:/cart";

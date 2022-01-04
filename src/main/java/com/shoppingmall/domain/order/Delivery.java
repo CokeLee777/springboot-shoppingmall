@@ -9,11 +9,11 @@ import javax.persistence.*;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter(AccessLevel.PROTECTED)
 @NoArgsConstructor
-@AllArgsConstructor
 public class Delivery extends BaseEntity {
 
     @Id @GeneratedValue
@@ -26,6 +26,12 @@ public class Delivery extends BaseEntity {
     @Embedded
     private Address address;
 
-    @OneToOne(mappedBy = "delivery", cascade = ALL)
+    @OneToOne(mappedBy = "delivery", fetch = LAZY)
     private Order order;
+
+    @Builder
+    private Delivery(DeliveryStatus deliveryStatus, Address address){
+        this.deliveryStatus = deliveryStatus;
+        this.address = address;
+    }
 }

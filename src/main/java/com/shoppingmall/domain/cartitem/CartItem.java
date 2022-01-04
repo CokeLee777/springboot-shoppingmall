@@ -3,13 +3,12 @@ package com.shoppingmall.domain.cartitem;
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.dto.CartItemRequestDto;
+import com.shoppingmall.dto.OrderItemResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
 
-import static com.shoppingmall.dto.CartItemRequestDto.*;
-import static javax.persistence.CascadeType.*;
+import static com.shoppingmall.dto.CartItemResponseDto.*;
 import static javax.persistence.FetchType.*;
 
 @Entity
@@ -68,4 +67,5 @@ public class CartItem extends BaseEntity {
                 .itemCount(itemCount)
                 .build();
     }
+
 }

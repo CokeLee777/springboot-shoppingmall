@@ -2,8 +2,6 @@ package com.shoppingmall.domain.user;
 
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.enums.UserRole;
-import com.shoppingmall.domain.inquiry.ItemInquiry;
-import com.shoppingmall.domain.inquiry.ItemInquiryAnswer;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.order.Order;
 import com.shoppingmall.domain.common.BaseEntity;
@@ -52,12 +50,6 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Order> orders = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<ItemInquiry> itemInquiries = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<ItemInquiryAnswer> itemInquiryAnswers = new ArrayList<>();
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();

@@ -26,6 +26,11 @@ public class UserService {
         validateDuplicateUser(form);  //중복 회원 검증
         userRepository.save(form.toEntity());
     }
+    //중복회원 검증 메서드
+    public void validateDuplicateUser(UserCreateForm form) {
+        boolean duplicated = userRepository.existsByIdentifier(form.getIdentifier());
+        if (duplicated) throw new DuplicatedUserException("이미 등록된 아이디입니다.");
+    }
 
     //유저 로그인
     public UserRole login(LoginUserForm form){
@@ -33,11 +38,6 @@ public class UserService {
                 .filter(u -> u.getPassword().equals(form.getPassword()))
                 .orElseThrow(() -> new IncorrectLoginInfoException("아이디 또는 비밀번호가 맞지 않습니다."));
         return findUser.getRole();
-    }
-
-    public void validateDuplicateUser(UserCreateForm form) {
-        boolean duplicated = userRepository.existsByIdentifier(form.getIdentifier());
-        if (duplicated) throw new DuplicatedUserException("이미 등록된 아이디입니다.");
     }
 
     //유저 프로필 조회

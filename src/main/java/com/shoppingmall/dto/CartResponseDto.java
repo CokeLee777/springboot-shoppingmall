@@ -6,15 +6,16 @@ import lombok.Getter;
 
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemRequestDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.*;
 
-public class CartRequestDto {
+public class CartResponseDto {
 
     @Getter
     @Builder
     @AllArgsConstructor
     public static class CartInfo {
 
+        private Long id;
         private List<CartItemInfo> cartItemInfos;
         private Integer deliveryPrice;
         private Integer totalPrice;

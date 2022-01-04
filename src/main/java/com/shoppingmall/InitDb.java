@@ -23,7 +23,6 @@ import static com.shoppingmall.dto.ItemRequestDto.*;
 @RequiredArgsConstructor
 public class InitDb {
 
-    private final ItemRepository itemRepository;
     private final UserRepository userRepository;
 
     @PostConstruct

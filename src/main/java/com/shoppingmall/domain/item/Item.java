@@ -1,8 +1,6 @@
 package com.shoppingmall.domain.item;
 
-import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.cartitem.CartItem;
-import com.shoppingmall.domain.inquiry.ItemInquiry;
 import com.shoppingmall.domain.review.ItemReview;
 import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
@@ -48,9 +46,6 @@ public class Item extends BaseEntity {
 
     @OneToMany(mappedBy = "item", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "item", cascade = ALL)
-    private List<ItemInquiry> itemInquiries = new ArrayList<>();
 
     @OneToMany(mappedBy = "item", cascade = ALL)
     private List<ItemReview> itemReviews = new ArrayList<>();

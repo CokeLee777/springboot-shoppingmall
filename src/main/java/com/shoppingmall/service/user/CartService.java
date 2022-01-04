@@ -4,10 +4,7 @@ import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.cartitem.CartItem;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.CartItemRequestDto;
-import com.shoppingmall.dto.CartRequestDto;
 import com.shoppingmall.exception.LoginRequiredException;
-import com.shoppingmall.exception.NotExistCartException;
 import com.shoppingmall.exception.NotExistCartItemException;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.CartItemRepository;
@@ -21,8 +18,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.shoppingmall.dto.CartItemRequestDto.*;
-import static com.shoppingmall.dto.CartRequestDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.*;
+import static com.shoppingmall.dto.CartResponseDto.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -55,9 +52,13 @@ public class CartService {
     }
 
     @Transactional
-    public void removeItemFromCart(Long cartItemId){
+    public void removeItemFromCart(String identifier, Long cartItemId){
+        User user = userRepository.findByIdentifier(identifier).orElseThrow(
+                () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
         CartItem cartItem = cartItemRepository.findById(cartItemId).orElseThrow(
                 () -> new NotExistCartItemException("존재하지 않는 장바구니 상품입니다."));
+        Cart cart = user.getCart();
+        cart.removeCartItem(cartItem);
         cartItemRepository.delete(cartItem);
     }
 

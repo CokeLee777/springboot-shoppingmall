@@ -4,6 +4,7 @@ import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.OrderStatus;
 import com.shoppingmall.domain.user.User;
+import com.shoppingmall.dto.OrderItemResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -11,6 +12,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shoppingmall.dto.OrderItemResponseDto.*;
+import static com.shoppingmall.dto.OrderResponseDto.*;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.EnumType.*;
 import static javax.persistence.FetchType.*;
@@ -42,6 +45,17 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = ALL)
     private List<OrderItem> orderItems = new ArrayList<>();
 
+    @Builder
+    private Order(String orderNumber, OrderStatus orderStatus, User user, Delivery delivery, List<OrderItem> orderItems){
+        this.orderNumber = orderNumber;
+        this.orderStatus = orderStatus;
+        setUser(user);
+        setDelivery(delivery);
+        for (OrderItem orderItem : orderItems) {
+            addOrderItem(orderItem);
+        }
+    }
+
     /**
      * 연관관계 메서드
      */
@@ -61,5 +75,28 @@ public class Order extends BaseEntity {
     private void addOrderItem(OrderItem orderItem){
         this.orderItems.add(orderItem);
         orderItem.setOrder(this);
+    }
+
+    //비즈니스 로직
+    public Integer getTotalPrice(){
+        Integer totalPrice = 0;
+        for (OrderItem orderItem : orderItems) {
+            totalPrice += orderItem.getTotalPrice();
+        }
+        if(totalPrice < 30000) totalPrice += 2500;
+
+        return totalPrice;
+    }
+
+    public OrderInfo toOrderInfo(List<OrderItemInfo> orderItemInfos){
+        return OrderInfo.builder()
+                .orderNumber(orderNumber)
+                .orderStatus(orderStatus)
+                .deliveryStatus(delivery.getDeliveryStatus())
+                .address(delivery.getAddress())
+                .orderItemInfos(orderItemInfos)
+                .totalPrice(getTotalPrice())
+                .deliveryPrice(getTotalPrice() < 30000 ? 2500 : 0)
+                .build();
     }
 }

@@ -1,6 +1,7 @@
 package com.shoppingmall.dto;
 
 import com.shoppingmall.domain.cart.Cart;
+import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.Address;
 import com.shoppingmall.domain.user.User;
 import lombok.*;
@@ -88,10 +89,11 @@ public class UserRequestDto {
         private String detailAddress;
     }
 
-    @Getter
     @Builder
+    @Getter @Setter
     @AllArgsConstructor
     public static class LoginUserForm {
+        private UserRole role;
         @NotBlank(message = "아이디를 작성해주세요.")
         private String identifier;
         @NotBlank(message = "비밀번호를 작성해주세요.")

@@ -1,7 +1,7 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.service.user.CartService;
-import com.shoppingmall.service.user.OrderService;
+import com.shoppingmall.service.CartService;
+import com.shoppingmall.service.OrderService;
 import com.shoppingmall.web.SessionConst;
 import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+
+import java.util.List;
 
 import static com.shoppingmall.dto.CartItemResponseDto.*;
 import static com.shoppingmall.dto.CartResponseDto.*;
@@ -26,18 +28,16 @@ public class OrderController {
     private final CartService cartService;
     private final OrderService orderService;
 
-    private LoginUserForm addSessionAttribute(HttpServletRequest request, Model model) {
+    private LoginUserForm addSessionAttribute(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        LoginUserForm loginUserForm = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
-        model.addAttribute("user", loginUserForm);
-
-        return loginUserForm;
+        return (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
     }
 
+    //주문 하기
     @UserLogin
     @GetMapping("/order")
     public String order(HttpServletRequest request, Model model){
-        LoginUserForm loginUserForm = addSessionAttribute(request, model);
+        LoginUserForm loginUserForm = addSessionAttribute(request);
         //장바구니 검색
         CartInfo cartInfo = cartService.searchCart(loginUserForm.getIdentifier());
         //주문 하기
@@ -48,6 +48,20 @@ public class OrderController {
         }
         model.addAttribute("orderInfo", orderInfo);
 
+        log.info("주문 완료 orderNumber={}", orderInfo.getOrderNumber());
         return "order/orderDetails";
+    }
+
+    @UserLogin
+    @GetMapping("/orders")
+    public String orderList(HttpServletRequest request, Model model){
+        LoginUserForm loginUserForm = addSessionAttribute(request);
+        //주문내역 모두 조회
+        List<OrderListInfo> orderListInfos = orderService.searchOrders(loginUserForm.getIdentifier());
+
+        model.addAttribute("orderListInfos", orderListInfos);
+
+        log.info("주문내역 조회 identifier={}", loginUserForm.getIdentifier());
+        return "order/orderList";
     }
 }

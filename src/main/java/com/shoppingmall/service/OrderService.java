@@ -1,4 +1,4 @@
-package com.shoppingmall.service.user;
+package com.shoppingmall.service;
 
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.cartitem.CartItem;
@@ -71,5 +71,19 @@ public class OrderService {
     }
 
     //나의 주문 검색
+    public List<OrderListInfo> searchOrders(String identifier) {
+        //나의 모든 주문 검색
+        List<Order> orders = orderRepository.findAllByIdentifier(identifier);
+        List<OrderListInfo> orderListInfos = orders.stream()
+                .map(o -> OrderListInfo.builder()
+                        .createdDate(o.getCreatedDate())
+                        .orderNumber(o.getOrderNumber())
+                        .orderStatus(o.getOrderStatus())
+                        .deliveryStatus(o.getDelivery().getDeliveryStatus())
+                        .totalPrice(o.getTotalPrice())
+                        .build())
+                .collect(Collectors.toList());
 
+        return orderListInfos;
+    }
 }

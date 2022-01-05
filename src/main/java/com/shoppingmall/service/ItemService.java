@@ -1,4 +1,4 @@
-package com.shoppingmall.service.user;
+package com.shoppingmall.service;
 
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;

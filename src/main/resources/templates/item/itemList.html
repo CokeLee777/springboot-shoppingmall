@@ -30,7 +30,6 @@
 
             <!-- ##### Single Widget ##### -->
             <div class="widget catagory mb-50">
-                <a href="/category/add" class="btn btn-primary mb-4">카테고리 추가</a>
                 <!--  Catagories  -->
                 <div class="catagories-menu">
                     <ul>
@@ -77,6 +76,7 @@
                 <div class="row">
                     <!-- Single Product Area -->
                     <div th:each="item : ${items}" class="col-12 col-sm-6 col-md-12 col-xl-6">
+                        <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
                         <div class="single-product-wrapper">
                             <!-- Product Image -->
                             <div class="product-img">
@@ -91,18 +91,16 @@
                                 <div class="product-meta-data">
                                     <div class="line"></div>
                                     <p class="product-price" th:text="${item.price}">상품가격</p>
-                                    <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
-                                        <h6 th:text="${item.name}">상품명</h6>
-                                    </a>
+                                    <h6 th:text="${item.name}">상품명</h6>
                                 </div>
-                                <!-- Ratings & Cart -->
                                 <div class="ratings-cart text-right">
                                     <div class="cart">
-                                        <a href="../cart.html" data-toggle="tooltip" data-placement="left" title="Add to Cart"><img src="/img/core-img/cart.png" alt=""></a>
+                                        <img src="/img/core-img/cart.png" alt="">
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        </a>
                     </div>
                 </div>
 

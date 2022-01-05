@@ -12,18 +12,20 @@
     <!-- Amado Nav -->
     <nav class="amado-nav">
         <ul>
-            <li class="active"><a href="/">Home</a></li>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/cart">Cart</a></li>
-            <li><a href="/item/add">Add Item</a></li>
+            <li><a href="/">홈 화면</a></li>
+            <li><a href="/shop">쇼핑하기</a></li>
+            <li th:if="${#session} != null and ${#session.getAttribute('loginUser')} != null"><a href="/cart">장바구니</a></li>
+            <li th:if="${#session} != null and ${#session.getAttribute('loginUser')} != null"><a href="/orders">주문 내역</a></li>
+            <li th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null"><a href="/item/add">상품 추가</a></li>
+            <li th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null"><a href="/category/add">카테고리 추가</a></li>
         </ul>
     </nav>
     <!-- Button Group -->
     <div class="amado-btn-group mt-30 mb-100">
         <form th:action="@{/logout}" method="post">
-            <button class="btn amado-btn mb-15" type="submit">LOG OUT</button>
+            <button class="btn amado-btn mb-15" type="submit">로그아웃</button>
         </form>
-        <a href="/profile" class="btn amado-btn active">MY PROFILE</a>
+        <a href="/profile" class="btn amado-btn active">내 프로필</a>
     </div>
     <!-- Cart Menu -->
     <div class="cart-fav-search mb-100">

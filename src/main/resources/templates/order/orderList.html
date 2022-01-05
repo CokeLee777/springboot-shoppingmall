@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | OrderList')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <th:block th:if="${#session} == null">
+        <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+    </th:block>
+    <th:block th:unless="${#session} == null">
+        <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+    </th:block>
+    <!-- Header Area End -->
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="cart-title mt-50">
+                        <h2>주문내역</h2>
+                    </div>
+
+                    <div class="cart-table clearfix">
+                        <table class="table table-responsive">
+                            <thead>
+                            <tr>
+                                <th>주문일</th>
+                                <th>주문번호</th>
+                                <th>주문상태</th>
+                                <th>배송상태</th>
+                                <th>총액</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="orderListInfo: *{orderListInfos}">
+                                <td th:text="${#temporals.format(orderListInfo.createdDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                                <td th:text="${orderListInfo.orderNumber}"></td>
+                                <td th:text="${orderListInfo.orderStatus}"></td>
+                                <td th:text="${orderListInfo.deliveryStatus}"></td>
+                                <td th:text="${orderListInfo.totalPrice}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

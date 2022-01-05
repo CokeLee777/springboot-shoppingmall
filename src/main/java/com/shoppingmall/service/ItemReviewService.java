@@ -1,4 +1,4 @@
-package com.shoppingmall.service.user;
+package com.shoppingmall.service;
 
 import com.shoppingmall.repository.ItemReviewRepository;
 import lombok.RequiredArgsConstructor;

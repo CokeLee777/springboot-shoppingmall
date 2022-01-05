@@ -25,15 +25,15 @@ public class WebConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
-                .addPathPatterns("/profile/**", "/cart/**", "/order/**", "/logout")
-                .excludePathPatterns("/", "/sign-in", "/sign-up", "/search", "/shop/**",
-                        "/css/**", "/fonts/**", "/img/**", "/js/**", "/scss/**",
+                .addPathPatterns("/cart/**", "/order/**", "/orders/**")
+                .excludePathPatterns("/", "/sign-in", "/sign-up", "/logout", "/search", "/shop/**",
+                        "/profile/**","/css/**", "/fonts/**", "/img/**", "/js/**", "/scss/**",
                         "/*.ico", "/error");
         registry.addInterceptor(new AdminLoginCheckInterceptor())
                 .order(2)
-                .addPathPatterns("/**")
+                .addPathPatterns("/category/**", "/item/**")
                 .excludePathPatterns("/", "/sign-in", "/sign-up", "/logout", "/search", "/shop/**",
-                        "/profile/**", "/cart/**", "/order/**", "/css/**", "/fonts/**",
+                        "/profile/**", "/css/**", "/fonts/**",
                         "/img/**", "/js/**", "/scss/**", "/*.ico", "/error");
     }
 }

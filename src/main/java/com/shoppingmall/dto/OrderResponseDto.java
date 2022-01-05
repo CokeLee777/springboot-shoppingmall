@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.shoppingmall.dto.OrderItemResponseDto.*;
@@ -24,5 +25,16 @@ public class OrderResponseDto {
         private Integer deliveryPrice;
         private Integer totalPrice;
         private List<OrderItemInfo> orderItemInfos;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class OrderListInfo{
+        private String orderNumber;
+        private OrderStatus orderStatus;
+        private DeliveryStatus deliveryStatus;
+        private Integer totalPrice;
+        private LocalDateTime createdDate;
     }
 }

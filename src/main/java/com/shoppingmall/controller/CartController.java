@@ -1,6 +1,6 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.service.user.CartService;
+import com.shoppingmall.service.CartService;
 import com.shoppingmall.web.SessionConst;
 import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
@@ -27,12 +27,9 @@ public class CartController {
 
     private final CartService cartService;
 
-    private LoginUserForm addSessionAttribute(HttpServletRequest request, Model model) {
+    private LoginUserForm addSessionAttribute(HttpServletRequest request) {
         HttpSession session = request.getSession(false);
-        LoginUserForm loginUserForm = (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
-        model.addAttribute("user", loginUserForm);
-
-        return loginUserForm;
+        return (LoginUserForm) session.getAttribute(SessionConst.LOGIN_USER);
     }
 
     @UserLogin
@@ -40,9 +37,9 @@ public class CartController {
     public String addItemToCart(
             HttpServletRequest request,
             @RequestParam("quantity") Integer quantity,
-            @PathVariable("itemId") Long itemId, Model model){
+            @PathVariable("itemId") Long itemId){
 
-        LoginUserForm loginUserForm = addSessionAttribute(request, model);
+        LoginUserForm loginUserForm = addSessionAttribute(request);
         cartService.addItemToCart(loginUserForm.getIdentifier(), itemId, quantity);
 
         log.info("장바구니에 상품 추가 itemId={}", itemId);
@@ -51,10 +48,9 @@ public class CartController {
 
     @UserLogin
     @GetMapping("/cart")
-    public String cartList(
-            HttpServletRequest request, Model model){
+    public String cartList(HttpServletRequest request, Model model){
 
-        LoginUserForm loginUserForm = addSessionAttribute(request, model);
+        LoginUserForm loginUserForm = addSessionAttribute(request);
 
         CartInfo cartInfo = cartService.searchCart(loginUserForm.getIdentifier());
         List<CartItemInfo> cartItemInfos = cartInfo.getCartItemInfos();
@@ -68,11 +64,9 @@ public class CartController {
 
     @UserLogin
     @GetMapping("/cart/{cartItemId}/delete")
-    public String removeCartItem(
-            HttpServletRequest request,
-            @PathVariable("cartItemId") Long cartItemId, Model model){
+    public String removeCartItem(@PathVariable("cartItemId") Long cartItemId, HttpServletRequest request){
 
-        LoginUserForm loginUserForm = addSessionAttribute(request, model);
+        LoginUserForm loginUserForm = addSessionAttribute(request);
         cartService.removeItemFromCart(loginUserForm.getIdentifier(), cartItemId);
 
         log.info("장바구니 상품 삭제 cartItemId={}", cartItemId);

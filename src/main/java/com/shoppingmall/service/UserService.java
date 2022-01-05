@@ -1,4 +1,4 @@
-package com.shoppingmall.service.user;
+package com.shoppingmall.service;
 
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.user.User;

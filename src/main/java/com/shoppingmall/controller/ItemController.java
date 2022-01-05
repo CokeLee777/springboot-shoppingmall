@@ -3,8 +3,8 @@ package com.shoppingmall.controller;
 import com.shoppingmall.domain.item.Item;
 import com.shoppingmall.domain.item.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
-import com.shoppingmall.service.user.ItemCategoryService;
-import com.shoppingmall.service.user.ItemService;
+import com.shoppingmall.service.ItemCategoryService;
+import com.shoppingmall.service.ItemService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +41,8 @@ public class ItemController {
         Page<Item> page = itemService.searchItems(pageable);
         //전체 상품 및 전체 카테고리 DTO로 변환
         addItemsAndCategoriesAttribute(model, page);
+
+        log.info("전체 상품 조회 access");
         return "item/itemList";
     }
 
@@ -54,6 +56,8 @@ public class ItemController {
         Page<Item> page = itemService.searchSameCategoryItems(categoryId, pageable);
         //카테고리에 따른 전체 상품, 전체 카테고리, 특정 카테고리 DTO로 변환
         addItemsAndCategoriesAttribute(model, page);
+
+        log.info("카테고리별로 상품 조회 access");
         return "item/itemCategoryList";
     }
 
@@ -91,6 +95,8 @@ public class ItemController {
 
         model.addAttribute("item", item.toItemInfo());
         model.addAttribute("category", itemCategory.toItemCategoryInfo());
+
+        log.info("상품 상세 조회 itemId={}", item.getId());
         return "item/itemDetails";
     }
 

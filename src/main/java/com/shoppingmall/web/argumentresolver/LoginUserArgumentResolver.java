@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver {
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
-        return parameter.hasMethodAnnotation(UserLogin.class) || parameter.hasMethodAnnotation(AdminLogin.class);
+        return parameter.hasMethodAnnotation(UserLogin.class);
     }
 
     @Override
@@ -26,8 +26,6 @@ public class LoginUserArgumentResolver implements HandlerMethodArgumentResolver 
 
         if(session == null) return null;
 
-        Object userAttribute = session.getAttribute(SessionConst.LOGIN_USER);
-        Object adminAttribute = session.getAttribute(SessionConst.LOGIN_ADMIN);
-        return userAttribute != null ? userAttribute : adminAttribute;
+        return session.getAttribute(SessionConst.LOGIN_ADMIN);
     }
 }

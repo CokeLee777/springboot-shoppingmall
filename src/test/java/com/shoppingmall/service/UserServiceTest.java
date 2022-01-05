@@ -3,7 +3,6 @@ package com.shoppingmall.service;
 import com.shoppingmall.domain.user.User;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
-import com.shoppingmall.service.user.UserService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

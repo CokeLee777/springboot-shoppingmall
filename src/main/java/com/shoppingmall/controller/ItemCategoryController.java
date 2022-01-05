@@ -1,7 +1,7 @@
 package com.shoppingmall.controller;
 
 import com.shoppingmall.exception.DuplicatedCategoryException;
-import com.shoppingmall.service.user.ItemCategoryService;
+import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

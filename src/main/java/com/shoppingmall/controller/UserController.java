@@ -3,10 +3,8 @@ package com.shoppingmall.controller;
 import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
-import com.shoppingmall.service.user.CartService;
-import com.shoppingmall.service.user.UserService;
+import com.shoppingmall.service.UserService;
 import com.shoppingmall.web.SessionConst;
-import com.shoppingmall.web.argumentresolver.UserLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -16,7 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
@@ -28,7 +25,6 @@ import static com.shoppingmall.dto.UserResponseDto.*;
 public class UserController {
 
     private final UserService userService;
-    private final CartService cartService;
 
     //회원가입 form
     @GetMapping("/sign-up")
@@ -82,6 +78,7 @@ public class UserController {
         try{
             //로그인 시도
             UserRole role = userService.login(loginUserForm);
+            loginUserForm.setRole(role);
             //세션이 있으면 세션 반환, 없으면 신규 세션 생성
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보를 보관한다.
@@ -101,7 +98,6 @@ public class UserController {
     }
 
     //로그아웃
-    @UserLogin
     @PostMapping("/logout")
     public String logout(HttpServletRequest request){
         //세션을 불러온다. -> 없으면 생성하지 않는다.
@@ -117,7 +113,6 @@ public class UserController {
     }
 
     //프로필 정보
-    @UserLogin
     @GetMapping("/profile")
     public String myProfile(HttpServletRequest request, Model model){
         HttpSession session = request.getSession(false);
@@ -143,7 +138,6 @@ public class UserController {
     }
 
     //프로필 수정 폼
-    @UserLogin
     @GetMapping("/profile/{userId}/edit")
     public String myProfileEditForm(@PathVariable Long userId, Model model){
 
@@ -156,7 +150,6 @@ public class UserController {
     }
 
     //프로필 수정
-    @UserLogin
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
@@ -176,7 +169,6 @@ public class UserController {
     }
 
     //회원 탈퇴
-    @UserLogin
     @GetMapping("/profile/{userId}/delete")
     public String deleteUser(@PathVariable Long userId, HttpServletRequest request){
         HttpSession session = request.getSession(false);

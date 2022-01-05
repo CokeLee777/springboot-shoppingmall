@@ -42,7 +42,7 @@ public class OrderController {
         CartInfo cartInfo = cartService.searchCart(loginUserForm.getIdentifier());
         //주문 하기
         OrderInfo orderInfo = orderService.order(cartInfo.getId());
-
+        //장바구니에 담겨있는 상품 모두 지우기
         for(CartItemInfo cartItemInfo : cartInfo.getCartItemInfos() ){
             cartService.removeItemFromCart(loginUserForm.getIdentifier(), cartItemInfo.getId());
         }

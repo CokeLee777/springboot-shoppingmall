@@ -34,7 +34,7 @@ public class Order extends BaseEntity {
     @Enumerated(value = STRING)
     private OrderStatus orderStatus;
 
-    @ManyToOne(fetch = LAZY, cascade = ALL)
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "user_id")
     private User user;
 

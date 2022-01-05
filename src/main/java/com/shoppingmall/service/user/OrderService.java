@@ -32,7 +32,6 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final CartRepository cartRepository;
-    private final CartItemRepository cartItemRepository;
 
     @Transactional
     public OrderInfo order(Long cartId){

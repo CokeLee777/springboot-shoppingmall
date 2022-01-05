@@ -1,7 +1,6 @@
 package com.shoppingmall.repository;
 
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.domain.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

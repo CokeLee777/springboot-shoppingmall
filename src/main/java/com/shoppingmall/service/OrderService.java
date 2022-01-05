@@ -1,19 +1,15 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.cart.Cart;
-import com.shoppingmall.domain.cartitem.CartItem;
+import com.shoppingmall.domain.Cart;
+import com.shoppingmall.domain.CartItem;
 import com.shoppingmall.domain.enums.DeliveryStatus;
 import com.shoppingmall.domain.enums.OrderStatus;
-import com.shoppingmall.domain.order.Delivery;
-import com.shoppingmall.domain.order.Order;
-import com.shoppingmall.domain.orderitem.OrderItem;
-import com.shoppingmall.dto.OrderItemResponseDto;
-import com.shoppingmall.dto.OrderResponseDto;
+import com.shoppingmall.domain.Delivery;
+import com.shoppingmall.domain.Order;
+import com.shoppingmall.domain.OrderItem;
 import com.shoppingmall.exception.NotExistCartException;
-import com.shoppingmall.repository.CartItemRepository;
 import com.shoppingmall.repository.CartRepository;
 import com.shoppingmall.repository.OrderRepository;
-import com.shoppingmall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

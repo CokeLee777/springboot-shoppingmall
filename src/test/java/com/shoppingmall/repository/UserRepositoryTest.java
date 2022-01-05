@@ -1,8 +1,6 @@
 package com.shoppingmall.repository;
 
-import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.UserRequestDto;
-import org.assertj.core.api.Assertions;
+import com.shoppingmall.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import javax.persistence.EntityManager;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Transactional

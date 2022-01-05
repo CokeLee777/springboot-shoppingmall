@@ -1,18 +1,12 @@
 package com.shoppingmall.dto;
 
 import com.shoppingmall.domain.enums.ItemStatus;
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.domain.Item;
+import com.shoppingmall.domain.ItemCategory;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
-import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
 
 public class ItemRequestDto {
 

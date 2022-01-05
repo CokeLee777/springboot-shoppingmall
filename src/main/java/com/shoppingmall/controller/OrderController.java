@@ -12,13 +12,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemResponseDto.*;
-import static com.shoppingmall.dto.CartResponseDto.*;
-import static com.shoppingmall.dto.OrderResponseDto.*;
-import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.CartResponseDto.CartInfo;
+import static com.shoppingmall.dto.OrderResponseDto.OrderInfo;
+import static com.shoppingmall.dto.OrderResponseDto.OrderListInfo;
+import static com.shoppingmall.dto.UserRequestDto.LoginUserForm;
 
 @Slf4j
 @Controller
@@ -43,9 +42,8 @@ public class OrderController {
         //주문 하기
         OrderInfo orderInfo = orderService.order(cartInfo.getId());
         //장바구니에 담겨있는 상품 모두 지우기
-        for(CartItemInfo cartItemInfo : cartInfo.getCartItemInfos() ){
-            cartService.removeItemFromCart(loginUserForm.getIdentifier(), cartItemInfo.getId());
-        }
+        cartService.clearItemFromCart(loginUserForm.getIdentifier());
+
         model.addAttribute("orderInfo", orderInfo);
 
         log.info("주문 완료 orderNumber={}", orderInfo.getOrderNumber());

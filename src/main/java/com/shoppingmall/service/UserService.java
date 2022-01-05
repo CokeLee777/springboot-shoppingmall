@@ -1,7 +1,7 @@
 package com.shoppingmall.service;
 
 import com.shoppingmall.domain.enums.UserRole;
-import com.shoppingmall.domain.user.User;
+import com.shoppingmall.domain.User;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.exception.LoginRequiredException;

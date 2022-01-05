@@ -2,7 +2,7 @@ package com.shoppingmall.dto;
 
 import com.shoppingmall.domain.enums.DeliveryStatus;
 import com.shoppingmall.domain.enums.OrderStatus;
-import com.shoppingmall.domain.user.Address;
+import com.shoppingmall.domain.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

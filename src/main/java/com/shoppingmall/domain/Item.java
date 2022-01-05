@@ -1,28 +1,25 @@
-package com.shoppingmall.domain.item;
+package com.shoppingmall.domain;
 
-import com.shoppingmall.domain.cartitem.CartItem;
-import com.shoppingmall.domain.review.ItemReview;
-import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.exception.NotEnoughStockException;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.ItemRequestDto.*;
-import static com.shoppingmall.dto.ItemResponseDto.*;
-import static javax.persistence.CascadeType.*;
+import static com.shoppingmall.dto.ItemRequestDto.ItemUpdateForm;
+import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 import static javax.persistence.EnumType.STRING;
-import static javax.persistence.FetchType.*;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter(AccessLevel.PROTECTED)
+@Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Item extends BaseEntity {
 
     @Id @GeneratedValue
@@ -46,9 +43,6 @@ public class Item extends BaseEntity {
 
     @OneToMany(mappedBy = "item")
     private List<OrderItem> orderItems = new ArrayList<>();
-
-    @OneToMany(mappedBy = "item", cascade = ALL)
-    private List<ItemReview> itemReviews = new ArrayList<>();
 
     @OneToMany(mappedBy = "item")
     public List<CartItem> cartItems = new ArrayList<>();

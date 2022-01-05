@@ -1,18 +1,19 @@
-package com.shoppingmall.domain.order;
+package com.shoppingmall.domain;
 
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.DeliveryStatus;
-import com.shoppingmall.domain.user.Address;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.EnumType.*;
+import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
 @Entity
-@Getter @Setter(AccessLevel.PROTECTED)
+@Getter @Setter
 @NoArgsConstructor
 public class Delivery extends BaseEntity {
 

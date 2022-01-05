@@ -1,7 +1,7 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.domain.Item;
+import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.service.ItemService;
@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
-import static com.shoppingmall.dto.ItemRequestDto.*;
-import static com.shoppingmall.dto.ItemResponseDto.*;
+import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
+import static com.shoppingmall.dto.ItemRequestDto.ItemCreateForm;
+import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 
 @Slf4j
 @Controller
@@ -86,12 +86,12 @@ public class ItemController {
 
     //상품 상세 조회
     @GetMapping("/shop/{categoryId}/{itemId}")
-    public String itemDetails(
-            @PathVariable("itemId") Long itemId, Model model){
+    public String itemDetails(@PathVariable("itemId") Long itemId, Model model){
 
         //현재 선택한 아이템 정보 불러오기
         Item item = itemService.searchItemWithCategory(itemId);
         ItemCategory itemCategory = item.getItemCategory();
+        //리뷰정보 불러오기
 
         model.addAttribute("item", item.toItemInfo());
         model.addAttribute("category", itemCategory.toItemCategoryInfo());
@@ -99,6 +99,8 @@ public class ItemController {
         log.info("상품 상세 조회 itemId={}", item.getId());
         return "item/itemDetails";
     }
+
+
 
     //상품 추가 form
     @AdminLogin
@@ -136,6 +138,7 @@ public class ItemController {
         return "redirect:/";
     }
 
+    //키워드로 상품 검색
     @GetMapping("/search")
     public String keywordItemList(@RequestParam("search") String keyword, Model model){
         List<Item> items = itemService.searchItemsByKeyword(keyword);
@@ -147,5 +150,4 @@ public class ItemController {
 
         return "item/itemSearchList";
     }
-
 }

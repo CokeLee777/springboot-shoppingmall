@@ -1,21 +1,21 @@
-package com.shoppingmall.domain.item;
+package com.shoppingmall.domain;
 
 import com.shoppingmall.domain.common.BaseEntity;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
-import static com.shoppingmall.dto.ItemCategoryResponseDto.*;
-import static javax.persistence.CascadeType.*;
+import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryUpdateForm;
+import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
+import static javax.persistence.CascadeType.ALL;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class ItemCategory extends BaseEntity {
 
     @Id @GeneratedValue

@@ -1,7 +1,6 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.item.ItemCategory;
-import com.shoppingmall.dto.ItemCategoryRequestDto;
+import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.exception.DuplicatedCategoryException;
 import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.repository.ItemCategoryRepository;
@@ -11,7 +10,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
+import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryCreateForm;
+import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryUpdateForm;
 
 @Service
 @Transactional(readOnly = true)

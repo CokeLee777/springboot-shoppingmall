@@ -1,6 +1,6 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.user.User;
+import com.shoppingmall.domain.User;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;

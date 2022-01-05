@@ -1,6 +1,6 @@
 package com.shoppingmall.controller;
 
-import com.shoppingmall.domain.item.Item;
+import com.shoppingmall.domain.Item;
 import com.shoppingmall.service.ItemService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.shoppingmall.dto.ItemResponseDto.*;
+import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 
 @Slf4j
 @Controller

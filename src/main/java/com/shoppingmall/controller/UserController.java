@@ -17,7 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
-import static com.shoppingmall.dto.UserResponseDto.*;
+import static com.shoppingmall.dto.UserResponseDto.UserProfileInfo;
 
 @Slf4j
 @Controller

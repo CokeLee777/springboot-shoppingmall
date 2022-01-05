@@ -1,19 +1,19 @@
-package com.shoppingmall.domain.cartitem;
+package com.shoppingmall.domain;
 
-import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.common.BaseEntity;
-import com.shoppingmall.domain.item.Item;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
-import static com.shoppingmall.dto.CartItemResponseDto.*;
-import static javax.persistence.FetchType.*;
+import static com.shoppingmall.dto.CartItemResponseDto.CartItemInfo;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor
+@NoArgsConstructor
 public class CartItem extends BaseEntity {
 
     @Id @GeneratedValue

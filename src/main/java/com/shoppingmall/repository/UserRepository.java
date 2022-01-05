@@ -1,7 +1,6 @@
 package com.shoppingmall.repository;
 
-import com.shoppingmall.domain.user.User;
-import com.sun.xml.bind.v2.schemagen.xmlschema.List;
+import com.shoppingmall.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

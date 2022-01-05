@@ -1,12 +1,18 @@
 package com.shoppingmall.dto;
 
-import com.shoppingmall.domain.cart.Cart;
+import com.shoppingmall.domain.Address;
+import com.shoppingmall.domain.Cart;
+import com.shoppingmall.domain.User;
 import com.shoppingmall.domain.enums.UserRole;
-import com.shoppingmall.domain.user.Address;
-import com.shoppingmall.domain.user.User;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
-import javax.validation.constraints.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 public class UserRequestDto {
 

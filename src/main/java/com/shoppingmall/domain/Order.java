@@ -1,27 +1,25 @@
-package com.shoppingmall.domain.order;
+package com.shoppingmall.domain;
 
-import com.shoppingmall.domain.orderitem.OrderItem;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.OrderStatus;
-import com.shoppingmall.domain.user.User;
-import com.shoppingmall.dto.OrderItemResponseDto;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.OrderItemResponseDto.*;
-import static com.shoppingmall.dto.OrderResponseDto.*;
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.EnumType.*;
-import static javax.persistence.FetchType.*;
+import static com.shoppingmall.dto.OrderItemResponseDto.OrderItemInfo;
+import static com.shoppingmall.dto.OrderResponseDto.OrderInfo;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity(name = "orders")
-@Getter @Setter(AccessLevel.PROTECTED)
+@Getter @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 public class Order extends BaseEntity {
 
     @Id @GeneratedValue

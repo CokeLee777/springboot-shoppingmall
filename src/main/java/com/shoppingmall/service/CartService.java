@@ -1,14 +1,13 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.cart.Cart;
-import com.shoppingmall.domain.cartitem.CartItem;
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.user.User;
+import com.shoppingmall.domain.Cart;
+import com.shoppingmall.domain.CartItem;
+import com.shoppingmall.domain.Item;
+import com.shoppingmall.domain.User;
 import com.shoppingmall.exception.LoginRequiredException;
 import com.shoppingmall.exception.NotExistCartItemException;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.CartItemRepository;
-import com.shoppingmall.repository.CartRepository;
 import com.shoppingmall.repository.ItemRepository;
 import com.shoppingmall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +15,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.shoppingmall.dto.CartItemResponseDto.*;
-import static com.shoppingmall.dto.CartResponseDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.CartItemInfo;
+import static com.shoppingmall.dto.CartResponseDto.CartInfo;
 
 @Service
 @Transactional(readOnly = true)
@@ -63,6 +61,17 @@ public class CartService {
         Cart cart = user.getCart();
         cart.removeCartItem(cartItem);
         cartItemRepository.delete(cartItem);
+    }
+
+    @Transactional
+    public void clearItemFromCart(String identifier){
+        User user = userRepository.findWithCartByIdentifier(identifier).orElseThrow(
+                () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
+        //장바구니에서 담은 상품 제거
+        Cart cart = user.getCart();
+        List<CartItem> cartItems = cart.getCartItems();
+        cart.clearCartItems();
+        cartItemRepository.deleteAll(cartItems);
     }
 
     //장바구니 조회

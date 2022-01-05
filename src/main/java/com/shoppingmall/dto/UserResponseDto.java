@@ -1,7 +1,7 @@
 package com.shoppingmall.dto;
 
+import com.shoppingmall.domain.Address;
 import com.shoppingmall.domain.enums.UserRole;
-import com.shoppingmall.domain.user.Address;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

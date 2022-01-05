@@ -16,9 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemResponseDto.*;
-import static com.shoppingmall.dto.CartResponseDto.*;
-import static com.shoppingmall.dto.UserRequestDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.CartItemInfo;
+import static com.shoppingmall.dto.CartResponseDto.CartInfo;
+import static com.shoppingmall.dto.UserRequestDto.LoginUserForm;
 
 @Slf4j
 @Controller

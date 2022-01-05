@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import static com.shoppingmall.dto.ItemCategoryRequestDto.*;
+import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryCreateForm;
 
 @Slf4j
 @Controller

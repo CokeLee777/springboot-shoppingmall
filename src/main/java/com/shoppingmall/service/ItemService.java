@@ -1,7 +1,7 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.domain.Item;
+import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.exception.NotExistCategoryException;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.ItemCategoryRepository;

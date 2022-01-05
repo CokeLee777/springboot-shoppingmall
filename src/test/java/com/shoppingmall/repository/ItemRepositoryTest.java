@@ -1,7 +1,7 @@
 package com.shoppingmall.repository;
 
-import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.domain.item.ItemCategory;
+import com.shoppingmall.domain.Item;
+import com.shoppingmall.domain.ItemCategory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

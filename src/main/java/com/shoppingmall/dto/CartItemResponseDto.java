@@ -1,12 +1,8 @@
 package com.shoppingmall.dto;
 
-import com.shoppingmall.domain.cartitem.CartItem;
-import com.shoppingmall.domain.item.Item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-
-import javax.validation.constraints.NotNull;
 
 public class CartItemResponseDto {
 

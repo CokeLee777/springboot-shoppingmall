@@ -1,21 +1,21 @@
-package com.shoppingmall.domain.user;
+package com.shoppingmall.domain;
 
-import com.shoppingmall.domain.cart.Cart;
-import com.shoppingmall.domain.enums.UserRole;
-import com.shoppingmall.domain.review.ItemReview;
-import com.shoppingmall.domain.order.Order;
 import com.shoppingmall.domain.common.BaseEntity;
-import lombok.*;
+import com.shoppingmall.domain.enums.UserRole;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.UserRequestDto.*;
-import static com.shoppingmall.dto.UserResponseDto.*;
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.EnumType.*;
-import static javax.persistence.FetchType.*;
+import static com.shoppingmall.dto.UserRequestDto.UserUpdateForm;
+import static com.shoppingmall.dto.UserResponseDto.UserProfileInfo;
+import static javax.persistence.CascadeType.ALL;
+import static javax.persistence.EnumType.STRING;
+import static javax.persistence.FetchType.LAZY;
 
 @Entity
 @Getter @Setter
@@ -50,9 +50,6 @@ public class User extends BaseEntity {
 
     @OneToMany(mappedBy = "user", cascade = ALL)
     private List<Order> orders = new ArrayList<>();
-
-    @OneToMany(mappedBy = "user", cascade = ALL)
-    private List<ItemReview> itemReviews = new ArrayList<>();
 
     @Builder
     private User(String identifier, String password, String username, String email, Address address, Cart cart){

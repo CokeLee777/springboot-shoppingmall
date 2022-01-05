@@ -71,12 +71,12 @@
                         <div class="cart-summary" th:object="${carts}">
                             <h5>장바구니 정보</h5>
                             <ul class="summary-table">
-                                <li><span>배송비:</span> <span th:text="${carts.getDeliveryPrice()}">배송비</span></li>
+                                <li th:if="${!cartItems.isEmpty()}"><span>배송비:</span> <span th:text="${carts.getDeliveryPrice()}">배송비</span></li>
+                                <li th:unless="${!cartItems.isEmpty()}"><span>배송비:</span> <span th:text="0">배송비</span></li>
                                 <li><span>총 액:</span> <span th:text="${carts.getTotalPrice()}">총 액</span></li>
                             </ul>
                             <div class="cart-btn mt-100">
-                                <a href="/order" class="btn amado-btn w-100">상품 주문</a>
-<!--                                <button type="submit" class="btn amado-btn w-100">상품 주문</button>-->
+                                <a th:if="${!cartItems.isEmpty()}" href="/order" class="btn amado-btn w-100">상품 주문</a>
                             </div>
                         </div>
                     </div>

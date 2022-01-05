@@ -29,26 +29,11 @@ public class Cart extends BaseEntity {
     @OneToMany(mappedBy = "cart", cascade = ALL)
     private List<CartItem> cartItems = new ArrayList<>();
 
-//    @Builder
-//    private Cart(User user, CartItem ... cartItems){
-//        this.setUser(user);
-//        for (CartItem cartItem : cartItems) {
-//            this.addCartItem(cartItem);
-//        }
-//    }
-
-    /**
-     * 연관관계 메서드
-     */
-//    public void setUser(User user){
-//        this.user = user;
-//        user.setCart(this);
-//    }
 
     /**
      * 비즈니스 로직
      */
-    //상품 장바구니에 추가
+
     public void addCartItem(CartItem cartItem){
         this.cartItems.add(cartItem);
         cartItem.setCart(this);
@@ -57,15 +42,7 @@ public class Cart extends BaseEntity {
     //상품 장바구니에서 삭제
     public void removeCartItem(CartItem cartItem){
         this.cartItems.remove(cartItem);
-        cartItem.dropItem();
-        if(cartItem.getCart() == this) cartItem.setCart(null);
-    }
-
-    //상품 모두삭제 -> 주문 완료시
-    public void removeCartItems(List<CartItem> cartItems){
-        for (CartItem cartItem : cartItems) {
-            this.removeCartItem(cartItem);
-        }
+        cartItem.cancel();
     }
 
     //배송비 조회

@@ -3,7 +3,6 @@ package com.shoppingmall.domain.cartitem;
 import com.shoppingmall.domain.cart.Cart;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.item.Item;
-import com.shoppingmall.dto.OrderItemResponseDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,7 +39,7 @@ public class CartItem extends BaseEntity {
         this.item = item;
         this.itemPrice = itemPrice;
         this.itemCount = itemCount;
-
+        //상품을 추가하면 재고 감소
         item.removeStock(itemCount);
     }
 
@@ -48,7 +47,7 @@ public class CartItem extends BaseEntity {
      * 비즈니스 로직
      */
     //장바구니에서 특정 상품 없앨 떄
-    public void dropItem(){
+    public void cancel(){
         getItem().addStock(itemCount);
     }
 

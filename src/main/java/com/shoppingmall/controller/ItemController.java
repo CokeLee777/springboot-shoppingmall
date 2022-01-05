@@ -136,4 +136,16 @@ public class ItemController {
         return "redirect:/";
     }
 
+    @GetMapping("/search")
+    public String keywordItemList(@RequestParam("search") String keyword, Model model){
+        List<Item> items = itemService.searchItemsByKeyword(keyword);
+        List<ItemInfo> itemInfos = items.stream()
+                .map(Item::toItemInfo)
+                .collect(Collectors.toList());
+
+        model.addAttribute("items", itemInfos);
+
+        return "item/itemSearchList";
+    }
+
 }

@@ -34,13 +34,17 @@ public class ItemService {
                 () -> new NotExistItemException("존재하지 않는 상품입니다."));
     }
 
-    //모든 상품 조회
+    //모든 상품 조회 - 페이징 o
     public Page<Item> searchItems(Pageable pageable){
         return itemRepository.findAll(pageable);
     }
-
+    //모든 상품 조회 - 페이징 x
     public List<Item> searchItems(){
         return itemRepository.findAll();
+    }
+    //키워드로 모든 상품 조회
+    public List<Item> searchItemsByKeyword(String keyword){
+        return itemRepository.findAllByKeyword(keyword);
     }
 
     //특정 카테고리의 모든 상품 조회

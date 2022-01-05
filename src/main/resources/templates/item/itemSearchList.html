@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Search')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <th:block th:if="${#session} == null">
+        <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+    </th:block>
+    <th:block th:if="${#session} != null">
+        <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+    </th:block>
+    <!-- Header Area End -->
+
+    <!-- Product Catagories Area Start -->
+    <div class="products-catagories-area clearfix">
+        <div class="amado-pro-catagory clearfix">
+            <!-- Single Catagory -->
+            <div th:each="item : ${items}" class="single-products-catagory clearfix">
+                <a href="#" th:href="@{/shop/{categoryId}/{itemId}(categoryId=${item.itemCategoryId}, itemId=${item.id})}">
+                    <img src="/img/bg-img/1.jpg" alt="">
+                    <!-- Hover Content -->
+                    <div class="hover-content">
+                        <div class="line"></div>
+                        <p th:text="${item.price}">상품 가격</p>
+                        <h4 th:text="${item.name}">상품명</h4>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    <!-- Product Catagories Area End -->
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

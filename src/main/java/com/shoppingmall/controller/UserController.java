@@ -1,7 +1,9 @@
 package com.shoppingmall.controller;
 
+import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
+import com.shoppingmall.service.user.CartService;
 import com.shoppingmall.service.user.UserService;
 import com.shoppingmall.web.SessionConst;
 import com.shoppingmall.web.argumentresolver.UserLogin;
@@ -26,6 +28,7 @@ import static com.shoppingmall.dto.UserResponseDto.*;
 public class UserController {
 
     private final UserService userService;
+    private final CartService cartService;
 
     //회원가입 form
     @GetMapping("/sign-up")
@@ -78,11 +81,11 @@ public class UserController {
 
         try{
             //로그인 시도
-            userService.login(loginUserForm);
+            UserRole role = userService.login(loginUserForm);
             //세션이 있으면 세션 반환, 없으면 신규 세션 생성
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보를 보관한다.
-            if(loginUserForm.getIdentifier().equals("admin123")){
+            if(role == UserRole.ADMIN){
                 session.setAttribute(SessionConst.LOGIN_ADMIN, loginUserForm);
             } else{
                 session.setAttribute(SessionConst.LOGIN_USER, loginUserForm);

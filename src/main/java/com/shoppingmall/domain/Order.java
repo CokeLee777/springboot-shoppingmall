@@ -17,7 +17,8 @@ import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.EnumType.STRING;
 import static javax.persistence.FetchType.LAZY;
 
-@Entity(name = "orders")
+@Entity
+@Table(name = "orders")
 @Getter @Setter
 @NoArgsConstructor
 public class Order extends BaseEntity {

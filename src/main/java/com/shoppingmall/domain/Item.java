@@ -61,6 +61,9 @@ public class Item extends BaseEntity {
         setItemCategory(itemCategory);
     }
 
+    /**
+     * 연관관계 메서드
+     */
     private void setItemCategory(ItemCategory itemCategory){
         if(this.itemCategory !=  null){
             this.itemCategory.getItems().remove(this);
@@ -69,9 +72,7 @@ public class Item extends BaseEntity {
         itemCategory.getItems().add(this);
     }
 
-    /**
-     * 연관관계 메서드
-     */
+
     public void updateItem(ItemUpdateForm itemUpdateForm){
         this.name = itemUpdateForm.getName();
         this.price = itemUpdateForm.getPrice();

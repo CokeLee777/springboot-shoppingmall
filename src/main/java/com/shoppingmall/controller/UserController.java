@@ -28,13 +28,13 @@ public class UserController {
 
     //회원가입 form
     @GetMapping("/sign-up")
-    public String signUpForm(@ModelAttribute("user") UserCreateForm userCreateForm){
+    public String signUpForm(@ModelAttribute("user") UserCreateForm form){
         log.info("회원가입 form access");
         return "user/signUpForm";
     }
     //회원가입
     @PostMapping("/sign-up")
-    public String signUp(@Validated @ModelAttribute("user") UserCreateForm userCreateForm, BindingResult bindingResult){
+    public String signUp(@Validated @ModelAttribute("user") UserCreateForm form, BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
         if(bindingResult.hasErrors()){
@@ -44,7 +44,7 @@ public class UserController {
 
         //중복 아이디 체크
         try{
-            userService.userRegistration(userCreateForm);
+            userService.userRegistration(form);
         } catch (Exception e){
             if(e.getClass() == DuplicatedUserException.class){
                 log.error("errors={}", e.getMessage());
@@ -53,20 +53,20 @@ public class UserController {
             return "user/signUpForm";
         }
 
-        log.info("회원가입 완료 identifier={}", userCreateForm.getIdentifier());
+        log.info("회원가입 완료 identifier={}", form.getIdentifier());
         return "redirect:/";
     }
 
     //로그인 form
     @GetMapping("/sign-in")
-    public String signInForm(@ModelAttribute("signInForm") LoginUserForm loginUserForm){
+    public String signInForm(@ModelAttribute("signInForm") LoginUserForm form){
         log.info("로그인 form access");
         return "user/signInForm";
     }
 
     //로그인
     @PostMapping("/sign-in")
-    public String signIn(@Validated @ModelAttribute("signInForm") LoginUserForm loginUserForm,
+    public String signIn(@Validated @ModelAttribute("signInForm") LoginUserForm form,
                          BindingResult bindingResult, @RequestParam(defaultValue = "/") String redirectURL,
                          HttpServletRequest request){
         //검증 오류에 문제가 있다면
@@ -77,15 +77,15 @@ public class UserController {
 
         try{
             //로그인 시도
-            UserRole role = userService.login(loginUserForm);
-            loginUserForm.setRole(role);
+            UserRole role = userService.login(form);
+            form.setRole(role);
             //세션이 있으면 세션 반환, 없으면 신규 세션 생성
             HttpSession session = request.getSession();
             //세션에 로그인 회원 정보를 보관한다.
             if(role == UserRole.ADMIN){
-                session.setAttribute(SessionConst.LOGIN_ADMIN, loginUserForm);
+                session.setAttribute(SessionConst.LOGIN_ADMIN, form);
             } else{
-                session.setAttribute(SessionConst.LOGIN_USER, loginUserForm);
+                session.setAttribute(SessionConst.LOGIN_USER, form);
             }
         } catch (Exception e) {
             log.error("error={}", e.getMessage());
@@ -93,7 +93,7 @@ public class UserController {
             return "user/signInForm";
         }
 
-        log.info("로그인 identifier={}", loginUserForm.getIdentifier());
+        log.info("로그인 identifier={}", form.getIdentifier());
         return "redirect:" + redirectURL;
     }
 
@@ -153,7 +153,7 @@ public class UserController {
     @PostMapping("/profile/{userId}/edit")
     public String myProfileEdit(
             @PathVariable Long userId,
-            @Validated @ModelAttribute("userUpdateForm") UserUpdateForm userUpdateForm,
+            @Validated @ModelAttribute("userUpdateForm") UserUpdateForm form,
             BindingResult bindingResult){
 
         //검증 실패시 입력 폼으로 돌아간다.
@@ -162,7 +162,7 @@ public class UserController {
             return "user/profileEditForm";
         }
 
-        userService.updateProfiles(userId, userUpdateForm);
+        userService.updateProfiles(userId, form);
 
         log.info("프로필 수정 완료");
         return "redirect:/profile";

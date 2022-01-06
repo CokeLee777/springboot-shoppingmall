@@ -24,7 +24,7 @@ public class ItemCategoryController {
     @AdminLogin
     @GetMapping("/category/add")
     public String categoryAddForm(
-            @ModelAttribute("category") ItemCategoryCreateForm itemCategoryCreateForm){
+            @ModelAttribute("category") ItemCategoryCreateForm form){
         log.info("상품카테고리 추가 form access");
         return "category/categoryAddForm";
     }
@@ -32,7 +32,7 @@ public class ItemCategoryController {
     @AdminLogin
     @PostMapping("/category/add")
     public String categoryAdd(
-            @Validated @ModelAttribute("category") ItemCategoryCreateForm itemCategoryCreateForm,
+            @Validated @ModelAttribute("category") ItemCategoryCreateForm form,
             BindingResult bindingResult){
 
         if(bindingResult.hasErrors()){
@@ -41,14 +41,14 @@ public class ItemCategoryController {
         }
 
         try{
-            itemCategoryService.addItemCategory(itemCategoryCreateForm);
+            itemCategoryService.addItemCategory(form);
         } catch (Exception e){
             log.error("error={}", e.getMessage());
             bindingResult.reject("duplicatedCategoryException", new Object[]{DuplicatedCategoryException.class}, null);
             return "category/categoryAddForm";
         }
 
-        log.info("상품카테고리 추가 name={}", itemCategoryCreateForm.getName());
+        log.info("상품카테고리 추가 name={}", form.getName());
 
         return "redirect:/shop";
     }

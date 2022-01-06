@@ -62,9 +62,9 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(Long itemId, ItemUpdateForm itemUpdateForm){
+    public void updateItem(Long itemId, ItemUpdateForm form){
         Item findItem = searchItem(itemId);
-        findItem.updateItem(itemUpdateForm);
+        findItem.updateItem(form);
     }
 
     @Transactional

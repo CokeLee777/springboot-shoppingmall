@@ -35,7 +35,7 @@ public class ItemController {
     //전체 상품 조회
     @GetMapping("/shop")
     public String itemList(
-            @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
+            @ModelAttribute("searchCondition") ItemSearchCondition condition,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //상품 전체 조회 - 페이징
         Page<Item> page = itemService.searchItems(pageable);
@@ -49,7 +49,7 @@ public class ItemController {
     //카테고리별로 상품 조회
     @GetMapping("/shop/{categoryId}")
     public String itemCategoryList(
-            @ModelAttribute("searchCondition") ItemSearchCondition itemSearchCondition,
+            @ModelAttribute("searchCondition") ItemSearchCondition condition,
             @PathVariable("categoryId") Long categoryId,
             @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
         //현재 선택된 카테고리에 따른 상품 조회 - 페이징
@@ -105,7 +105,7 @@ public class ItemController {
     //상품 추가 form
     @AdminLogin
     @GetMapping("/item/add")
-    public String addItemForm(@ModelAttribute("item") ItemCreateForm itemCreateForm, Model model) throws  Exception{
+    public String addItemForm(@ModelAttribute("item") ItemCreateForm form, Model model) throws  Exception{
         //카테고리 모두 불러오기
         List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
         //카테고리 추가
@@ -119,7 +119,7 @@ public class ItemController {
     @AdminLogin
     @PostMapping("/item/add")
     public String addItem(
-            @Validated @ModelAttribute("item") ItemCreateForm itemCreateForm,
+            @Validated @ModelAttribute("item") ItemCreateForm form,
             BindingResult bindingResult, Model model){
 
         if(bindingResult.hasErrors()){
@@ -133,8 +133,8 @@ public class ItemController {
             return "item/itemAddForm";
         }
 
-        log.info("상품 추가 완료 name={}", itemCreateForm.getName());
-        itemService.addItem(itemCreateForm);
+        log.info("상품 추가 완료 name={}", form.getName());
+        itemService.addItem(form);
         return "redirect:/";
     }
 

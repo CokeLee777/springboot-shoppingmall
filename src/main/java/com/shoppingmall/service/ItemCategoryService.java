@@ -32,9 +32,9 @@ public class ItemCategoryService {
     }
 
     @Transactional
-    public void updateItemCategory(Long itemCategoryId, ItemCategoryUpdateForm itemCategoryUpdateForm){
+    public void updateItemCategory(Long itemCategoryId, ItemCategoryUpdateForm form){
         ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
-        findItemCategory.updateItemCategory(itemCategoryUpdateForm);
+        findItemCategory.updateItemCategory(form);
     }
 
     @Transactional

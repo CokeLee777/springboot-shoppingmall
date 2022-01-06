@@ -36,8 +36,8 @@ public class ItemCategory extends BaseEntity {
     /**
      * 비즈니스 로직
      */
-    public void updateItemCategory(ItemCategoryUpdateForm itemCategoryUpdateForm){
-        this.name = itemCategoryUpdateForm.getName();
+    public void updateItemCategory(ItemCategoryUpdateForm form){
+        this.name = form.getName();
     }
 
     public ItemCategoryInfo toItemCategoryInfo(){

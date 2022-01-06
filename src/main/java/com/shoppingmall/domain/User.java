@@ -69,11 +69,11 @@ public class User extends BaseEntity {
         cart.setUser(this);
     }
 
-    public void updateProfiles(UserUpdateForm userUpdateForm){
-        this.password = userUpdateForm.getPassword();
-        this.username = userUpdateForm.getUsername();
-        this.email = userUpdateForm.getEmail();
-        this.address = new Address(userUpdateForm.getRoadAddress(), userUpdateForm.getDetailAddress());
+    public void updateProfiles(UserUpdateForm form){
+        this.password = form.getPassword();
+        this.username = form.getUsername();
+        this.email = form.getEmail();
+        this.address = new Address(form.getRoadAddress(), form.getDetailAddress());
     }
 
     //관리자 계정을 만들 때, 이 메서드를 호출해주어야한다.

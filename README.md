@@ -44,10 +44,16 @@
 * AWS EC2 배포
 
 ## :clipboard: 성능 테스팅 도구
-* 미정
+* Apache JMeter
 
 ## :clipboard: 로그 분석 도구
 * 미정
 
+## :clipboard: 도메인 모델 분석
+* [shopping mall - Domain](https://github.com/CokeLee777/springboot-shoppingmall/issues/1#issuecomment-1007228702)
+
+## :clipboard: Entity 정의서
+* [shopping mall - Entity Details](https://github.com/CokeLee777/springboot-shoppingmall/issues/2#issuecomment-1007239378)
+
 ## :clipboard: ERD 설계 명세서
-* [shopping mall ERD](https://github.com/CokeLee777/springboot-shoppingmall/issues/2)
+* [shopping mall - ERD](https://github.com/CokeLee777/springboot-shoppingmall/issues/2#issuecomment-999452751)

@@ -3,11 +3,15 @@ package com.shoppingmall.controller;
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
+import com.shoppingmall.file.FileStore;
+import com.shoppingmall.file.UploadFile;
 import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.service.ItemService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -17,6 +21,8 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +37,7 @@ public class ItemController {
 
     private final ItemService itemService;
     private final ItemCategoryService itemCategoryService;
+    private final FileStore fileStore;
 
     //전체 상품 조회
     @GetMapping("/shop")
@@ -120,7 +127,9 @@ public class ItemController {
     @PostMapping("/item/add")
     public String addItem(
             @Validated @ModelAttribute("item") ItemCreateForm form,
-            BindingResult bindingResult, Model model){
+            BindingResult bindingResult, Model model) throws IOException {
+        //이미지 db에 저장
+        UploadFile uploadFile = fileStore.storeFile(form.getItemImg());
 
         if(bindingResult.hasErrors()){
             log.error("error={}", bindingResult);
@@ -134,7 +143,7 @@ public class ItemController {
         }
 
         log.info("상품 추가 완료 name={}", form.getName());
-        itemService.addItem(form);
+        itemService.addItem(form, uploadFile.getStoreFilename());
         return "redirect:/";
     }
 
@@ -149,5 +158,12 @@ public class ItemController {
         model.addAttribute("items", itemInfos);
 
         return "item/itemSearchList";
+    }
+
+    //이미지를 다운로드할 때 API
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 }

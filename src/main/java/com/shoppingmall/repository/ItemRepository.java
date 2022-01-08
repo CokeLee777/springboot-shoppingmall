@@ -33,5 +33,5 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     //키워드로 상품 검색
     @Query("select i from Item i where i.name like %:keyword%")
-    List<Item> findAllByKeyword(String keyword);
+    List<Item> findAllByKeyword(@Param("keyword") String keyword);
 }

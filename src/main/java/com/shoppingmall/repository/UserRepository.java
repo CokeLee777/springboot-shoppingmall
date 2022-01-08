@@ -3,6 +3,7 @@ package com.shoppingmall.repository;
 import com.shoppingmall.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -19,12 +20,12 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("select u from User u" +
             " join fetch u.cart c" +
             " where u.identifier = :identifier")
-    Optional<User> findWithCartByIdentifier(String identifier);
+    Optional<User> findWithCartByIdentifier(@Param("identifier") String identifier);
 
     @Query("select u from User u" +
             " join fetch u.cart c" +
             " join fetch c.cartItems ci" +
             " where u.identifier = :identifier")
-    Optional<User> findWithCartAndCartItemByUser(String identifier);
+    Optional<User> findWithCartAndCartItemByUser(@Param("identifier") String identifier);
 }
 

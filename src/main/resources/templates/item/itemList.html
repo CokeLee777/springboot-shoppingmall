@@ -80,9 +80,9 @@
                         <div class="single-product-wrapper">
                             <!-- Product Image -->
                             <div class="product-img">
-                                <img src="/img/product-img/product1.jpg" alt="">
+                                <img th:src="|/images/${item.itemImg}|" alt="">
                                 <!-- Hover Thumb -->
-                                <img class="hover-img" src="/img/product-img/product2.jpg" alt="">
+<!--                                <img class="hover-img" src="/img/product-img/product2.jpg" alt="">-->
                             </div>
 
                             <!-- Product Description -->

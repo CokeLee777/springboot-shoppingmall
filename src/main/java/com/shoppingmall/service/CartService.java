@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
+    private final EntityManager em;
 
     //장바구니에 상품 담기
     @Transactional
@@ -63,15 +65,18 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
+    /**
+     * 수정 필요
+     */
     @Transactional
     public void clearItemFromCart(String identifier){
-        User user = userRepository.findWithCartByIdentifier(identifier).orElseThrow(
+        User user = userRepository.findWithCartAndCartItemByUser(identifier).orElseThrow(
                 () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
         //장바구니에서 담은 상품 제거
         Cart cart = user.getCart();
         List<CartItem> cartItems = cart.getCartItems();
-        cart.clearCartItems();
         cartItemRepository.deleteAll(cartItems);
+        cart.clearCartItems();
     }
 
     //장바구니 조회

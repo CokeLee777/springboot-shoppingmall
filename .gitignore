@@ -38,3 +38,4 @@ out/
 
 ### CUSTOM ###
 /src/main/resources/application.yml
+/src/main/resources/static/img/

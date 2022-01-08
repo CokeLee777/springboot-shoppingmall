@@ -4,6 +4,7 @@ import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -26,14 +27,15 @@ public class ItemRequestDto {
         @NotNull(message = "상품 카테고리를 선택해주세요.")
         private Long categoryId;
 
-        private String itemImg;
+        @NotNull(message = "상품 이미지를 추가해주세요.")
+        private MultipartFile itemImg;
 
-        public Item toEntity(ItemCategory itemCategory){
+        public Item toEntity(ItemCategory itemCategory, String img){
             return Item.builder()
                     .name(name)
                     .price(price)
                     .stockQuantity(stockQuantity)
-                    .itemImg(itemImg)
+                    .itemImg(img)
                     .itemCategory(itemCategory)
                     .build();
         }

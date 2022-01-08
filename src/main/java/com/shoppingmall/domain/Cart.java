@@ -50,7 +50,7 @@ public class Cart extends BaseEntity {
 
     //배송비 조회
     public Integer getDeliveryPrice(){
-        if(getTotalPrice() < 30000) return 2500;
+        if(getTotalPrice() < 50000) return 2500;
         else return 0;
     }
 

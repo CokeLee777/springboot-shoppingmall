@@ -53,12 +53,12 @@ public class ItemService {
     }
 
     @Transactional
-    public void addItem(ItemCreateForm form){
+    public void addItem(ItemCreateForm form, String img){
         //아이템 카테고리 정보를 받아온다.
         Long categoryId = form.getCategoryId();
         ItemCategory itemCategory = itemCategoryRepository.findById(categoryId).orElseThrow(
                 () -> new NotExistCategoryException("존재하지 않는 카테고리입니다."));
-        itemRepository.save(form.toEntity(itemCategory));
+        itemRepository.save(form.toEntity(itemCategory, img));
     }
 
     @Transactional

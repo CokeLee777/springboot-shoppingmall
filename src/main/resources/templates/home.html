@@ -32,7 +32,7 @@
                 <!-- Single Catagory -->
                 <div th:each="item : ${items}" class="single-products-catagory clearfix">
                     <a href="#" th:href="@{/shop/{categoryId}/{itemId}(categoryId=${item.itemCategoryId}, itemId=${item.id})}">
-                        <img src="/img/bg-img/1.jpg" alt="">
+                        <img th:src="|/images/${item.itemImg}|" alt="">
                         <!-- Hover Content -->
                         <div class="hover-content">
                             <div class="line"></div>

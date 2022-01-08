@@ -35,7 +35,7 @@
                             <h2 th:text="#{page.item.add}">상품 추가</h2>
                         </div>
 
-                        <form action="/item/add" th:action th:object="${item}" method="post">
+                        <form action="/item/add" th:action th:object="${item}" method="post" enctype="multipart/form-data">
 
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
@@ -64,6 +64,14 @@
                                            th:errorclass="field-error" class="form-control" placeholder="수량을 입력하세요">
                                     <div class="field-error" th:errors="*{stockQuantity}">
                                         수량 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="itemImg" th:text="#{label.item.img}">상품 이미지</label>
+                                    <input type="file" id="itemImg" th:field="*{itemImg}" th:name="itemImg"
+                                           th:errorclass="field-error" class="form-control" placeholder="이미지를 추가하세요">
+                                    <div class="field-error" th:errors="*{itemImg}">
+                                        이미지 입력 오류
                                     </div>
                                 </div>
                                 <div class="col-md-6 mb-3">

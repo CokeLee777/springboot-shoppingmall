@@ -1,6 +1,7 @@
 package com.shoppingmall.service;
 
 import com.shoppingmall.domain.User;
+import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -59,7 +60,7 @@ class UserServiceTest {
         UserCreateForm userCreateForm = new UserCreateForm("test1234", "test123*", "test1", "test@naver.com", "test", "test");
         userService.userRegistration(userCreateForm);
         //when
-        LoginUserForm loginUserForm = new LoginUserForm("test1234", "test123*");
+        LoginUserForm loginUserForm = new LoginUserForm(UserRole.USER,"test1234", "test123*");
         userService.login(loginUserForm);
         //then
     }

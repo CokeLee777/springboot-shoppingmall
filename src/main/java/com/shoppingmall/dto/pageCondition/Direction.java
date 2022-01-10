@@ -5,7 +5,8 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public class ItemSearchCondition {
-    private SortCondition sort;
-    private Direction direction;
+public enum Direction {
+    asc("오름차순"), desc("내림차순");
+
+    private String direction;
 }

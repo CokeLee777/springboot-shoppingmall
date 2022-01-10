@@ -13,7 +13,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,6 +26,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
@@ -39,33 +42,29 @@ public class ItemController {
     private final ItemCategoryService itemCategoryService;
     private final FileStore fileStore;
 
-    //전체 상품 조회
-    @GetMapping("/shop")
-    public String itemList(
-            @ModelAttribute("searchCondition") ItemSearchCondition condition,
-            @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
-        //상품 전체 조회 - 페이징
-        Page<Item> page = itemService.searchItems(pageable);
-        //전체 상품 및 전체 카테고리 DTO로 변환
-        addItemsAndCategoriesAttribute(model, page);
-
-        log.info("전체 상품 조회 access");
-        return "item/itemList";
-    }
-
-    //카테고리별로 상품 조회
-    @GetMapping("/shop/{categoryId}")
+    //상품 조회
+    @GetMapping(value = {"/shop/{categoryId}", "/shop"})
     public String itemCategoryList(
+            @PathVariable(value = "categoryId", required = false) Optional<Long> categoryId,
             @ModelAttribute("searchCondition") ItemSearchCondition condition,
-            @PathVariable("categoryId") Long categoryId,
-            @PageableDefault(page =  0, size = 10, sort = "createdDate") Pageable pageable, Model model){
-        //현재 선택된 카테고리에 따른 상품 조회 - 페이징
-        Page<Item> page = itemService.searchSameCategoryItems(categoryId, pageable);
-        //카테고리에 따른 전체 상품, 전체 카테고리, 특정 카테고리 DTO로 변환
-        addItemsAndCategoriesAttribute(model, page);
+            @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
+            @RequestParam(value = "sort", required = false, defaultValue = "createdDate") String sort,
+            @RequestParam(value = "direction", required = false, defaultValue = "asc") String direction, Model model){
 
+        PageRequest pageRequest = PageRequest.of(pageNum, 10, Sort.by(Sort.Direction.fromString(direction), sort));
+        if(categoryId.isPresent()){
+            //현재 선택된 카테고리에 따른 상품 조회 - 페이징
+            Page<Item> page = itemService.searchSameCategoryItems(categoryId.get(), pageRequest);
+            //카테고리에 따른 전체 상품, 전체 카테고리, 특정 카테고리 DTO로 변환
+            addItemsAndCategoriesAttribute(model, page);
+        } else {
+            //상품 전체 조회 - 페이징
+            Page<Item> page = itemService.searchItems(pageRequest);
+            //전체 상품 및 전체 카테고리 DTO로 변환
+            addItemsAndCategoriesAttribute(model, page);
+        }
         log.info("카테고리별로 상품 조회 access");
-        return "item/itemCategoryList";
+        return "item/itemList";
     }
 
     private void addItemsAndCategoriesAttribute(Model model, Page<Item> page) {
@@ -107,12 +106,10 @@ public class ItemController {
         return "item/itemDetails";
     }
 
-
-
     //상품 추가 form
     @AdminLogin
     @GetMapping("/item/add")
-    public String addItemForm(@ModelAttribute("item") ItemCreateForm form, Model model) throws  Exception{
+    public String addItemForm(@ModelAttribute("item") ItemCreateForm form, Model model){
         //카테고리 모두 불러오기
         List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
         //카테고리 추가
@@ -128,8 +125,6 @@ public class ItemController {
     public String addItem(
             @Validated @ModelAttribute("item") ItemCreateForm form,
             BindingResult bindingResult, Model model) throws IOException {
-        //이미지 db에 저장
-        UploadFile uploadFile = fileStore.storeFile(form.getItemImg());
 
         if(bindingResult.hasErrors()){
             log.error("error={}", bindingResult);
@@ -143,8 +138,17 @@ public class ItemController {
         }
 
         log.info("상품 추가 완료 name={}", form.getName());
+        //이미지 db에 저장
+        UploadFile uploadFile = fileStore.storeFile(form.getItemImg());
         itemService.addItem(form, uploadFile.getStoreFilename());
         return "redirect:/";
+    }
+
+    //이미지를 다운로드할 때 API
+    @ResponseBody
+    @GetMapping("/images/{filename}")
+    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
+        return new UrlResource("file:" + fileStore.getFullPath(filename));
     }
 
     //키워드로 상품 검색
@@ -160,10 +164,26 @@ public class ItemController {
         return "item/itemSearchList";
     }
 
-    //이미지를 다운로드할 때 API
-    @ResponseBody
-    @GetMapping("/images/{filename}")
-    public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+//    @GetMapping("/item/{itemId}/edit")
+//    public String editItemForm(@PathVariable("itemId") Long itemId, Model model){
+//        Item findItem = itemService.searchItemWithCategory(itemId);
+//        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+//
+//        model.addAttribute("itemCategories", itemCategoryInfos);
+//        model.addAttribute("item", findItem.toItemInfo());
+//        return "item/itemEditForm";
+//    }
+//
+//    @PostMapping("/item/{itemId}/edit")
+//    public String editItem(@PathVariable("itemId") Long itemId){
+//
+//    }
+
+    @AdminLogin
+    @GetMapping("/item/{itemId}/delete")
+    public String deleteItem(@PathVariable("itemId") Long itemId){
+        itemService.deleteItem(itemId);
+        log.info("상품 삭제 id={}", itemId);
+        return "redirect:/shop";
     }
 }

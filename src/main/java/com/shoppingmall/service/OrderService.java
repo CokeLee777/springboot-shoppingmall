@@ -70,7 +70,7 @@ public class OrderService {
     public List<OrderListInfo> searchOrders(String identifier) {
         //나의 모든 주문 검색
         List<Order> orders = orderRepository.findAllByIdentifier(identifier);
-        List<OrderListInfo> orderListInfos = orders.stream()
+        return orders.stream()
                 .map(o -> OrderListInfo.builder()
                         .createdDate(o.getCreatedDate())
                         .orderNumber(o.getOrderNumber())
@@ -79,7 +79,5 @@ public class OrderService {
                         .totalPrice(o.getTotalPrice())
                         .build())
                 .collect(Collectors.toList());
-
-        return orderListInfos;
     }
 }

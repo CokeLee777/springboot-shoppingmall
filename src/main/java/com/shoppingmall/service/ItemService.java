@@ -38,6 +38,12 @@ public class ItemService {
     public Page<Item> searchItems(Pageable pageable){
         return itemRepository.findAll(pageable);
     }
+
+    //특정 카테고리의 모든 상품 조회 - 페이징 o
+    public Page<Item> searchSameCategoryItems(Long categoryId, Pageable pageable){
+        return itemRepository.findItemsJoinCategoryByCategory(categoryId, pageable);
+    }
+
     //모든 상품 조회 - 페이징 x
     public List<Item> searchItems(){
         return itemRepository.findAll();
@@ -45,11 +51,6 @@ public class ItemService {
     //키워드로 모든 상품 조회
     public List<Item> searchItemsByKeyword(String keyword){
         return itemRepository.findAllByKeyword(keyword);
-    }
-
-    //특정 카테고리의 모든 상품 조회
-    public Page<Item> searchSameCategoryItems(Long categoryId, Pageable pageable){
-        return itemRepository.findItemsJoinCategoryByCategory(categoryId, pageable);
     }
 
     @Transactional
@@ -62,9 +63,9 @@ public class ItemService {
     }
 
     @Transactional
-    public void updateItem(Long itemId, ItemUpdateForm form){
+    public void updateItem(Long itemId, ItemUpdateForm form, String img){
         Item findItem = searchItem(itemId);
-        findItem.updateItem(form);
+        findItem.updateItem(form, img);
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -73,12 +74,12 @@ public class Item extends BaseEntity {
     }
 
 
-    public void updateItem(ItemUpdateForm itemUpdateForm){
+    public void updateItem(ItemUpdateForm itemUpdateForm, String itemImg){
         this.name = itemUpdateForm.getName();
         this.price = itemUpdateForm.getPrice();
         this.stockQuantity = itemUpdateForm.getStockQuantity();
         this.itemStatus = itemUpdateForm.getItemStatus();
-        this.itemImg = itemUpdateForm.getItemImg();
+        this.itemImg = itemImg;
     }
 
     /**
@@ -104,6 +105,17 @@ public class Item extends BaseEntity {
         return ItemInfo.builder()
                 .id(id)
                 .itemCategoryId(itemCategory.getId())
+                .name(name)
+                .price(price)
+                .stockQuantity(stockQuantity)
+                .itemStatus(itemStatus)
+                .itemImg(itemImg)
+                .build();
+    }
+
+    public ItemUpdateForm toItemUpdateForm(MultipartFile itemImg){
+        return ItemUpdateForm.builder()
+                .categoryId(itemCategory.getId())
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)

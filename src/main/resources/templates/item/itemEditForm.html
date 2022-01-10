@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragment/header :: header">
+    <!-- Title  -->
+    <div th:replace="~{fragment/header :: title ('Coke Shop | Add Item')}"></div>
+</head>
+
+<body>
+<!-- Search Wrapper Area Start -->
+<div th:replace="fragment/search :: search"/>
+<!-- Search Wrapper Area End -->
+
+<!-- ##### Main Content Wrapper Start ##### -->
+<div class="main-content-wrapper d-flex clearfix">
+
+    <!-- Mobile Nav (max width 767px)-->
+    <div th:replace="fragment/mobileNav :: mobileNav"/>
+
+    <!-- Header Area Start -->
+    <th:block th:if="${#session} == null">
+        <div th:replace="fragment/bodyHeader :: bodyHeader"></div>
+    </th:block>
+    <th:block th:unless="${#session} == null">
+        <div th:replace="fragment/loginBodyHeader :: loginBodyHeader"></div>
+    </th:block>
+    <!-- Header Area End -->
+
+    <div class="cart-table-area section-padding-100">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 col-lg-8">
+                    <div class="checkout_details_area mt-50 clearfix">
+
+                        <div class="cart-title">
+                            <h2 th:text="#{page.item.edit}">상품 수정</h2>
+                        </div>
+
+                        <form th:action="@{/item/{itemId}/edit (itemId=${item.id})" th:object="${item}" method="post" enctype="multipart/form-data">
+
+                            <div th:if="${#fields.hasGlobalErrors()}">
+                                <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="name" th:text="#{label.item.itemName}">상품명</label>
+                                    <input type="text" id="name" th:field="*{name}" th:name="name"
+                                           th:errorclass="field-error" class="form-control" placeholder="상품명을 입력하세요">
+                                    <div class="field-error" th:errors="*{name}">
+                                        상품명 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="price" th:text="#{label.item.price}">상품 가격</label>
+                                    <input type="price" id="price" th:field="*{price}" th:name="price"
+                                           th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
+                                    <div class="field-error" th:errors="*{price}">
+                                        가격 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="stockQuantity" th:text="#{label.item.quantity}">상품 수량</label>
+                                    <input type="text" id="stockQuantity" th:field="*{stockQuantity}" th:name="stockQuantity"
+                                           th:errorclass="field-error" class="form-control" placeholder="수량을 입력하세요">
+                                    <div class="field-error" th:errors="*{stockQuantity}">
+                                        수량 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="itemImg" th:text="#{label.item.img}">상품 이미지</label>
+                                    <input type="file" id="itemImg" th:field="*{itemImg}" th:name="itemImg"
+                                           th:errorclass="field-error" class="form-control" placeholder="이미지를 추가하세요">
+                                    <div class="field-error" th:errors="*{itemImg}">
+                                        이미지 입력 오류
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="categoryId" th:text="#{label.item.category}">상품 카테고리</label>
+                                    <select id="categoryId" th:field="*{itemCategoryId}" th:name="itemCategoryId"
+                                            th:errorclass="field-error" class="form-control">
+                                        <option value="">카테고리 선택</option>
+                                        <option th:each="itemCategory : ${itemCategories}"
+                                                th:value="${itemCategory.id}"
+                                                th:text="${itemCategory.name}">option
+                                        </option>
+                                    </select>
+                                    <div class="field-error" th:errors="*{itemCategoryId}">
+                                        카테고리 선택 오류
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <button class="w-100 btn btn-primary btn-lg" type="submit" th:text="#{button.edit.complete}">상품 수정완료</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ##### Main Content Wrapper End ##### -->
+
+<!-- ##### Footer Area Start ##### -->
+<div th:replace="fragment/footer :: footer"/>
+<!-- ##### Footer Area End ##### -->
+
+<!-- ##### jQuery (Necessary for All JavaScript Plugins) ##### -->
+<script src="/js/jquery/jquery-2.2.4.min.js"></script>
+<!-- Popper js -->
+<script src="/js/popper.min.js"></script>
+<!-- Bootstrap js -->
+<script src="/js/bootstrap.min.js"></script>
+<!-- Plugins js -->
+<script src="/js/plugins.js"></script>
+<!-- Active js -->
+<script src="/js/active.js"></script>
+
+</body>
+
+</html>

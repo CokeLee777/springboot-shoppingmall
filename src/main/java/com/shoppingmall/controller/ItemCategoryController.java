@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryCreateForm;
@@ -50,6 +51,14 @@ public class ItemCategoryController {
 
         log.info("상품카테고리 추가 name={}", form.getName());
 
+        return "redirect:/shop";
+    }
+
+    @AdminLogin
+    @GetMapping("/category/{categoryId}/delete")
+    public String deleteCategory(@PathVariable("categoryId") Long categoryId){
+        itemCategoryService.deleteItemCategory(categoryId);
+        log.info("상품 카테고리 삭제 id={}", categoryId);
         return "redirect:/shop";
     }
 }

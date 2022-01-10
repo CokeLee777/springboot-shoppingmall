@@ -60,6 +60,7 @@ public class ItemRequestDto {
         @NotNull(message = "상품 카테고리를 선택해주세요.")
         private Long categoryId;
 
-        private String itemImg;
+        @NotNull(message = "상품 이미지를 추가해주세요.")
+        private MultipartFile itemImg;
     }
 }

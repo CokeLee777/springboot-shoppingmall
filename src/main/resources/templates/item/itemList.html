@@ -36,95 +36,106 @@
                         <li><a href="/shop">전체 상품</a></li>
                     </ul>
                     <ul th:each="itemcategory : ${itemCategories}">
-                        <li><a href="#" th:href="@{/shop/{categoryId}(categoryId=${itemcategory.id})}" th:text="${itemcategory.name}">카테고리명</a></li>
+                        <li>
+                            <a href="#" th:href="@{/shop/{categoryId}(categoryId=${itemcategory.id})}" th:text="${itemcategory.name}">카테고리명</a>
+                            <a th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null"
+                               href="#" th:href="@{/category/{categoryId}/delete (categoryId=${itemcategory.id})}" class="btn btn-danger w-50 h-50" role="button">삭제</a>
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
         <div class="amado_product_area section-padding-100">
-            <div class="container-fluid">
+            <form th:action  th:object="${searchCondition}">
+                <div class="container-fluid">
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="product-topbar d-xl-flex align-items-end justify-content-between">
-                            <!-- Total Products -->
-                            <div class="total-products">
-                                <p>총 상품 <span th:text="${items.size()}"></span></p>
-                            </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="product-topbar d-xl-flex align-items-end justify-content-between">
+                                <!-- Total Products -->
+                                <div class="total-products">
+                                    <p>총 상품 <span th:text="${items.size()}"></span></p>
+                                </div>
 
-                            <form th:action  th:object="${searchCondition}">
-                                <div class="product-sorting d-flex">
-                                    <div class="sort-by-date d-flex align-items-center mr-15">
-                                        <p>정렬 기준</p>
-                                        <select th:field="*{sort}">
-                                            <option th:each="sortCond : ${T(com.shoppingmall.dto.pageCondition.SortCondition).values()}"
-                                                    th:value="${sortCond}"
-                                                    th:text="${sortCond.sort}">option
-                                            </option>
-                                        </select>
+                                    <div class="product-sorting d-flex">
+                                        <div class="sort-by-date d-flex align-items-center mr-15">
+                                            <p>정렬 기준</p>
+                                            <select th:field="*{sort}" th:name="sort">
+                                                <option th:each="sortCond : ${T(com.shoppingmall.dto.pageCondition.SortCondition).values()}"
+                                                        th:value="${sortCond}"
+                                                        th:text="${sortCond.sort}">option
+                                                </option>
+                                            </select>
+                                            <select th:field="*{direction}" th:name="direction">
+                                                <option th:each="direction : ${T(com.shoppingmall.dto.pageCondition.Direction).values()}"
+                                                        th:value="${direction}"
+                                                        th:text="${direction.direction}">option
+                                                </option>
+                                            </select>
+                                        </div>
+                                        <div class="view-product d-flex align-items-center">
+                                            <button type="submit" class="btn btn-primary mb-2">검색</button>
+                                        </div>
                                     </div>
-                                    <div class="view-product d-flex align-items-center">
-                                        <button type="submit" class="btn btn-primary mb-2">검색</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Single Product Area -->
+                        <div th:each="item : ${items}" class="col-12 col-sm-6 col-md-12 col-xl-6">
+                            <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
+                                <div class="single-product-wrapper">
+                                    <!-- Product Image -->
+                                    <div class="product-img">
+                                        <img th:src="|/images/${item.itemImg}|" alt="">
+                                    </div>
+
+                                    <!-- Product Description -->
+                                    <div class="product-description d-flex align-items-center justify-content-between">
+                                        <!-- Product Meta Data -->
+                                        <div class="product-meta-data">
+                                            <div class="line"></div>
+                                            <p class="product-price" th:text="${item.price}">상품가격</p>
+                                            <h6 th:text="${item.name}">상품명</h6>
+                                        </div>
+                                        <div th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null">
+                                            <a href="#" th:href="@{/item/{itemId}/delete (itemId=${item.id})}" class="btn btn-danger" role="button">삭제</a>
+                                        </div>
+                                        <div class="ratings-cart text-right">
+                                            <div class="cart">
+                                                <img src="/img/core-img/cart.png" alt="">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </form>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-12">
+                            <!-- Pagination -->
+                            <nav aria-label="navigation"
+                                th:with="
+                                    pageNumber = ${page.pageable.pageNumber},
+                                    pageSize = ${page.pageable.pageSize},
+                                    totalPages = ${page.totalPages},
+                                    startPage = ${T(Math).floor(pageNumber / pageSize) * pageSize + 1},
+                                    tempEndPage = ${startPage + pageSize - 1},
+                                    endPage = (${tempEndPage > totalPages ? totalPages : tempEndPage})">
+
+                                <ul class="pagination justify-content-end mt-50">
+                                    <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
+                                        <button class="page-link" type="submit" th:text="${page}" th:value="${page}-1" th:name="pageNum"></button>
+                                    </li>
+                                </ul>
+                            </nav>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <!-- Single Product Area -->
-                    <div th:each="item : ${items}" class="col-12 col-sm-6 col-md-12 col-xl-6">
-                        <a href="#" th:href="@{/shop/{categoryId}/{itemId} (itemId=${item.id}, categoryId=${item.getItemCategoryId()})}">
-                        <div class="single-product-wrapper">
-                            <!-- Product Image -->
-                            <div class="product-img">
-                                <img th:src="|/images/${item.itemImg}|" alt="">
-                                <!-- Hover Thumb -->
-<!--                                <img class="hover-img" src="/img/product-img/product2.jpg" alt="">-->
-                            </div>
-
-                            <!-- Product Description -->
-                            <div class="product-description d-flex align-items-center justify-content-between">
-                                <!-- Product Meta Data -->
-                                <div class="product-meta-data">
-                                    <div class="line"></div>
-                                    <p class="product-price" th:text="${item.price}">상품가격</p>
-                                    <h6 th:text="${item.name}">상품명</h6>
-                                </div>
-                                <div class="ratings-cart text-right">
-                                    <div class="cart">
-                                        <img src="/img/core-img/cart.png" alt="">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12">
-                        <!-- Pagination -->
-                        <nav aria-label="navigation"
-                            th:with="
-                                pageNumber = ${page.pageable.pageNumber},
-                                pageSize = ${page.pageable.pageSize},
-                                totalPages = ${page.totalPages},
-                                startPage = ${T(Math).floor(pageNumber / pageSize) * pageSize + 1},
-                                tempEndPage = ${startPage + pageSize - 1},
-                                endPage = (${tempEndPage > totalPages ? totalPages : tempEndPage})">
-
-                            <ul class="pagination justify-content-end mt-50">
-                                <li th:each="page: ${#numbers.sequence(startPage, endPage)}" th:classappend="${page == pageNumber + 1} ? 'active'" class="page-item">
-                                    <a th:text="${page}" class="page-link" th:href="@{/shop(page=${page}-1)}"></a>
-                                </li>
-                            </ul>
-                        </nav>
-                    </div>
-                </div>
-            </div>
+            </form>
         </div>
     </div>
     <!-- ##### Main Content Wrapper End ##### -->

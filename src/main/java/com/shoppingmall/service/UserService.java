@@ -40,7 +40,7 @@ public class UserService {
         return findUser.getRole();
     }
 
-    //유저 프로필 조회
+    //유저 프로필 조회 - 회원 아이디로 조회
     public UserProfileInfo searchProfiles(String identifier){
         User findUser = userRepository.findByIdentifier(identifier).orElseThrow(
                 () -> new LoginRequiredException("로그인이 필요한 서비스입니다."));
@@ -48,6 +48,7 @@ public class UserService {
         return findUser.toUserProfileInfo();
     }
 
+    //유저 프로필 조회 - PK로 조회
     public UserUpdateForm searchProfiles(Long userId){
         User findUser = getUserById(userId);
 
@@ -58,7 +59,6 @@ public class UserService {
     @Transactional
     public void updateProfiles(Long userId, UserUpdateForm userUpdateForm){
         User findUser = getUserById(userId);
-
         findUser.updateProfiles(userUpdateForm);
     }
 
@@ -66,7 +66,6 @@ public class UserService {
     @Transactional
     public void deleteUser(Long userId){
         User findUser = getUserById(userId);
-
         userRepository.delete(findUser);
     }
 

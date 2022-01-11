@@ -1,0 +1,27 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deploy
+        uses: appleboy/ssh-action@master
+        with: 
+          host: ec2-3-36-180-136.ap-northeast-2.compute.amazonaws.com
+          username: ec2-user 
+          key: ${{ secrets.PRIVATE_KEY }}
+          envs: GITHUB_SHA
+          script: | 
+            docker pull akak640/spring-cicd:${GITHUB_SHA::7}
+            docker tag akak640/spring-cicd:${GITHUB_SHA::7} spring-cicd
+            docker stop server
+            docker run -d --rm --name server -p 80:80 spring-cicd

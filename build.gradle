@@ -15,6 +15,10 @@ plugins {
 group = 'com.shoppingmall'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+//build 시 plain.jar 생성되지 못하게 설정
+bootJar.archiveBaseName = 'app'
+bootJar.archiveFileName = 'app.jar'
+jar.enabled = false
 
 configurations {
 	compileOnly {

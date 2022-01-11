@@ -22,7 +22,9 @@ jobs:
       uses: samin/mysql-action@v1
       with: 
         character set server: 'utf8'
+        mysql version: '8.0'
         mysql database: 'shoppingmall'
+        mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD}}
         mysql user: ${{ secrets.MYSQL_USERNAME }}
         mysql password: ${{ secrets.MYSQL_PASSWORD }}
 

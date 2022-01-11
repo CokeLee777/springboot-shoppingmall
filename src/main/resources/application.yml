@@ -1,0 +1,36 @@
+spring:
+  messages:
+    basename: messages, errors
+
+  servlet:
+    multipart:
+      max-file-size: 2MB
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://shoppingmall-springboot-db.chpdwor0gvvp.ap-northeast-2.rds.amazonaws.com:3306/shoppingmall?useUnicode=yes&characterEncoding=UTF-8&enabledTLSProtocols=TLSv1.2
+    username: admin
+    password: 11111111
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+
+logging:
+  level:
+    org.hibernate.SQL: debug
+    org.hibernate.type: trace
+
+server:
+  servlet:
+    session:
+      tracking-modes: cookie
+  port: 8080
+
+file:
+  upload:
+    dir: /Volumes/T7/Repository/springboot-shoppingmall/src/main/resources/static/img/product-img/

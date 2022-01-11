@@ -17,7 +17,8 @@ import static com.shoppingmall.dto.UserResponseDto.*;
 import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=" +
+        "classpath:/application.yml")
 @Transactional
 class UserServiceTest {
 

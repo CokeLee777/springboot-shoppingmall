@@ -27,7 +27,6 @@ jobs:
         mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD}}
         mysql user: ${{ secrets.MYSQL_USERNAME }}
         mysql password: ${{ secrets.MYSQL_PASSWORD }}
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle

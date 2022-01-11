@@ -29,7 +29,7 @@ server:
   servlet:
     session:
       tracking-modes: cookie
-  port: 8080
+  port: 80
 
 file:
   upload:

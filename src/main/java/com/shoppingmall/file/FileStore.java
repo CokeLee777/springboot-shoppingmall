@@ -9,8 +9,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -22,9 +24,6 @@ public class FileStore {
     //s3 버킷
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
-    //로컬 저장소
-    @Value("${file.upload.dir}")
-    private String fileDir;
 
     //새로운 이미지 업로드
     public UploadFile newUpload(MultipartFile multipartFile) throws IOException {
@@ -33,8 +32,8 @@ public class FileStore {
         //DB에 저장할 파일명
         String storeFilename = createStoreFilename(originalFilename);
         //파일을 지정된 위치에 저장
-        File uploadFile = new File(getFullPath(storeFilename));
-        multipartFile.transferTo(uploadFile);
+        File uploadFile = convert(multipartFile, storeFilename).orElseThrow(
+                () -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
         //s3로 업로드
         String uploadImageUrl = putS3(uploadFile, "static/" + storeFilename);
         //로컬에 있는 파일 삭제
@@ -46,8 +45,8 @@ public class FileStore {
     //원래 이미지 변경
     public UploadFile replaceUpload(MultipartFile multipartFile, String oldFilename) throws IOException {
         //파일을 지정된 위치에 저장
-        File uploadFile = new File(getFullPath(oldFilename));
-        multipartFile.transferTo(uploadFile);
+        File uploadFile = convert(multipartFile, oldFilename).orElseThrow(
+                () -> new IllegalArgumentException("error: MultipartFile -> File convert fail"));
         //s3로 업로드
         String uploadImageUrl = putS3(uploadFile, "static/" + oldFilename);
         //로컬에 있는 파일 삭제
@@ -71,10 +70,6 @@ public class FileStore {
         }
     }
 
-    public String getFullPath(String filename){
-        return fileDir + filename;
-    }
-
     private String createStoreFilename(String originalFilename) {
         String uuid = UUID.randomUUID().toString();
         String ext = extractExt(originalFilename);
@@ -84,5 +79,17 @@ public class FileStore {
     private String extractExt(String originalFilename) {
         int pos = originalFilename.lastIndexOf(".");
         return originalFilename.substring(pos + 1);
+    }
+
+    private Optional<File> convert(MultipartFile file, String storeFilename) throws IOException {
+        File convertFile = new File(System.getProperty("user.dir") + "/" + storeFilename);
+        if (convertFile.createNewFile()) { // 바로 위에서 지정한 경로에 File이 생성됨 (경로가 잘못되었다면 생성 불가능)
+            try (FileOutputStream fos = new FileOutputStream(convertFile)) { // FileOutputStream 데이터를 파일에 바이트 스트림으로 저장하기 위함
+                fos.write(file.getBytes());
+            }
+            return Optional.of(convertFile);
+        }
+
+        return Optional.empty();
     }
 }

@@ -2,10 +2,8 @@ package com.shoppingmall.controller;
 
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
-import com.shoppingmall.dto.ItemRequestDto;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.file.FileStore;
-import com.shoppingmall.file.UploadFile;
 import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.service.ItemService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
@@ -145,7 +143,7 @@ public class ItemController {
     @ResponseBody
     @GetMapping("/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
-        return new UrlResource("file:" + fileStore.getFullPath(filename));
+        return new UrlResource("file:" + filename);
     }
 
     //키워드로 상품 검색

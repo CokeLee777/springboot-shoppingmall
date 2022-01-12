@@ -37,7 +37,7 @@ out/
 .vscode/
 
 ### CUSTOM ###
-/src/main/resources/static/img/
+/src/main/resources/static/img/product-img
 /src/main/resources/application.yml
 /src/main/resources/aws.yml
 services.tar

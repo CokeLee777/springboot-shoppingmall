@@ -31,7 +31,7 @@ jobs:
     - name: Decrypt Services
       run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$YML_SETTING_PASSWORD" --output services.tar services.tar.gpg
       env:
-        YML_SETTING_PASSWORD: $
+        YML_SETTING_PASSWORD: ${{ secrets.YML_SETTING_PASSWORD }}
     - name: Unzip Services
       run: tar xvf services.tar
       

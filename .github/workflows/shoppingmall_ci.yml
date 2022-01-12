@@ -29,9 +29,9 @@ jobs:
         mysql password: ${{ secrets.MYSQL_PASSWORD }}
         
     - name: Decrypt Services
-      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$FIREBASE_SECRET" --output services.tar services.tar.gpg
+      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$YML_SETTING_PASSWORD" --output services.tar services.tar.gpg
       env:
-        FIREBASE_SECRET: $
+        YML_SETTING_PASSWORD: $
     - name: Unzip Services
       run: tar xvf services.tar
       

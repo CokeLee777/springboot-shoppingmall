@@ -35,7 +35,7 @@
                             <h2 th:text="#{page.item.edit}">상품 수정</h2>
                         </div>
 
-                        <form th:action="@{/item/{itemId}/edit (itemId=${item.id})" th:object="${item}" method="post" enctype="multipart/form-data">
+                        <form th:action="@{/item/{itemId}/edit (itemId=${itemId})}" th:object="${itemUpdateForm}" method="post" enctype="multipart/form-data">
 
                             <div th:if="${#fields.hasGlobalErrors()}">
                                 <p class="field-error" th:each="err : ${#fields.globalErrors()}" th:text="${err}">글로벌 오류 메시지</p>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="price" th:text="#{label.item.price}">상품 가격</label>
-                                    <input type="price" id="price" th:field="*{price}" th:name="price"
+                                    <input type="text" id="price" th:field="*{price}" th:name="price"
                                            th:errorclass="field-error" class="form-control" placeholder="가격을 입력하세요">
                                     <div class="field-error" th:errors="*{price}">
                                         가격 입력 오류
@@ -76,7 +76,7 @@
                                 </div>
                                 <div class="col-md-6 mb-3">
                                     <label for="categoryId" th:text="#{label.item.category}">상품 카테고리</label>
-                                    <select id="categoryId" th:field="*{itemCategoryId}" th:name="itemCategoryId"
+                                    <select id="categoryId" th:field="*{categoryId}" th:name="categoryId"
                                             th:errorclass="field-error" class="form-control">
                                         <option value="">카테고리 선택</option>
                                         <option th:each="itemCategory : ${itemCategories}"
@@ -84,7 +84,7 @@
                                                 th:text="${itemCategory.name}">option
                                         </option>
                                     </select>
-                                    <div class="field-error" th:errors="*{itemCategoryId}">
+                                    <div class="field-error" th:errors="*{categoryId}">
                                         카테고리 선택 오류
                                     </div>
                                 </div>

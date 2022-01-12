@@ -13,10 +13,10 @@ public class ItemResponseDto {
     public static class ItemInfo {
         private Long id;
         private Long itemCategoryId;
+        private String itemImgUrl;
         private String name;
         private Integer price;
         private Integer stockQuantity;
         private ItemStatus itemStatus;
-        private String itemImg;
     }
 }

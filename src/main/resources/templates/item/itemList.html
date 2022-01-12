@@ -90,7 +90,7 @@
                                     <!-- Product Image -->
                                     <div class="product-img">
 <!--                                        <img th:src="|/images/${item.itemImg}|" alt="">-->
-                                        <img th:src="${item.itemImg}" alt="">
+                                        <img th:src="${item.itemImgUrl}" alt="">
                                     </div>
 
                                     <!-- Product Description -->
@@ -100,6 +100,9 @@
                                             <div class="line"></div>
                                             <p class="product-price" th:text="${item.price}">상품가격</p>
                                             <h6 th:text="${item.name}">상품명</h6>
+                                        </div>
+                                        <div th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null">
+                                            <a href="#" th:href="@{/item/{id}/edit (id=${item.id})}" class="btn btn-warning" role="button">수정</a>
                                         </div>
                                         <div th:if="${#session} != null and ${#session.getAttribute('loginAdmin')} != null">
                                             <a href="#" th:href="@{/item/{itemId}/delete (itemId=${item.id})}" class="btn btn-danger" role="button">삭제</a>

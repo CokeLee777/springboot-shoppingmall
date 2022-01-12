@@ -25,13 +25,5 @@ public class ItemCategoryRequestDto {
                     .build();
         }
     }
-
-    @Getter
-    @AllArgsConstructor
-    public static class ItemCategoryUpdateForm {
-
-        @NotBlank(message = "카테고리명을 작성해주세요.")
-        private String name;
-    }
 }
 

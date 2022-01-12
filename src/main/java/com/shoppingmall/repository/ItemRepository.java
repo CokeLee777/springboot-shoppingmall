@@ -25,11 +25,11 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
 
     //카테고리별로 조회
     @Query("select i from Item i inner join i.itemCategory where i.itemCategory.id = :categoryId")
-    Page<Item> findItemsJoinCategoryByCategory(@Param("categoryId") Long categoryId, Pageable pageable);
+    Page<Item> findAllWithCategoryByCategoryId(@Param("categoryId") Long categoryId, Pageable pageable);
 
     //상품 카테고리와 함께 조회
     @Query("select i from Item i join fetch i.itemCategory where i.id = :itemId")
-    Optional<Item> findItemJoinCategory(@Param("itemId") Long id);
+    Optional<Item> findOneWithCategoryById(@Param("itemId") Long id);
 
     //키워드로 상품 검색
     @Query("select i from Item i where i.name like %:keyword%")

@@ -2,8 +2,10 @@ package com.shoppingmall.controller;
 
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
+import com.shoppingmall.dto.ItemRequestDto;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.file.FileStore;
+import com.shoppingmall.file.UploadFile;
 import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.service.ItemService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
@@ -27,6 +29,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
+import static com.shoppingmall.dto.ItemRequestDto.*;
 import static com.shoppingmall.dto.ItemRequestDto.ItemCreateForm;
 import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 
@@ -47,7 +50,7 @@ public class ItemController {
             @RequestParam(value = "pageNum", required = false, defaultValue = "0") Integer pageNum,
             @RequestParam(value = "sort", required = false, defaultValue = "createdDate") String sort,
             @RequestParam(value = "direction", required = false, defaultValue = "asc") String direction, Model model){
-
+        //페이징 조건
         PageRequest pageRequest = PageRequest.of(pageNum, 10, Sort.by(Sort.Direction.fromString(direction), sort));
         if(categoryId.isPresent()){
             //현재 선택된 카테고리에 따른 상품 조회 - 페이징
@@ -94,7 +97,6 @@ public class ItemController {
         //현재 선택한 아이템 정보 불러오기
         Item item = itemService.searchItemWithCategory(itemId);
         ItemCategory itemCategory = item.getItemCategory();
-        //리뷰정보 불러오기
 
         model.addAttribute("item", item.toItemInfo());
         model.addAttribute("category", itemCategory.toItemCategoryInfo());
@@ -126,19 +128,16 @@ public class ItemController {
         if(bindingResult.hasErrors()){
             log.error("error={}", bindingResult);
             //카테고리 모두 불러오기
-            List<ItemCategory> itemCategories = itemCategoryService.searchItemCategories();
-            List<ItemCategoryInfo> itemCategoryInfos = itemCategories.stream()
-                    .map(ItemCategory::toItemCategoryInfo)
-                    .collect(Collectors.toList());
+            List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+
             model.addAttribute("itemCategories", itemCategoryInfos);
             return "item/itemAddForm";
         }
 
-        String uploadImgUrl = fileStore.upload(form.getItemImg());
+        //이미지 업로드 및 DB에 저장
+        itemService.addItem(form);
 
         log.info("상품 추가 완료 name={}", form.getName());
-        //이미지 이름 db에 저장
-        itemService.addItem(form, uploadImgUrl);
         return "redirect:/";
     }
 
@@ -162,24 +161,39 @@ public class ItemController {
         return "item/itemSearchList";
     }
 
-//    @GetMapping("/item/{itemId}/edit")
-//    public String editItemForm(@PathVariable("itemId") Long itemId, Model model){
-//        Item findItem = itemService.searchItemWithCategory(itemId);
-//        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
-//
-//        model.addAttribute("itemCategories", itemCategoryInfos);
-//        model.addAttribute("item", findItem.toItemInfo());
-//        return "item/itemEditForm";
-//    }
-//
-//    @PostMapping("/item/{itemId}/edit")
-//    public String editItem(@PathVariable("itemId") Long itemId){
-//
-//    }
+    @AdminLogin
+    @GetMapping("/item/{itemId}/edit")
+    public String editItemForm(@PathVariable("itemId") Long itemId, Model model){
+        Item findItem = itemService.searchItemWithCategory(itemId);
+        List<ItemCategoryInfo> itemCategoryInfos = getItemCategoryInfos();
+
+        model.addAttribute("itemCategories", itemCategoryInfos);
+        model.addAttribute("itemUpdateForm", findItem.toItemUpdateForm());
+        return "item/itemEditForm";
+    }
+
+    @PostMapping("/item/{itemId}/edit")
+    public String editItem(
+            @PathVariable("itemId") Long itemId,
+            @Validated @ModelAttribute("itemUpdateForm") ItemUpdateForm form,
+            BindingResult bindingResult) throws IOException {
+
+        if(bindingResult.hasErrors()){
+            log.error("error={}", bindingResult);
+            return "item/itemEditForm";
+        }
+        //상품 수정
+        itemService.updateItem(itemId, form);
+
+        log.info("상품 수정 완료 id={}", itemId);
+        return "redirect:/shop";
+    }
 
     @AdminLogin
     @GetMapping("/item/{itemId}/delete")
     public String deleteItem(@PathVariable("itemId") Long itemId){
+//        Item item = itemService.searchItem(itemId);
+//        fileStore.deleteS3(item.getItemImgName());
         itemService.deleteItem(itemId);
         log.info("상품 삭제 id={}", itemId);
         return "redirect:/shop";

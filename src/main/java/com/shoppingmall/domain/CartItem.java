@@ -60,7 +60,7 @@ public class CartItem extends BaseEntity {
         return CartItemInfo
                 .builder()
                 .id(id)
-                .itemImg(item.getItemImg())
+                .itemImgUrl(item.getItemImgUrl())
                 .itemName(item.getName())
                 .itemPrice(itemPrice)
                 .itemCount(itemCount)

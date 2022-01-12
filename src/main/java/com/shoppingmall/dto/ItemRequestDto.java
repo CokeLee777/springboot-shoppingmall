@@ -3,6 +3,7 @@ package com.shoppingmall.dto;
 import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
+import com.shoppingmall.file.UploadFile;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -30,12 +31,12 @@ public class ItemRequestDto {
         @NotNull(message = "상품 이미지를 추가해주세요.")
         private MultipartFile itemImg;
 
-        public Item toEntity(ItemCategory itemCategory, String img){
+        public Item toEntity(ItemCategory itemCategory, UploadFile uploadImg){
             return Item.builder()
                     .name(name)
                     .price(price)
                     .stockQuantity(stockQuantity)
-                    .itemImg(img)
+                    .uploadImg(uploadImg)
                     .itemCategory(itemCategory)
                     .build();
         }
@@ -53,9 +54,6 @@ public class ItemRequestDto {
 
         @NotNull(message = "상품 수량을 작성해주세요.")
         private Integer stockQuantity;
-
-        @NotNull(message = "상품 상태를 선택해주세요.")
-        private ItemStatus itemStatus;
 
         @NotNull(message = "상품 카테고리를 선택해주세요.")
         private Long categoryId;

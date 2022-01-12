@@ -3,6 +3,7 @@ package com.shoppingmall.domain;
 import com.shoppingmall.domain.common.BaseEntity;
 import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.exception.NotEnoughStockException;
+import com.shoppingmall.file.UploadFile;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,7 +41,10 @@ public class Item extends BaseEntity {
     private ItemStatus itemStatus;
 
     @Column
-    private String itemImg;
+    private String itemImgName;
+
+    @Column
+    private String itemImgUrl;
 
     @OneToMany(mappedBy = "item")
     private List<OrderItem> orderItems = new ArrayList<>();
@@ -53,12 +57,13 @@ public class Item extends BaseEntity {
     public ItemCategory itemCategory;
 
     @Builder
-    private Item(String name, Integer price, Integer stockQuantity, String itemImg, ItemCategory itemCategory){
+    private Item(String name, Integer price, Integer stockQuantity, UploadFile uploadImg, ItemCategory itemCategory){
         this.itemStatus = ItemStatus.SALE;
         this.name = name;
         this.price = price;
         this.stockQuantity = stockQuantity;
-        this.itemImg = itemImg;
+        this.itemImgName = uploadImg.getStoreFilename();
+        this.itemImgUrl = uploadImg.getStoreFileUrl();
         setItemCategory(itemCategory);
     }
 
@@ -74,12 +79,13 @@ public class Item extends BaseEntity {
     }
 
 
-    public void updateItem(ItemUpdateForm itemUpdateForm, String itemImg){
+    public void updateItem(ItemUpdateForm itemUpdateForm, UploadFile uploadImg, ItemCategory itemCategory){
         this.name = itemUpdateForm.getName();
         this.price = itemUpdateForm.getPrice();
         this.stockQuantity = itemUpdateForm.getStockQuantity();
-        this.itemStatus = itemUpdateForm.getItemStatus();
-        this.itemImg = itemImg;
+        this.itemImgName = uploadImg.getStoreFilename();
+        this.itemImgUrl = uploadImg.getStoreFileUrl();
+        setItemCategory(itemCategory);
     }
 
     /**
@@ -109,18 +115,17 @@ public class Item extends BaseEntity {
                 .price(price)
                 .stockQuantity(stockQuantity)
                 .itemStatus(itemStatus)
-                .itemImg(itemImg)
+                .itemImgUrl(itemImgUrl)
                 .build();
     }
 
-    public ItemUpdateForm toItemUpdateForm(MultipartFile itemImg){
+    public ItemUpdateForm toItemUpdateForm(){
         return ItemUpdateForm.builder()
                 .categoryId(itemCategory.getId())
                 .name(name)
                 .price(price)
                 .stockQuantity(stockQuantity)
-                .itemStatus(itemStatus)
-                .itemImg(itemImg)
+                .itemImg(null)
                 .build();
     }
 }

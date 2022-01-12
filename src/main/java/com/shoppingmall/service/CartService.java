@@ -8,6 +8,7 @@ import com.shoppingmall.exception.LoginRequiredException;
 import com.shoppingmall.exception.NotExistCartItemException;
 import com.shoppingmall.exception.NotExistItemException;
 import com.shoppingmall.repository.CartItemRepository;
+import com.shoppingmall.repository.CartRepository;
 import com.shoppingmall.repository.ItemRepository;
 import com.shoppingmall.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.shoppingmall.dto.CartItemResponseDto.CartItemInfo;
@@ -29,7 +31,6 @@ public class CartService {
     private final CartItemRepository cartItemRepository;
     private final UserRepository userRepository;
     private final ItemRepository itemRepository;
-    private final EntityManager em;
 
     //장바구니에 상품 담기
     @Transactional
@@ -65,9 +66,6 @@ public class CartService {
         cartItemRepository.delete(cartItem);
     }
 
-    /**
-     * 수정 필요
-     */
     @Transactional
     public void clearItemFromCart(String identifier){
         User user = userRepository.findWithCartAndCartItemByUser(identifier).orElseThrow(

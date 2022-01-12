@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryCreateForm;
-import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryUpdateForm;
 
 @Service
 @Transactional(readOnly = true)
@@ -32,12 +31,6 @@ public class ItemCategoryService {
     }
 
     @Transactional
-    public void updateItemCategory(Long itemCategoryId, ItemCategoryUpdateForm form){
-        ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
-        findItemCategory.updateItemCategory(form);
-    }
-
-    @Transactional
     public void deleteItemCategory(Long itemCategoryId){
         ItemCategory findItemCategory = searchItemCategory(itemCategoryId);
         itemCategoryRepository.delete(findItemCategory);
@@ -49,11 +42,6 @@ public class ItemCategoryService {
 
     public ItemCategory searchItemCategory(Long itemCategoryId) {
         return itemCategoryRepository.findById(itemCategoryId).orElseThrow(
-                () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
-    }
-
-    public ItemCategory searchItemCategory(String categoryName){
-        return itemCategoryRepository.findByName(categoryName).orElseThrow(
                 () -> new NotExistCategoryException("존재하지 않는 카테고리 입니다."));
     }
 }

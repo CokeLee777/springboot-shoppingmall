@@ -1,10 +1,7 @@
 package com.shoppingmall.file;
 
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.GetObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.S3ObjectSummary;
+import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -29,8 +26,8 @@ public class FileStore {
     @Value("${file.upload.dir}")
     private String fileDir;
 
-    //업로드
-    public String upload(MultipartFile multipartFile) throws IOException {
+    //새로운 이미지 업로드
+    public UploadFile newUpload(MultipartFile multipartFile) throws IOException {
         //원본 파일명
         String originalFilename = multipartFile.getOriginalFilename();
         //DB에 저장할 파일명
@@ -43,7 +40,20 @@ public class FileStore {
         //로컬에 있는 파일 삭제
         if(uploadFile.delete()) log.info("Local file delete success");
 
-        return uploadImageUrl;
+        return new UploadFile(uploadImageUrl, storeFilename);
+    }
+
+    //원래 이미지 변경
+    public UploadFile replaceUpload(MultipartFile multipartFile, String oldFilename) throws IOException {
+        //파일을 지정된 위치에 저장
+        File uploadFile = new File(getFullPath(oldFilename));
+        multipartFile.transferTo(uploadFile);
+        //s3로 업로드
+        String uploadImageUrl = putS3(uploadFile, "static/" + oldFilename);
+        //로컬에 있는 파일 삭제
+        if(uploadFile.delete()) log.info("Local file delete success");
+
+        return new UploadFile(uploadImageUrl, oldFilename);
     }
 
     // S3로 업로드
@@ -51,6 +61,14 @@ public class FileStore {
         amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
         return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    //S3에 있는 이미지 삭제
+    public void deleteS3(String fileName){
+        boolean isExistObject = amazonS3Client.doesObjectExist(bucket, fileName);
+        if(isExistObject){
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+        }
     }
 
     public String getFullPath(String filename){

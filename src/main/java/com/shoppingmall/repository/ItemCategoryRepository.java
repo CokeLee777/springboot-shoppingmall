@@ -2,8 +2,12 @@ package com.shoppingmall.repository;
 
 import com.shoppingmall.domain.ItemCategory;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.awt.print.Pageable;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -13,4 +17,5 @@ public interface ItemCategoryRepository extends JpaRepository<ItemCategory, Long
     Optional<ItemCategory> findByName(String name);
     //이름으로 카테고리 존재 여부 찾기
     boolean existsByName(String name);
+    //특정 카테고리의 모든 상품 조회
 }

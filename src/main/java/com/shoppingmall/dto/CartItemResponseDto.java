@@ -12,7 +12,7 @@ public class CartItemResponseDto {
     public static class CartItemInfo {
 
         private Long id;
-        private String itemImg;
+        private String itemImgUrl;
         private String itemName;
         private Integer itemPrice;
         private Integer itemCount;

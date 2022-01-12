@@ -9,7 +9,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.shoppingmall.dto.ItemCategoryRequestDto.ItemCategoryUpdateForm;
 import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
 import static javax.persistence.CascadeType.ALL;
 
@@ -31,13 +30,6 @@ public class ItemCategory extends BaseEntity {
     @Builder
     private ItemCategory(String name){
         this.name = name;
-    }
-
-    /**
-     * 비즈니스 로직
-     */
-    public void updateItemCategory(ItemCategoryUpdateForm form){
-        this.name = form.getName();
     }
 
     public ItemCategoryInfo toItemCategoryInfo(){

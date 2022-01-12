@@ -9,14 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 @SpringBootApplication
 public class CokeApplication {
 
-	public static final String APPLICATION_LOCATIONS = "spring.config.location=" +
-			"classpath:application.yml," +
-			"classpath:aws.yml";
-
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(CokeApplication.class)
-				.properties(APPLICATION_LOCATIONS)
-						.run(args);
+		SpringApplication.run(CokeApplication.class, args);
 	}
 
 }

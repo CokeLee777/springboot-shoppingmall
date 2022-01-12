@@ -4,7 +4,6 @@ import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.dto.pageCondition.ItemSearchCondition;
 import com.shoppingmall.file.FileStore;
-import com.shoppingmall.file.UploadFile;
 import com.shoppingmall.service.ItemCategoryService;
 import com.shoppingmall.service.ItemService;
 import com.shoppingmall.web.argumentresolver.AdminLogin;
@@ -14,9 +13,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -137,16 +134,17 @@ public class ItemController {
             return "item/itemAddForm";
         }
 
+        String uploadImgUrl = fileStore.upload(form.getItemImg());
+
         log.info("상품 추가 완료 name={}", form.getName());
-        //이미지 db에 저장
-        UploadFile uploadFile = fileStore.storeFile(form.getItemImg());
-        itemService.addItem(form, uploadFile.getStoreFilename());
+        //이미지 이름 db에 저장
+        itemService.addItem(form, uploadImgUrl);
         return "redirect:/";
     }
 
     //이미지를 다운로드할 때 API
     @ResponseBody
-    @GetMapping("/images/{filename}")
+    @GetMapping("/{filename}")
     public Resource downloadImage(@PathVariable String filename) throws MalformedURLException {
         return new UrlResource("file:" + fileStore.getFullPath(filename));
     }

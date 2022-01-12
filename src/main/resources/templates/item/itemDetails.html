@@ -47,8 +47,8 @@
                             <div id="product_details_slider" class="carousel slide" data-ride="carousel">
                                 <div class="carousel-inner">
                                     <div class="carousel-item active">
-                                        <a class="gallery_img" th:href="|/images/${item.itemImg}|">
-                                            <img class="d-block w-100" th:src="|/images/${item.itemImg}|" alt="First slide">
+                                        <a class="gallery_img" th:src="${item.itemImg}">
+                                            <img class="d-block w-100" th:src="${item.itemImg}" alt="First slide">
                                         </a>
                                     </div>
                                 </div>

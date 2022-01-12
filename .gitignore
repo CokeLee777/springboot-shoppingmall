@@ -38,3 +38,5 @@ out/
 
 ### CUSTOM ###
 /src/main/resources/static/img/
+/src/main/resources/application.yml
+/src/main/resources/aws.yml

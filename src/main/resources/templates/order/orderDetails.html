@@ -48,7 +48,7 @@
                             <tbody>
                             <tr th:each="orderItemInfo: *{orderItemInfos}">
                                 <td class="cart_product_img">
-                                    <a th:href="@{/}"><img th:src="|/images/${orderItemInfo.itemInfo.itemImg}|" alt="Product"></a>
+                                    <a th:href="@{/}"><img th:src="${orderItemInfo.itemInfo.itemImg}" alt="Product"></a>
                                 </td>
                                 <td class="cart_product_desc">
                                     <h5 th:text="${orderItemInfo.itemInfo.name}">상품명</h5>

@@ -1,38 +1,60 @@
 package com.shoppingmall.file;
 
+import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.GetObjectRequest;
+import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.S3ObjectSummary;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@Slf4j
 @Configuration
+@RequiredArgsConstructor
 public class FileStore {
 
+    private final AmazonS3Client amazonS3Client;
+    //s3 버킷
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucket;
+    //로컬 저장소
     @Value("${file.upload.dir}")
     private String fileDir;
 
-    public String getFullPath(String filename){
-        return fileDir + filename;
-    }
-
-    public UploadFile storeFile(MultipartFile multipartFile) throws IOException {
-        if(multipartFile.isEmpty()){
-            return null;
-        }
-
+    //업로드
+    public String upload(MultipartFile multipartFile) throws IOException {
         //원본 파일명
         String originalFilename = multipartFile.getOriginalFilename();
         //DB에 저장할 파일명
         String storeFilename = createStoreFilename(originalFilename);
         //파일을 지정된 위치에 저장
-        multipartFile.transferTo(new File(getFullPath(storeFilename)));
+        File uploadFile = new File(getFullPath(storeFilename));
+        multipartFile.transferTo(uploadFile);
+        //s3로 업로드
+        String uploadImageUrl = putS3(uploadFile, "static/" + storeFilename);
+        //로컬에 있는 파일 삭제
+        if(uploadFile.delete()) log.info("Local file delete success");
 
-        return new UploadFile(originalFilename, storeFilename);
+        return uploadImageUrl;
+    }
+
+    // S3로 업로드
+    private String putS3(File uploadFile, String fileName) {
+        amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, uploadFile)
+                .withCannedAcl(CannedAccessControlList.PublicRead));
+        return amazonS3Client.getUrl(bucket, fileName).toString();
+    }
+
+    public String getFullPath(String filename){
+        return fileDir + filename;
     }
 
     private String createStoreFilename(String originalFilename) {

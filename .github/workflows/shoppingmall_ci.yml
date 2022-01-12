@@ -27,6 +27,14 @@ jobs:
         mysql root password: ${{ secrets.MYSQL_ROOT_PASSWORD}}
         mysql user: ${{ secrets.MYSQL_USERNAME }}
         mysql password: ${{ secrets.MYSQL_PASSWORD }}
+        
+    - name: Decrypt Services
+      run: gpg --quiet --batch --yes --always-trust --decrypt --passphrase="$FIREBASE_SECRET" --output services.tar services.tar.gpg
+      env:
+        FIREBASE_SECRET: $
+    - name: Unzip Services
+      run: tar xvf services.tar
+      
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
     - name: Build with Gradle

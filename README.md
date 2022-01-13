@@ -22,6 +22,7 @@
 
 #### AWS
 * EC2
+* RDS
 * S3
 
 #### CI/CD
@@ -42,12 +43,11 @@
 * 예외처리
 * Git 버전관리
 * AWS EC2 배포
+* AWS RDS MySQL 연동
+* AWS S3 이미지 업로드
 
 ## :clipboard: 성능 테스팅 도구
 * Apache JMeter
-
-## :clipboard: 로그 분석 도구
-* 미정
 
 ## :clipboard: 도메인 모델 분석
 * [shopping mall - Domain](https://github.com/CokeLee777/springboot-shoppingmall/issues/1#issuecomment-1007228702)

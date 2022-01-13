@@ -13,18 +13,13 @@ public class AdminLoginCheckInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String requestURI = request.getRequestURI();
 
         HttpSession session = request.getSession();
 
-        if(session != null && session.getAttribute(SessionConst.LOGIN_USER) != null){
-            response.sendRedirect("/");
-        }
-
         if(session == null || session.getAttribute(SessionConst.LOGIN_ADMIN) == null){
-            log.info("일반 사용자 요청");
+            log.info("미허가 사용자 요청");
 
-            response.sendRedirect("/sign-in?redirectURL=" + requestURI);
+            response.sendError(403, "미허가 사용자 요청");
             return false;
         }
 

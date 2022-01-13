@@ -18,6 +18,7 @@ jobs:
         with: 
           host: ec2-3-36-180-136.ap-northeast-2.compute.amazonaws.com
           username: ec2-user 
+          port: 22
           key: ${{ secrets.PRIVATE_KEY }}
           envs: GITHUB_SHA
           script: | 

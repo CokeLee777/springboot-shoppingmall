@@ -64,9 +64,9 @@ public class FileStore {
 
     //S3에 있는 이미지 삭제
     public void deleteS3(String fileName){
-        boolean isExistObject = amazonS3Client.doesObjectExist(bucket, fileName);
+        boolean isExistObject = amazonS3Client.doesObjectExist(bucket, "static/" + fileName);
         if(isExistObject){
-            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, "static/" + fileName));
         }
     }
 

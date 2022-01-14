@@ -1,5 +1,17 @@
 # :shopping_cart: 스프링 부트로 만드는 쇼핑몰 프로젝트
 
+## :clipboard: 사용자 인터페이스(UI)
+* 홈
+<img width="1425" alt="홈 화면" src="https://user-images.githubusercontent.com/64250896/149453159-d34149cd-8a29-4599-bfcd-6d728496f105.png">
+* 쇼핑
+<img width="1421" alt="쇼핑 화면" src="https://user-images.githubusercontent.com/64250896/149453202-119f2f8b-0873-4966-8b7b-00b64d4d525a.png">
+* 상품 상세
+<img width="976" alt="상품 상세 화면" src="https://user-images.githubusercontent.com/64250896/149453604-93bb7261-c440-4f7c-83a6-03fe1763fe61.png">
+* 장바구니
+<img width="1109" alt="장바구니 화면" src="https://user-images.githubusercontent.com/64250896/149453213-e60f0efb-d025-4770-9f00-98b4d7877842.png">
+* 주문내역
+<img width="1060" alt="주문내역 화면" src="https://user-images.githubusercontent.com/64250896/149453226-03b4bf68-2a8e-4c47-af2f-fca238d69319.png">
+
 ## :clipboard: 개발환경
 * IntelliJ
 * Postman

@@ -190,8 +190,6 @@ public class ItemController {
     @AdminLogin
     @GetMapping("/item/{itemId}/delete")
     public String deleteItem(@PathVariable("itemId") Long itemId){
-//        Item item = itemService.searchItem(itemId);
-//        fileStore.deleteS3(item.getItemImgName());
         itemService.deleteItem(itemId);
         log.info("상품 삭제 id={}", itemId);
         return "redirect:/shop";

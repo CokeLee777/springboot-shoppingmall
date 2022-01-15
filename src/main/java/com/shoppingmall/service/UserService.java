@@ -1,7 +1,7 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.domain.User;
+import com.shoppingmall.domain.enums.UserRole;
 import com.shoppingmall.exception.DuplicatedUserException;
 import com.shoppingmall.exception.IncorrectLoginInfoException;
 import com.shoppingmall.exception.LoginRequiredException;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.shoppingmall.dto.UserRequestDto.*;
-import static com.shoppingmall.dto.UserResponseDto.*;
+import static com.shoppingmall.dto.UserResponseDto.UserProfileInfo;
 
 @Service
 @Transactional(readOnly = true)

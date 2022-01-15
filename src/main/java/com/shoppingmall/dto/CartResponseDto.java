@@ -6,7 +6,7 @@ import lombok.Getter;
 
 import java.util.List;
 
-import static com.shoppingmall.dto.CartItemResponseDto.*;
+import static com.shoppingmall.dto.CartItemResponseDto.CartItemInfo;
 
 public class CartResponseDto {
 

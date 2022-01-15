@@ -1,12 +1,8 @@
 package com.shoppingmall.service;
 
-import com.shoppingmall.domain.Cart;
-import com.shoppingmall.domain.CartItem;
+import com.shoppingmall.domain.*;
 import com.shoppingmall.domain.enums.DeliveryStatus;
 import com.shoppingmall.domain.enums.OrderStatus;
-import com.shoppingmall.domain.Delivery;
-import com.shoppingmall.domain.Order;
-import com.shoppingmall.domain.OrderItem;
 import com.shoppingmall.exception.NotExistCartException;
 import com.shoppingmall.repository.CartRepository;
 import com.shoppingmall.repository.OrderRepository;
@@ -18,8 +14,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import static com.shoppingmall.dto.OrderItemResponseDto.*;
-import static com.shoppingmall.dto.OrderResponseDto.*;
+import static com.shoppingmall.dto.OrderItemResponseDto.OrderItemInfo;
+import static com.shoppingmall.dto.OrderResponseDto.OrderInfo;
+import static com.shoppingmall.dto.OrderResponseDto.OrderListInfo;
 
 @Service
 @Transactional(readOnly = true)

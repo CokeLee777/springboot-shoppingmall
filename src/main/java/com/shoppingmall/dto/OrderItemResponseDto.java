@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
-import static com.shoppingmall.dto.ItemResponseDto.*;
+import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 
 public class OrderItemResponseDto {
 

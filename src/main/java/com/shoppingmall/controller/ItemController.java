@@ -27,8 +27,8 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.shoppingmall.dto.ItemCategoryResponseDto.ItemCategoryInfo;
-import static com.shoppingmall.dto.ItemRequestDto.*;
 import static com.shoppingmall.dto.ItemRequestDto.ItemCreateForm;
+import static com.shoppingmall.dto.ItemRequestDto.ItemUpdateForm;
 import static com.shoppingmall.dto.ItemResponseDto.ItemInfo;
 
 @Slf4j

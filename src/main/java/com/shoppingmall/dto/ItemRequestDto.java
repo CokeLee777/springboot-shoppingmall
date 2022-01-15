@@ -1,10 +1,11 @@
 package com.shoppingmall.dto;
 
-import com.shoppingmall.domain.enums.ItemStatus;
 import com.shoppingmall.domain.Item;
 import com.shoppingmall.domain.ItemCategory;
 import com.shoppingmall.file.UploadFile;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotBlank;

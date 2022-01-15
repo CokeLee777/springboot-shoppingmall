@@ -88,7 +88,7 @@ public class ItemService {
         Item findItem = itemRepository.findById(itemId).orElseThrow(
                 () -> new NotExistItemException("존재하지 않는 상품입니다."));
         //s3에서 이미지 삭제
-//        fileStore.deleteS3(findItem.getItemImgName());
+        fileStore.deleteS3(findItem.getItemImgName());
         //DB에서 이미지 삭제
         itemRepository.delete(findItem);
     }
